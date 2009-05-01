@@ -64,7 +64,7 @@ public abstract class Ucigame
 	           KeyListener,
 	           FocusListener
 {
-	private static String VERSION = "2008.05.30a";
+	private static String VERSION = "2009.04.27";
 	static Ucigame gameObject = null;  			 // only used when not an applet
 	private static Object lock1 = new Object();  // for synchronization
 	private static Object lock2 = new Object();  // for synchronization
@@ -76,6 +76,7 @@ public abstract class Ucigame
 	public static final long serialVersionID = 12345L;
 
 	static Ucigame ucigameAppletObject = null;	// for use only when running as an applet
+	private boolean OKtoRunGetImage = false;	// prevent getImage() in object field init.
 
 	/**
 	 * non-API
@@ -346,6 +347,7 @@ public abstract class Ucigame
         // Let the game set up the window, especially its size.
         window.size(100, 100);		// in case setup() has no size()
   		canvas.background(255);		// in case background is not called, default is white
+  		OKtoRunGetImage = true;
         setup();
 
         // set default framerate if none in setup
@@ -519,9 +521,17 @@ public abstract class Ucigame
 	 */
 	public final Image getImage(String filename)  // dangerous having same name as Applet.getImage()?
 	{
+		// This check is really only needed for applets on the web, not
+		// when running with an appletviewer or as an application.  But
+		// enforced in all cases for consistency.
+		if (!OKtoRunGetImage)
+		{
+			logError("getImage() cannot be called in an object field initializer.");
+			return null;
+		}
 		java.awt.Image i;
 		if (isApplet)
-			i = getImage(getCodeBase(), filename);
+			i = getImage(getCodeBase(), filename);  // this is Applet's getImage()
 		else
 			i = Toolkit.getDefaultToolkit().getImage(filename);
 		if (i == null)
@@ -553,6 +563,11 @@ public abstract class Ucigame
 	 */
 	public final Image getImage(String filename, int shade)
 	{
+		if (!OKtoRunGetImage)
+		{
+			logError("getImage() cannot be called in an object field initializer.");
+			return null;
+		}
 		Image image = getImage(filename);
 		image.transparent(shade);
 		return image;
@@ -566,6 +581,11 @@ public abstract class Ucigame
 	 */
 	public final Image getImage(String filename, int r, int g, int b)
 	{
+		if (!OKtoRunGetImage)
+		{
+			logError("getImage() cannot be called in an object field initializer.");
+			return null;
+		}
 		Image image = getImage(filename);
 		image.transparent(r, g, b);
 		return image;
@@ -577,6 +597,11 @@ public abstract class Ucigame
 	 */
 	public final Sound getSound(String _filename)
 	{
+		if (!OKtoRunGetImage)
+		{
+			logError("getSound() cannot be called in an object field initializer.");
+			return null;
+		}
 		if (_filename.toLowerCase().endsWith(".mp3"))
 		{
 			// make sure the file can be opened, for an immediate fail if not.
@@ -968,7 +993,7 @@ public abstract class Ucigame
 
 	/**
 	 * Called by Ucigame every time the game window needs to be repainted.
-	 * The window can be repainted because of the requested framerate of because part
+	 * The window can be repainted because of the requested framerate or because part
 	 * or all of the window has been exposed.
 	 * A game should override this method.
 	 */
@@ -1414,11 +1439,17 @@ public abstract class Ucigame
 	// this non-static version is used by Applets
 	class UcigameWorker extends SwingWorker<String, Void>
 	{
+		Exception pendingException = null;
+
 		@Override
 		protected void done()
 		{
 			workerIsDone = true;		// communicate with Applet.stop()
-			//System.err.println("worker is done");
+			if (pendingException != null)
+			{
+				pendingException.printStackTrace();
+				logError("Java Exception:\n" + pendingException);
+			}
 		}
 
 		@Override
@@ -1427,6 +1458,7 @@ public abstract class Ucigame
         // Redraw the window periodically.
         while (playing && !isCancelled())
         {
+			try { // this is for all un-otherwise-caught exceptions
 			if (!suspended)
 			{
 				long now = System.currentTimeMillis();
@@ -1559,6 +1591,12 @@ public abstract class Ucigame
 				try { Thread.sleep(delayTime); }
 				catch (InterruptedException ie) { break; }  // we're done
 			}
+			}
+			catch (Exception e)
+			{
+				pendingException = e;
+				return "";  // send control to done() method
+			}
 		}
 		//System.err.println("playing: " + playing + " isCancelled(): " + isCancelled());
 		return "";
@@ -1569,11 +1607,16 @@ public abstract class Ucigame
 	// This class is used when running as an application, not applet.
 	static class StaticUcigameWorker extends SwingWorker<String, Void>
 	{
+		Exception pendingException = null;
+
 		@Override
 		protected void done()
 		{
-			//workerIsDone = true;		// communicate with Applet.stop()
-			//System.err.println("worker is done");
+			if (pendingException != null)
+			{
+				pendingException.printStackTrace();
+				logError("Java Exception:\n" + pendingException);
+			}
 		}
 
 		@Override
@@ -1582,6 +1625,7 @@ public abstract class Ucigame
         // Redraw the window periodically.
         while (gameObject.playing && !isCancelled())
         {
+			try { // this is for all un-otherwise-caught exceptions
 			if (!gameObject.suspended)
 			{
 				long now = System.currentTimeMillis();
@@ -1716,6 +1760,12 @@ public abstract class Ucigame
 			{
 				try { Thread.sleep(gameObject.delayTime); }
 				catch (InterruptedException ie) { break; }  // we're done
+			}
+			}
+			catch (Exception e)
+			{
+				pendingException = e;
+				return "";  // don't exit(0), send control to done() method
 			}
 		}
 		System.exit(0);

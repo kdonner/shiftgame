@@ -1026,7 +1026,8 @@ public class Sprite {
 				return true;
 			else if (side == ucigame.TOP && Ycollision && !contactOnThisBottom)
 				return true;
-			else if (side == ucigame.BOTTOM && Ycollision && contactOnThisBottom)
+			else if (side == ucigame.BOTTOM && Ycollision
+					&& contactOnThisBottom)
 				return true;
 			if (side != ucigame.LEFT && side != ucigame.RIGHT
 					&& side != ucigame.TOP && side != ucigame.BOTTOM)
@@ -1172,10 +1173,6 @@ public class Sprite {
 		if (!overlapsWith(_sprite)) {
 			return;
 		}
-		if (_action == CHECK) {
-			Xcollision = Ycollision = true;
-			return;
-		}
 
 		if (_sprite == ucigame.BOTTOMEDGE)
 		{
@@ -1283,6 +1280,12 @@ public class Sprite {
 			contactOnThisRight = false;
 			Xcollision = true;
 			XcollisionThisSprite = true;
+		}
+
+		// if CHECK, just set flags, don't update nextX, nextY, etc.
+		if (_action == CHECK)
+		{
+			return;
 		}
 
 		// XcollisionTime and YcollisionTime are both between 0 and 1 now
