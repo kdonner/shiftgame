@@ -11,7 +11,7 @@ public class Player extends Sprite
 	private static final int JUMP_FORCE = -5;
 	Shift parent;
 	boolean flipHoriz, flipVertical;
-	private boolean jumping, onSurface;
+	private boolean jumping, onSurface, collision;
 	Actions currentAction;
 	
 	public Player(Shift parent)
@@ -42,6 +42,7 @@ public class Player extends Sprite
 		jumping = false;
 		onSurface = false;
 		currentAction = Actions.STAND;
+		collision = false;
 	}
 	
 	public void jump()
@@ -71,6 +72,8 @@ public class Player extends Sprite
 	
 	public void move(Dimensions dim)
 	{
+		super.move(); //If this doesn't occur before collision detection jumping gets screwed
+		collision = false;
 		if(flipHoriz)
 			flipHorizontal();
 		if(flipVertical)
@@ -81,21 +84,32 @@ public class Player extends Sprite
 			checkIfCollidesWith(parent.BOTTOMEDGE);
 			if(collided())
 			{
-				playerCollided(parent.BOTTOMEDGE, true);
+				stopFall(parent.BOTTOMEDGE);
 			}
 			
 			Level lev = parent.getCurrLevel();
 			for(Sprite s : lev.walls)
 			{
-				checkIfCollidesWith(s, parent.PIXELPERFECT);
-				if(collided(parent.BOTTOM))
+				s.checkIfCollidesWith(this);
+				
+				if(s.collided(parent.TOP))
 				{
-					playerCollided(s, true);
-					System.out.println("Collision");
+					stopFall(s);
+				}
+				if(this.collided(parent.BOTTOM))
+				{
+					stopRise(s);
 				}
 			}
-			double yVel = yspeed() + dim.getGravity();
-			motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
+			if(!collision)
+			{
+				double yVel = yspeed() + dim.getGravity();
+				motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
+			}
+		}
+		else
+		{
+			//TODO Make sure they are staying on the surface
 		}
 //		if((y() + HEIGHT) < Shift.FRAME_HEIGHT)
 //		{
@@ -116,19 +130,29 @@ public class Player extends Sprite
 //				onSurface = true;
 //			}
 //		}
-		super.move();
 	}
 	
-	private void playerCollided(Sprite collidedWith, boolean stopFall)
+	private void stopRise(Sprite collidedWith)
 	{
-		if(stopFall)
-		{
-			motion(xspeed(), 0);
-			this.position(x(), collidedWith.y() - HEIGHT);
-			jumping = false;
-			onSurface = true;
-		}
+		collision = true;
+		System.out.println("Collision: Stop Rise");
+		motion(xspeed(), 0);
+		this.position(x(), collidedWith.y() + collidedWith.height());
+		jumping = true;
+		onSurface = false;
 	}
+	
+	private void stopFall(Sprite collidedWith)
+	{
+		collision = true;
+		System.out.println("Collision: Stop Fall");
+		motion(xspeed(), 0);
+		this.position(x(), collidedWith.y() - HEIGHT);
+		jumping = false;
+		onSurface = true;
+	}
+	
+	
 	
 	public void draw(Dimensions which)
 	{

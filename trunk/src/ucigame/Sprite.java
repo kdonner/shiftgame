@@ -1026,8 +1026,7 @@ public class Sprite {
 				return true;
 			else if (side == ucigame.TOP && Ycollision && !contactOnThisBottom)
 				return true;
-			else if (side == ucigame.BOTTOM && Ycollision
-					&& contactOnThisBottom)
+			else if (side == ucigame.BOTTOM && Ycollision && contactOnThisBottom)
 				return true;
 			if (side != ucigame.LEFT && side != ucigame.RIGHT
 					&& side != ucigame.TOP && side != ucigame.BOTTOM)
