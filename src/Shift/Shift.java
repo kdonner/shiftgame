@@ -50,7 +50,11 @@ public class Shift extends Ucigame
 		}
 		if(keyboard.isDown(keyboard.DOWN, keyboard.S))
 		{
-			
+
+		}
+		if(keyboard.isDown(keyboard.RIGHT, keyboard.D) && keyboard.isDown(keyboard.LEFT, keyboard.A))
+		{
+			player.stand();
 		}
 	}
 	
