@@ -90,15 +90,23 @@ public class Player extends Sprite
 			Level lev = parent.getCurrLevel();
 			for(Sprite s : lev.walls)
 			{
-				s.checkIfCollidesWith(this);
+				s.checkIfCollidesWith(this); //PixelPerfect doesn't work well
 				
 				if(s.collided(parent.TOP))
 				{
 					stopFall(s);
 				}
-				if(this.collided(parent.BOTTOM))
+				if(s.collided(parent.BOTTOM))
 				{
 					stopRise(s);
+				}
+				if(s.collided(parent.LEFT))
+				{
+					stopXMovement(s, true);
+				}
+				if(s.collided(parent.RIGHT))
+				{
+					stopXMovement(s, false);
 				}
 			}
 			if(!collision)
@@ -130,6 +138,22 @@ public class Player extends Sprite
 //				onSurface = true;
 //			}
 //		}
+	}
+	
+	private void stopXMovement(Sprite collidedWith, boolean leftSide)
+	{
+		collision = true;
+		System.out.println("Collision: X Movement");
+		motion(0, yspeed());
+		if(leftSide)
+		{
+			this.position(collidedWith.x() - this.width(), y());
+		}
+		else
+		{
+			this.position(collidedWith.x() + collidedWith.width(), y());
+		}
+		
 	}
 	
 	private void stopRise(Sprite collidedWith)
