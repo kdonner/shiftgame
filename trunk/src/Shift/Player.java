@@ -1,7 +1,6 @@
 package Shift;
 import ucigame.Image;
 import ucigame.Sprite;
-import ucigame.Ucigame;
 
 public class Player extends Sprite
 {
@@ -96,15 +95,15 @@ public class Player extends Sprite
 				{
 					stopFall(s);
 				}
-				if(s.collided(parent.BOTTOM))
+				else if(s.collided(parent.BOTTOM))
 				{
 					stopRise(s);
 				}
-				if(s.collided(parent.LEFT))
+				else if(s.collided(parent.LEFT))
 				{
 					stopXMovement(s, true);
 				}
-				if(s.collided(parent.RIGHT))
+				else if(s.collided(parent.RIGHT))
 				{
 					stopXMovement(s, false);
 				}
