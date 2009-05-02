@@ -29,4 +29,9 @@ public class Level implements java.io.Serializable
 	{
 		return dimensions.get(currDimension).dims;
 	}
+	
+	public void switchDim(int newDim)
+	{
+		currDimension = newDim;
+	}
 }
