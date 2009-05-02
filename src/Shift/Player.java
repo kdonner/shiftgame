@@ -14,7 +14,7 @@ public class Player extends Sprite
 	boolean flipHoriz, flipVertical;
 	private boolean jumping, onSurface, collision;
 	Actions currentAction;
-	private ArrayList<PlayerHistory> history;
+	private HistoryManager history;
 	
 	public Player(Shift parent)
 	{
@@ -46,7 +46,7 @@ public class Player extends Sprite
 		currentAction = Actions.STAND;
 		collision = false;
 		
-		history = new ArrayList<PlayerHistory>();
+		history = new HistoryManager();
 	}
 	
 	public void playAction(Actions action)
@@ -81,52 +81,77 @@ public class Player extends Sprite
 	
 	public void move(Dimensions dim)
 	{
-		super.move(); //If this doesn't occur before collision detection jumping gets screwed
-		collision = false;
-		if(flipHoriz)
-			flipHorizontal();
-		if(flipVertical)
-			flipVertical();
-		//TODO make real check to see if you are already standing on something
-		if(!onSurface)
+		if(dim != Dimensions.DIM2)
 		{
-			checkIfCollidesWith(parent.BOTTOMEDGE);
-			if(collided())
+			history.add(new PlayerHistory(x(), y(), currFrame, this.flipHoriz, this.flipVertical, currentAction));
+			super.move(); //If this doesn't occur before collision detection jumping gets screwed
+			collision = false;
+			if(flipHoriz)
+				flipHorizontal();
+			if(flipVertical)
+				flipVertical();
+			//TODO make real check to see if you are already standing on something
+			if(!onSurface)
 			{
-				stopFall(parent.BOTTOMEDGE);
-			}
-			
-			Level lev = parent.getCurrLevel();
-			for(Sprite s : lev.walls)
-			{
-				s.checkIfCollidesWith(this); //PixelPerfect doesn't work well
+				checkIfCollidesWith(parent.BOTTOMEDGE);
+				if(collided())
+				{
+					stopFall(parent.BOTTOMEDGE);
+				}
 				
-				if(s.collided(parent.TOP))
+				Level lev = parent.getCurrLevel();
+				for(Sprite s : lev.walls)
 				{
-					stopFall(s);
+					s.checkIfCollidesWith(this); //PixelPerfect doesn't work well
+					
+					if(s.collided(parent.TOP))
+					{
+						stopFall(s);
+					}
+					else if(s.collided(parent.BOTTOM))
+					{
+						stopRise(s);
+					}
+					else if(s.collided(parent.LEFT))
+					{
+						stopXMovement(s, true);
+					}
+					else if(s.collided(parent.RIGHT))
+					{
+						stopXMovement(s, false);
+					}
 				}
-				else if(s.collided(parent.BOTTOM))
+				if(!collision)
 				{
-					stopRise(s);
-				}
-				else if(s.collided(parent.LEFT))
-				{
-					stopXMovement(s, true);
-				}
-				else if(s.collided(parent.RIGHT))
-				{
-					stopXMovement(s, false);
+					double yVel = yspeed() + dim.getGravity();
+					motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
 				}
 			}
-			if(!collision)
+			else
 			{
-				double yVel = yspeed() + dim.getGravity();
-				motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
+				//TODO Make sure they are staying on the surface
 			}
 		}
-		else
+		else //for testing the rewind
 		{
-			//TODO Make sure they are staying on the surface
+			try
+			{
+				if(!history.isEmpty())
+				{
+					PlayerHistory past = history.remove();
+					this.position(past.xLoc, past.yLoc);
+					if(past.flipHoriz)
+						flipHorizontal();
+					if(past.flipVert)
+						flipVertical();
+					playAction(past.action);
+					this.setToFrame(past.frame);
+				}
+			}
+			catch(HistoryEmptyException e)
+			{
+				
+			}
 		}
 //		if((y() + HEIGHT) < Shift.FRAME_HEIGHT)
 //		{
@@ -189,25 +214,6 @@ public class Player extends Sprite
 	{
 		move(which);
 		super.draw();
-		//history.add(new PlayerHistory(x(), y(), currFrame, this.flipHoriz, this.flipVertical, currentAction));
-	}
-	
-	class PlayerHistory
-	{
-		double xLoc, yLoc;
-		int frame;
-		boolean flipHoriz, flipVert;
-		Actions action;
-		
-		public PlayerHistory(double xLoc, double yLoc, int frame, boolean flipHoriz, boolean flipVert, Actions action)
-		{
-			this.xLoc = xLoc;
-			this.yLoc = yLoc;
-			this.frame = frame;
-			this.flipHoriz = flipHoriz;
-			this.flipVert = flipVert;
-			this.action = action;
-		}
 	}
 }
 

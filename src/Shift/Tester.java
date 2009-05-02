@@ -28,6 +28,10 @@ public class Tester
 		
 		lev.dimensions.add(dim);
 		
+		dim = new Dimension(Dimensions.DIM2);
+		
+		lev.dimensions.add(dim);
+		
 		return lev;
 	}
 }
