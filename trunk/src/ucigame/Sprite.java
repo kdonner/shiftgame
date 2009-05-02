@@ -1377,7 +1377,7 @@ public class Sprite {
 		// Stop is implemented in a very simple way: the sprite just
 		// stops in its tracks -- it doesn't get as close to the other
 		// sprite as possible (as in the regular collision detection).
-		if (_action == PAUSE)
+		if (_action == PAUSE || _action == CHECK)
 			return;
 		if (_action == STOP)
 		{
