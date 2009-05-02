@@ -1,4 +1,6 @@
 package Shift;
+import java.util.ArrayList;
+
 import ucigame.Image;
 import ucigame.Sprite;
 
@@ -12,6 +14,7 @@ public class Player extends Sprite
 	boolean flipHoriz, flipVertical;
 	private boolean jumping, onSurface, collision;
 	Actions currentAction;
+	private ArrayList<PlayerHistory> history;
 	
 	public Player(Shift parent)
 	{
@@ -42,12 +45,21 @@ public class Player extends Sprite
 		onSurface = false;
 		currentAction = Actions.STAND;
 		collision = false;
+		
+		history = new ArrayList<PlayerHistory>();
+	}
+	
+	public void playAction(Actions action)
+	{
+		currentAction = action;
+		play(action.name);
 	}
 	
 	public void jump()
 	{
 		if(!jumping && onSurface)
 		{
+			//TODO: Replace with playAction call once jump Action defined
 			currentAction = Actions.JUMP;
 			motion(xspeed(), yspeed() + JUMP_FORCE);
 			jumping = true;
@@ -57,15 +69,13 @@ public class Player extends Sprite
 
 	public void stand()
 	{
-		currentAction = Actions.STAND;
-		play("Stand");
+		playAction(Actions.STAND);
 		motion(0, yspeed());
 	}
 	
 	public void run()
 	{
-		currentAction = Actions.RUN;
-		play("Run");
+		playAction(Actions.RUN);
 		motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
 	}
 	
@@ -175,11 +185,30 @@ public class Player extends Sprite
 		onSurface = true;
 	}
 	
-	
-	
 	public void draw(Dimensions which)
 	{
 		move(which);
 		super.draw();
+		//history.add(new PlayerHistory(x(), y(), currFrame, this.flipHoriz, this.flipVertical, currentAction));
+	}
+	
+	class PlayerHistory
+	{
+		double xLoc, yLoc;
+		int frame;
+		boolean flipHoriz, flipVert;
+		Actions action;
+		
+		public PlayerHistory(double xLoc, double yLoc, int frame, boolean flipHoriz, boolean flipVert, Actions action)
+		{
+			this.xLoc = xLoc;
+			this.yLoc = yLoc;
+			this.frame = frame;
+			this.flipHoriz = flipHoriz;
+			this.flipVert = flipVert;
+			this.action = action;
+		}
 	}
 }
+
+

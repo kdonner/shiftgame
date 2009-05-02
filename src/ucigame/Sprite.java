@@ -59,7 +59,7 @@ public class Sprite {
 	private Vector<Image> frameImage = new Vector<Image>();
 	private Image[][] tiledImages = null;
 	private Vector<int[][]> transparencyBuffer = null;
-	private int currFrame;
+	protected int currFrame; //changed to protected to be accessible by extending classes
 	private int numFrames;
 	private int tileWidth = 0, tileHeight = 0;
 	private int tileCols, tileRows;
@@ -1026,8 +1026,7 @@ public class Sprite {
 				return true;
 			else if (side == ucigame.TOP && Ycollision && !contactOnThisBottom)
 				return true;
-			else if (side == ucigame.BOTTOM && Ycollision
-					&& contactOnThisBottom)
+			else if (side == ucigame.BOTTOM && Ycollision && contactOnThisBottom)
 				return true;
 			if (side != ucigame.LEFT && side != ucigame.RIGHT
 					&& side != ucigame.TOP && side != ucigame.BOTTOM)
@@ -1173,6 +1172,7 @@ public class Sprite {
 		if (!overlapsWith(_sprite)) {
 			return;
 		}
+		
 
 		if (_sprite == ucigame.BOTTOMEDGE)
 		{
