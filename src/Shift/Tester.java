@@ -14,7 +14,7 @@ public class Tester
 		lev.walls.add(wall);
 		
 		wall = helper.makeSprite(helper.getImage(Constants.IMG_DIR + "levels/wall.gif"));
-		wall.position(Shift.FRAME_WIDTH / 2 - 150, Shift.FRAME_HEIGHT - wall.height());
+		wall.position(Shift.FRAME_WIDTH / 2 - 350, Shift.FRAME_HEIGHT - wall.height());
 		lev.walls.add(wall);
 		
 		Sprite platform = helper.makeSprite(helper.getImage(Constants.IMG_DIR + "levels/platform.gif"));

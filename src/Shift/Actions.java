@@ -3,7 +3,8 @@ package Shift;
 public enum Actions {
 	RUN("Run"),
 	JUMP("Jump"),
-	STAND("Stand");
+	STAND("Stand"),
+	PUSH("Push");
 	
 	public String name;
 	Actions(String name)
