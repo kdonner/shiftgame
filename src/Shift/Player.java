@@ -36,7 +36,8 @@ public class Player extends Sprite
 				704, 0, //Frame 11
 				576, 0); //Frame 12 Standing  
 		defineSequence(Actions.RUN.name, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
-		defineSequence(Actions.STAND.name, 12);
+		defineSequence(Actions.STAND.name, 12); //TODO: make real stand sprite
+		defineSequence(Actions.JUMP.name, 12); //TODO: make real jump animation
 		framerate(20);
 		
 		flipHoriz = false;
