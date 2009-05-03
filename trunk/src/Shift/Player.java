@@ -16,6 +16,7 @@ public class Player extends Sprite
 	private Sprite onWhat; //Goes with onSurface
 	Actions currentAction;
 	private HistoryManager history;
+	short health, armor; //These will be between 0 and 100
 	
 	public Player(Shift parent)
 	{
@@ -49,6 +50,8 @@ public class Player extends Sprite
 		currentAction = Actions.STAND;
 		collision = false;
 		onWhat = null;
+		health = 100;
+		armor = 0;
 		
 		history = new HistoryManager();
 	}
