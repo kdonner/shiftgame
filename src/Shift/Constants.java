@@ -7,4 +7,5 @@ public class Constants
 	//If you are receiving img not found or audio not found errors this might be why
 	public static String IMG_DIR = "../img/";
 	public static String AUDIO_DIR = "../audio/";
+	public static StringBuilder strBuild = new StringBuilder();
 }
