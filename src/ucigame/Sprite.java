@@ -91,6 +91,7 @@ public class Sprite {
 	private int sequenceRepetitions = 0;
 	private int indexWithinSequence = 0;
 	private boolean playSequenceOnce = false;
+	private float opacity; //should have value between 0f and 1f inclusive
 
 	// package visible
 	int width, height;
@@ -103,6 +104,7 @@ public class Sprite {
 		rotationDegrees = 0;
 		addOnceDeltaX = addOnceDeltaY = 0;
 		deltaX = deltaY = 0;
+		opacity = 1f;
 	}
 
 	/**
@@ -204,6 +206,15 @@ public class Sprite {
 		this.width = width;
 		this.height = height;
 		numFrames = 1;
+	}
+	
+	public void setOpacity(float newOpac)
+	{
+		//The range of valid values, otherwise leave it unchanged
+		if(newOpac >= 0f && newOpac <= 1f)
+		{
+			opacity = newOpac;
+		}
 	}
 
 	/**
@@ -624,11 +635,15 @@ public class Sprite {
 			flipH = flipV = false;
 		}
 		if (tiledImages == null)
+		{
+			frameImage.get(currFrame).setOpacity(opacity);
 			frameImage.get(currFrame).draw(at);
+		}
 		else {
 			for (int col = 0; col < tileCols; col++)
 				for (int row = 0; row < tileRows; row++) {
 					if (tiledImages[col][row] != null) {
+						tiledImages[col][row].setOpacity(opacity);
 						AffineTransform at2 = new AffineTransform(_Tx);
 						at2.translate(currX + rotCenterX + (col * tileWidth),
 								currY + rotCenterY + (row * tileHeight));

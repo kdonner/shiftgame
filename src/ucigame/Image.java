@@ -42,6 +42,10 @@ public class Image
 	private Ucigame ucigame;
 	BufferedImage buffImage;
 	int iwidth, iheight;
+	float[] scales = { 1f, 1f, 1f, 1f };
+	float[] offsets = new float[4];
+	RescaleOp rop;
+
 
 	/**
 	 * Create new image.
@@ -55,6 +59,7 @@ public class Image
 		buffImage = toBufferedImage(_i);
 		iwidth = buffImage.getWidth(ucigame);
 		iheight = buffImage.getHeight(ucigame);
+		rop = new RescaleOp(scales, offsets, null);
 	}
 
 	/**
@@ -69,6 +74,15 @@ public class Image
 	{
 		draw(AffineTransform.getTranslateInstance(_x, _y));
 	}
+	
+	void setOpacity(float opacity)
+	{
+		if(scales[3] != opacity)
+		{
+			scales[3] = opacity;
+			rop = new RescaleOp(scales, offsets, null);
+		}
+	}
 
 	/**
 	 * Draw the image.
@@ -77,13 +91,18 @@ public class Image
 	 */
 	void draw(AffineTransform _Tx)   // package access only
 	{
+		//This applies any filter to the image, this includes Opacity as well as many other options
+		//More details: http://72.5.124.55/docs/books/tutorial/2d/images/drawimage.html
+		BufferedImage bImage = rop.filter(buffImage, null);
 		if (ucigame.offG != null)
 		{
-			ucigame.offG.drawImage(buffImage, _Tx, null);
+			ucigame.offG.drawImage(bImage, _Tx, null);
 		}
 		else
 			ucigame.logError("UImage.draw() used outside of draw()");
 	}
+	
+	
 
 	/**
 	 * This method return the width of the image.
