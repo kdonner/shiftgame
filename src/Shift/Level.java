@@ -6,8 +6,8 @@ import ucigame.Sprite;
 public class Level implements java.io.Serializable 
 {
 	private static final long serialVersionUID = 3627550956646622212L;
-	ArrayList<Sprite> walls;
-	ArrayList<Dimension> dimensions;
+	ArrayList<Sprite> walls; //These walls will always be drawn
+	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	int currDimension = 0;
 	
 	public Level(int numDims)

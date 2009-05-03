@@ -12,6 +12,7 @@ public class Shift extends Ucigame
 	private Player player;
 	private Level currLevel;
 	private float opac; //for testing opacity changes
+	private long startTime;
 
 	public void setup()
 	{
@@ -24,6 +25,7 @@ public class Shift extends Ucigame
 		player.position(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
 		player.stand();
 		currLevel = Tester.makeLevel(this);
+		startTime = System.currentTimeMillis();
 		opac = 1f;
 	}
 	
@@ -31,6 +33,7 @@ public class Shift extends Ucigame
 	{
 		canvas.clear();
 		currLevel.render();
+		drawUI();
 		player.draw(currLevel.getCurrDims());
 	}
 	
@@ -84,6 +87,34 @@ public class Shift extends Ucigame
 		{
 			player.stand();
 		}
+	}
+	
+	private void drawUI()
+	{
+		drawHealth();
+		drawArmor();
+		drawTime();
+		drawInventory();
+	}
+	
+	private void drawHealth()
+	{
+		
+	}
+	
+	private void drawArmor()
+	{
+		
+	}
+	
+	private void drawTime()
+	{
+		long elapsed = System.currentTimeMillis() - startTime;
+	}
+	
+	private void drawInventory()
+	{
+		
 	}
 	
 	public Level getCurrLevel()
