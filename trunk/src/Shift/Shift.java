@@ -11,6 +11,7 @@ public class Shift extends Ucigame
 	public static final int FRAME_HEIGHT = 720;
 	private Player player;
 	private Level currLevel;
+	private float opac; //for testing opacity changes
 
 	public void setup()
 	{
@@ -23,6 +24,7 @@ public class Shift extends Ucigame
 		player.position(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
 		player.stand();
 		currLevel = Tester.makeLevel(this);
+		opac = 1f;
 	}
 	
 	public void draw()
@@ -63,6 +65,16 @@ public class Shift extends Ucigame
 		if(keyboard.isDown(keyboard.K))
 		{
 			currLevel.switchDim(0); //just for testing
+		}
+		if(keyboard.isDown(keyboard.EQUALS))
+		{
+			opac += 0.01f;
+			player.setOpacity(opac);
+		}
+		if(keyboard.isDown(keyboard.DASH))
+		{
+			opac -= 0.01f;
+			player.setOpacity(opac);
 		}
 	}
 	
