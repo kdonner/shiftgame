@@ -87,6 +87,40 @@ public class Player extends Sprite
 		motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
 	}
 	
+	public void lossHealth(short amt)
+	{
+		if(armor > 0)
+		{
+			if(armor < amt)
+			{
+				amt -= armor;
+				armor = 0;
+			}
+			else
+			{
+				armor -= amt;
+				amt = 0;
+			}
+		}
+		if(amt > 0)
+		{
+			if(health < amt)
+			{
+				health = 0;
+				die();
+			}
+			else
+			{
+				health -= amt;
+			}
+		}
+	}
+	
+	private void die()
+	{
+		//TODO send death signals, start level over, etc.
+	}
+	
 	public void move(Dimensions dim)
 	{
 		//TODO: This is temorary for the reverse time functionality, should actually check dimension 
