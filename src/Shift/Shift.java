@@ -27,6 +27,7 @@ public class Shift extends Ucigame
 		currLevel = Tester.makeLevel(this);
 		startTime = System.currentTimeMillis();
 		opac = 1f;
+		player.armor = 100; //just for testing TODO: Remove this
 	}
 	
 	public void draw()
@@ -61,13 +62,14 @@ public class Shift extends Ucigame
 		{
 			player.stand();
 		}
+		//The following controls are just for testing
 		if(keyboard.isDown(keyboard.J))
 		{
-			currLevel.switchDim(1); //just for testing
+			currLevel.switchDim(1); 
 		}
 		if(keyboard.isDown(keyboard.K))
 		{
-			currLevel.switchDim(0); //just for testing
+			currLevel.switchDim(0); 
 		}
 		if(keyboard.isDown(keyboard.EQUALS))
 		{
@@ -78,6 +80,10 @@ public class Shift extends Ucigame
 		{
 			opac -= 0.01f;
 			player.setOpacity(opac);
+		}
+		if(keyboard.isDown(keyboard.Y))
+		{
+			player.lossHealth((short)1);
 		}
 	}
 	
@@ -99,12 +105,52 @@ public class Shift extends Ucigame
 	
 	private void drawHealth()
 	{
-		
+		if(player.health > 0)
+		{
+			int x = 10;
+			int y = 10;
+			Sprite heal = makeSprite(getImage(Constants.IMG_DIR + "player/HealthLeft.png"));
+			heal.position(x, y);
+			heal.draw();
+			if(player.health > 20)
+			{
+				heal = makeSprite(getImage(Constants.IMG_DIR + "player/HealthFiller.png"));
+				for(short i = player.health; i > 20; i -=10)
+				{
+					x += 25;
+					heal.position(x, y);
+					heal.draw();
+				}
+			}
+			heal = makeSprite(getImage(Constants.IMG_DIR + "player/HealthRight.png"));
+			heal.position((player.health > 10? x + 25 : x + 1), y);
+			heal.draw();
+		}
 	}
 	
 	private void drawArmor()
 	{
-		
+		if(player.armor > 0)
+		{
+			int x = 10;
+			int y = 30;
+			Sprite armor = makeSprite(getImage(Constants.IMG_DIR + "player/ArmorLeft.png"));
+			armor.position(x, y);
+			armor.draw();
+			if(player.armor > 20)
+			{
+				armor = makeSprite(getImage(Constants.IMG_DIR + "player/ArmorFiller.png"));
+				for(short i = player.armor; i > 20; i -=10)
+				{
+					x += 25;
+					armor.position(x, y);
+					armor.draw();
+				}
+			}
+			armor = makeSprite(getImage(Constants.IMG_DIR + "player/ArmorRight.png"));
+			armor.position((player.armor > 10? x + 25 : x + 1), y);
+			armor.draw();
+		}
 	}
 	
 	private void drawTime()
