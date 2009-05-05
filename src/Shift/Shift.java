@@ -173,7 +173,7 @@ public class Shift extends Ucigame
 		}
 		build.append(sec);
 		canvas.putText(build.toString(), (FRAME_WIDTH / 2), TIME_OFFSET);
-		build.delete(0, build.length()); //This clears the string builder for the next call
+		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
 	}
 	
 	private void drawInventory()
