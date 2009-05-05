@@ -8,4 +8,9 @@ public class Constants
 	public static String IMG_DIR = "../img/";
 	public static String AUDIO_DIR = "../audio/";
 	public static StringBuilder strBuild = new StringBuilder();
+	
+	public static void clearStringBuilder()
+	{
+		strBuild.delete(0, strBuild.length());
+	}
 }
