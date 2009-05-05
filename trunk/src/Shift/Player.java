@@ -251,21 +251,24 @@ public class Player extends Sprite
 				stopFall(collidedWith);
 			}
 		}
-		else if(this.yspeed() < 0)
+		if(this.yspeed() < 0)
 		{
 			if(collidedWith.y() + collidedWith.height() < this.y())
 			{
 				stopRise(collidedWith);
 			}
 		}
-		else if(this.xspeed() > 0)
+		if(this.xspeed() > 0)
 		{
-			if(this.x() + this.width() > collidedWith.x())
+			if(this.y() < collidedWith.y() + collidedWith.height())
 			{
-				stopXMovement(collidedWith, true);
+				if(this.x() + this.width() > collidedWith.x())
+				{
+					stopXMovement(collidedWith, true);
+				}
 			}
 		}
-		else if(this.xspeed() < 0)
+		if(this.xspeed() < 0)
 		{
 			if(this.x() < collidedWith.x() + collidedWith.width())
 			{
