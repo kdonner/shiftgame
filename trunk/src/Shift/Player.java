@@ -253,14 +253,17 @@ public class Player extends Sprite
 		}
 		if(this.yspeed() < 0)
 		{
-			if(collidedWith.y() + collidedWith.height() < this.y())
+			if(this.x() > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width())
 			{
-				stopRise(collidedWith);
+				if(collidedWith.y() + collidedWith.height() < this.y())
+				{
+					stopRise(collidedWith);
+				}
 			}
 		}
 		if(this.xspeed() > 0)
 		{
-			if(this.y() < collidedWith.y() + collidedWith.height())
+			if(this.y() < collidedWith.y() + collidedWith.height() && !(this.x() + this.width()/2 > collidedWith.x() + collidedWith.width()))
 			{
 				if(this.x() + this.width() > collidedWith.x())
 				{
@@ -270,9 +273,12 @@ public class Player extends Sprite
 		}
 		if(this.xspeed() < 0)
 		{
-			if(this.x() < collidedWith.x() + collidedWith.width())
+			if(this.y() < collidedWith.y() + collidedWith.height() && !(this.x() - this.width()/2 < collidedWith.x()))
 			{
-				stopXMovement(collidedWith, false);
+				if(this.x() < collidedWith.x() + collidedWith.width())
+				{
+					stopXMovement(collidedWith, false);
+				}
 			}
 		}
 	}
@@ -301,7 +307,7 @@ public class Player extends Sprite
 		collision = true;
 		System.out.println("Collision: Stop Rise");
 		motion(xspeed(), 0);
-		this.position(x(), collidedWith.y() + collidedWith.height());
+		this.position(this.x(), collidedWith.y() + collidedWith.height());
 		jumping = true;
 		onSurface = false;
 		onWhat = null;
@@ -312,7 +318,7 @@ public class Player extends Sprite
 		collision = true;
 		System.out.println("Collision: Stop Fall");
 		motion(xspeed(), 0);
-		this.position(x(), collidedWith.y() - HEIGHT);
+		this.position(this.x(), collidedWith.y() - HEIGHT);
 		jumping = false;
 		onSurface = true;
 		onWhat = collidedWith;
