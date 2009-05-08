@@ -14,6 +14,7 @@ public class Player extends Sprite
 	boolean flipHoriz, flipVertical;
 	private boolean jumping, onSurface, collision;
 	private Sprite onWhat; //Goes with onSurface
+	Inventory inven;
 	Actions currentAction;
 	private HistoryManager history;
 	short health, armor; //These will be between 0 and 100
@@ -43,6 +44,7 @@ public class Player extends Sprite
 		defineSequence(Actions.PUSH.name, 11); //TODO: make real push sprite
 		framerate(20);
 		
+		inven = new Inventory(parent);
 		flipHoriz = false;
 		flipVertical = false;
 		jumping = false;
@@ -327,7 +329,9 @@ public class Player extends Sprite
 	public void draw(Dimensions which)
 	{
 		move(which);
+		inven.draw();
 		super.draw();
+		inven.draw();
 	}
 }
 

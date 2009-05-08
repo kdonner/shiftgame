@@ -85,6 +85,14 @@ public class Shift extends Ucigame
 		{
 			player.lossHealth((short)1);
 		}
+		if(keyboard.isDown(keyboard.Q))
+		{
+			player.inven.items[0].found();
+		}
+		if(keyboard.isDown(keyboard.TAB))
+		{
+			player.inven.items[0].use();
+		}
 	}
 	
 	public void onKeyRelease()
