@@ -253,9 +253,9 @@ public class Player extends Sprite
 		}
 		if(this.yspeed() < 0)
 		{
-			if(this.x() > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width())
+			if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width())
 			{
-				if(collidedWith.y() + collidedWith.height() < this.y())
+				if(collidedWith.y() < this.y())
 				{
 					stopRise(collidedWith);
 				}
@@ -265,7 +265,7 @@ public class Player extends Sprite
 		{
 			if(this.y() < collidedWith.y() + collidedWith.height() && !(this.x() + this.width()/2 > collidedWith.x() + collidedWith.width()))
 			{
-				if(this.x() + this.width() > collidedWith.x())
+				if(this.x() + this.width() > collidedWith.x() && !(this.x() > collidedWith.x() + this.width()/2))
 				{
 					stopXMovement(collidedWith, true);
 				}
@@ -273,7 +273,7 @@ public class Player extends Sprite
 		}
 		if(this.xspeed() < 0)
 		{
-			if(this.y() < collidedWith.y() + collidedWith.height() && !(this.x() - this.width()/2 < collidedWith.x()))
+			if(this.y() < collidedWith.y() + collidedWith.height() && !(this.x() < collidedWith.x() + collidedWith.width()/8))
 			{
 				if(this.x() < collidedWith.x() + collidedWith.width())
 				{
