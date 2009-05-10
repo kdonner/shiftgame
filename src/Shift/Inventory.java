@@ -9,10 +9,10 @@ public class Inventory
 	{
 		items = new InventoryItem[3];
 		int yLoc = 10;
-		int xLoc = Shift.WIDTH - IMG_X_OFFSET;
-		items[0] = new InventoryItem(parent, "items/keyInventory.png", xLoc, yLoc);
+		int xLoc = Shift.FRAME_WIDTH - IMG_X_OFFSET;
+		items[0] = new InventoryItem(parent, "items/SilverKey.png", xLoc, yLoc);
 		xLoc -= IMG_X_OFFSET;
-		items[1] = new InventoryItem(parent, "items/keyInventory.png", xLoc, yLoc);
+		items[1] = new InventoryItem(parent, "items/GoldKey.png", xLoc, yLoc);
 		xLoc -= IMG_X_OFFSET;
 		items[2] = new InventoryItem(parent, "items/keyInventory.png", xLoc, yLoc);
 	}

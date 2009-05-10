@@ -329,7 +329,6 @@ public class Player extends Sprite
 	public void draw(Dimensions which)
 	{
 		move(which);
-		inven.draw();
 		super.draw();
 		inven.draw();
 	}
