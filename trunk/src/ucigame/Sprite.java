@@ -91,7 +91,7 @@ public class Sprite {
 	private int sequenceRepetitions = 0;
 	private int indexWithinSequence = 0;
 	private boolean playSequenceOnce = false;
-	private float opacity; //should have value between 0f and 1f inclusive
+	private float opacity, rFilter, gFilter, bFilter; //different scaler filter values, should have value between 0f and 1f inclusive
 
 	// package visible
 	int width, height;
@@ -104,7 +104,7 @@ public class Sprite {
 		rotationDegrees = 0;
 		addOnceDeltaX = addOnceDeltaY = 0;
 		deltaX = deltaY = 0;
-		opacity = 1f;
+		opacity = 1f; rFilter = 1f; gFilter = 1f; bFilter = 1f;
 	}
 
 	/**
@@ -214,6 +214,33 @@ public class Sprite {
 		if(newOpac >= 0f && newOpac <= 1f)
 		{
 			opacity = newOpac;
+		}
+	}
+	
+	public void setRFilter(float newR)
+	{
+		//The range of valid values, otherwise leave it unchanged
+		if(newR >= 0f && newR <= 1f)
+		{
+			rFilter = newR;
+		}
+	}
+	
+	public void setGFilter(float newG)
+	{
+		//The range of valid values, otherwise leave it unchanged
+		if(newG >= 0f && newG <= 1f)
+		{
+			gFilter = newG;
+		}
+	}
+	
+	public void setBFilter(float newB)
+	{
+		//The range of valid values, otherwise leave it unchanged
+		if(newB >= 0f && newB <= 1f)
+		{
+			bFilter = newB;
 		}
 	}
 
@@ -636,14 +663,14 @@ public class Sprite {
 		}
 		if (tiledImages == null)
 		{
-			frameImage.get(currFrame).setOpacity(opacity);
+			setFilters(frameImage.get(currFrame));
 			frameImage.get(currFrame).draw(at);
 		}
 		else {
 			for (int col = 0; col < tileCols; col++)
 				for (int row = 0; row < tileRows; row++) {
 					if (tiledImages[col][row] != null) {
-						tiledImages[col][row].setOpacity(opacity);
+						setFilters(tiledImages[col][row]);
 						AffineTransform at2 = new AffineTransform(_Tx);
 						at2.translate(currX + rotCenterX + (col * tileWidth),
 								currY + rotCenterY + (row * tileHeight));
@@ -681,6 +708,14 @@ public class Sprite {
 			ucigame.addSpriteToList(ps.sprite);
 		}
 		rotationDegrees = rotCenterX = rotCenterY = 0;
+	}
+	
+	private void setFilters(Image img)
+	{
+		img.setOpacity(opacity);
+		img.setRFilter(rFilter);
+		img.setGFilter(gFilter);
+		img.setRFilter(rFilter);
 	}
 
 	// Sets currFrame, which is an index into the frameImage Vector,

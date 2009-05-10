@@ -75,11 +75,40 @@ public class Image
 		draw(AffineTransform.getTranslateInstance(_x, _y));
 	}
 	
+	//Added by Matt Crain, these next four functions allow the modification of the different fields of the scaling array
+	//They allow for opacity changes and reduction of different color amounts
 	void setOpacity(float opacity)
 	{
 		if(scales[3] != opacity)
 		{
 			scales[3] = opacity;
+			rop = new RescaleOp(scales, offsets, null);
+		}
+	}
+	
+	void setRFilter(float newR)
+	{
+		if(scales[0] != newR)
+		{
+			scales[0] = newR;
+			rop = new RescaleOp(scales, offsets, null);
+		}
+	}
+	
+	void setGFilter(float newG)
+	{
+		if(scales[1] != newG)
+		{
+			scales[1] = newG;
+			rop = new RescaleOp(scales, offsets, null);
+		}
+	}
+	
+	void setBFilter(float newB)
+	{
+		if(scales[2] != newB)
+		{
+			scales[2] = newB;
 			rop = new RescaleOp(scales, offsets, null);
 		}
 	}

@@ -10,11 +10,9 @@ public class InventoryItem extends Sprite
 	
 	public InventoryItem(Shift parent, String imgDir, int xLoc, int yLoc)
 	{
-		super(WIDTH, HEIGHT);
+		super(parent.getImage(Constants.IMG_DIR+imgDir));
 		this.parent = parent;
-		Image item = parent.getImage(Constants.IMG_DIR+imgDir);
-		this.addFrame(item, 0, 0);
-		hasFound = false;
+		hasFound = false; //TODO: Change default to false, set to true only to ensure drawing correctly
 		this.position(xLoc, yLoc);
 	}
 	
@@ -22,7 +20,7 @@ public class InventoryItem extends Sprite
 	{
 		if(hasFound)
 		{
-			this.setOpacity(0f);
+			this.setOpacity(0.1f);
 			hasFound = false;
 		}
 	}
@@ -34,10 +32,5 @@ public class InventoryItem extends Sprite
 			this.setOpacity(1f);
 			hasFound = true;
 		}
-	}
-	
-	public void draw()
-	{
-		super.draw();
 	}
 }

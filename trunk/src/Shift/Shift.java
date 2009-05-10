@@ -27,7 +27,8 @@ public class Shift extends Ucigame
 		currLevel = Tester.makeLevel(this);
 		startTime = System.currentTimeMillis();
 		opac = 1f;
-		player.armor = 100; //just for testing TODO: Remove this
+		//Everything below this is just for testing purposes TODO: Remove this when everything runs well
+		player.armor = 100; 
 	}
 	
 	public void draw()
