@@ -236,33 +236,34 @@ public class DimensionMenu
 			wedges.add(wedge);
 			if(i == 0)
 			{
-				yLoc += wedge.height()/4 + 6;
-				xLoc += reference.width()/2 + 7;
+				yLoc += wedge.height()/4 + 7;
+				xLoc += reference.width()/2 + 8;
 			}
 			if(i == 1)
 			{
-				yLoc += wedge.height()/2 + 18;
-				xLoc += wedge.width()/4 - 8;
+				yLoc += wedge.height()/2 + 20;
+				xLoc += wedge.width()/4 - 10;
 			}
 			if(i == 2)
 			{
-				yLoc += wedge.height()/2 + 6;
-				xLoc -= reference.width()/4 + 14;
+				yLoc += wedge.height()/2 + 9;
+				xLoc -= reference.width()/4 + 15;
 			}
 			if(i == 3)
 			{
 				yLoc += 2;
-				xLoc -= wedge.width()/2 + 14;
+				xLoc -= wedge.width()/2 + 16;
 			}
 			if(i == 4)
 			{
-				yLoc -= wedge.height()/2 + 5;
-				xLoc -= reference.width()/4 + 16;
+				yLoc -= wedge.height()/2 + 7;
+				xLoc -= reference.width()/4 + 18;
 			}
 			if(i == 5)
 			{
-				yLoc -= wedge.height()/2 + 16;
-				xLoc += 10;
+				rotationAmt += 2.2;
+				yLoc -= wedge.height()/2 + 22;
+				xLoc += 14;
 			}
 			rotationAmt += rotation;
 		}
