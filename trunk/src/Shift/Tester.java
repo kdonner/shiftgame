@@ -36,7 +36,6 @@ public class Tester
 		lev.dimensions.add(dim);
 		lev.dimensions.add(dim);
 		lev.dimensions.add(dim);
-		lev.dimensions.add(dim);
 		
 		return lev;
 	}
