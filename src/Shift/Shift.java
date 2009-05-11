@@ -13,6 +13,10 @@ public class Shift extends Ucigame
 	private Level currLevel;
 	private float opac; //for testing opacity changes
 	private long startTime;
+	private DimensionMenu dimMenu;
+	private boolean displayDimMenu;
+	private double mouseX, mouseY;
+//	Sprite testSprite; TODO: Remove test Sprite when done
 
 	public void setup()
 	{
@@ -25,10 +29,16 @@ public class Shift extends Ucigame
 		player.position(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
 		player.stand();
 		currLevel = Tester.makeLevel(this);
+		dimMenu = new DimensionMenu(this, currLevel.dimensions.size());
 		startTime = System.currentTimeMillis();
 		opac = 1f;
+		displayDimMenu = false;
+		mouseX = -1;
+		mouseY = -1;
 		//Everything below this is just for testing purposes TODO: Remove this when everything runs well
 		player.armor = 100; 
+//		testSprite = makeSprite(getImage(Constants.IMG_DIR + "menu/Select8.png"));
+//		testSprite.position(400, 400);
 	}
 	
 	public void draw()
@@ -37,6 +47,7 @@ public class Shift extends Ucigame
 		currLevel.render();
 		drawUI();
 		player.draw(currLevel.getCurrDims());
+//		testSprite.draw();
 	}
 	
 	public void onKeyPress()
@@ -62,6 +73,15 @@ public class Shift extends Ucigame
 		if(keyboard.isDown(keyboard.RIGHT, keyboard.D) && keyboard.isDown(keyboard.LEFT, keyboard.A))
 		{
 			player.stand();
+		}
+		if(keyboard.isDown(keyboard.SHIFT))
+		{
+			if(!displayDimMenu)
+			{
+				displayDimMenu = true;
+				mouseX = mouse.x();
+				mouseY = mouse.y();
+			}
 		}
 		//The following controls are just for testing
 		if(keyboard.isDown(keyboard.J))
@@ -102,6 +122,15 @@ public class Shift extends Ucigame
 		{
 			player.stand();
 		}
+		if(displayDimMenu)
+		{
+			if(!keyboard.isDown(keyboard.SHIFT))
+			{
+				displayDimMenu = false;
+				//TODO ShiftDimensions shiftDimension(startX, endX, startY, endY)
+				// shiftDimension(mouseX, mouse.x(), mouseY, mouse.y());
+			}
+		}
 	}
 	
 	private void drawUI()
@@ -110,6 +139,10 @@ public class Shift extends Ucigame
 		drawArmor();
 		drawTime();
 		drawInventory();
+		if(displayDimMenu)
+		{
+			dimMenu.draw();
+		}
 	}
 	
 	private void drawHealth()

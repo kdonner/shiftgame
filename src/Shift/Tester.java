@@ -31,6 +31,12 @@ public class Tester
 		dim = new Dimension(Dimensions.DIM2);
 		
 		lev.dimensions.add(dim);
+		lev.dimensions.add(dim);
+		lev.dimensions.add(dim);
+		lev.dimensions.add(dim);
+		lev.dimensions.add(dim);
+		lev.dimensions.add(dim);
+		lev.dimensions.add(dim);
 		
 		return lev;
 	}
