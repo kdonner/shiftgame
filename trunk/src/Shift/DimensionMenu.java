@@ -59,6 +59,7 @@ public class DimensionMenu
 				create7(numDims);
 				break;
 			case 8:
+				create8(numDims);
 				break;
 			default:
 				break;
@@ -71,7 +72,7 @@ public class DimensionMenu
 		double rotation = 360 / numDims;
 		double rotationAmt = 0;
 		Image reference = parent.getImage(menuImgDir);
-		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; //TODO: Add calculation to position wedges properly
+		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
 			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
@@ -90,7 +91,7 @@ public class DimensionMenu
 		double rotation = 360 / numDims;
 		double rotationAmt = 0;
 		Image reference = parent.getImage(menuImgDir);
-		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; //TODO: Add calculation to position wedges properly
+		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
 			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
@@ -117,7 +118,7 @@ public class DimensionMenu
 		double rotation = 360 / numDims;
 		double rotationAmt = 0;
 		Image reference = parent.getImage(menuImgDir);
-		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; //TODO: Add calculation to position wedges properly
+		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
 			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
@@ -149,7 +150,7 @@ public class DimensionMenu
 		double rotation = 360 / numDims;
 		double rotationAmt = 0;
 		Image reference = parent.getImage(menuImgDir);
-		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; //TODO: Add calculation to position wedges properly
+		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
 			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
@@ -186,7 +187,7 @@ public class DimensionMenu
 		double rotation = 360 / numDims;
 		double rotationAmt = 0;
 		Image reference = parent.getImage(menuImgDir);
-		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; //TODO: Add calculation to position wedges properly
+		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
 			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
@@ -227,7 +228,7 @@ public class DimensionMenu
 		double rotation = 360 / numDims;
 		double rotationAmt = 0;
 		Image reference = parent.getImage(menuImgDir);
-		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; //TODO: Add calculation to position wedges properly
+		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
 			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
@@ -264,6 +265,58 @@ public class DimensionMenu
 				rotationAmt += 2.2;
 				yLoc -= wedge.height()/2 + 22;
 				xLoc += 14;
+			}
+			rotationAmt += rotation;
+		}
+	}
+	
+	private void create8(int numDims)
+	{
+		String menuImgDir = Constants.IMG_DIR + "menu/Select" + numDims + ".png";
+		double rotation = 360 / numDims;
+		double rotationAmt = 0;
+		Image reference = parent.getImage(menuImgDir);
+		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
+		for(int i = 0; i < numDims; i++)
+		{
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			wedge.rotation = rotationAmt;
+			wedge.position(xLoc, yLoc);
+			wedges.add(wedge);
+			if(i == 0)
+			{
+				yLoc += wedge.height()/4 + 1;
+				xLoc += reference.width()/2 + 9;
+			}
+			if(i == 1)
+			{
+				yLoc += wedge.height()/2 + 12;
+				xLoc += wedge.width()/4 + 1;
+			}
+			if(i == 2)
+			{
+				yLoc += wedge.height()/2 + 12;
+				xLoc -= reference.width()/4;
+			}
+			if(i == 3)
+			{
+				yLoc += wedge.height()/4 + 2;
+				xLoc -= reference.width()/2 + 10;
+			}
+			if(i == 4)
+			{
+				yLoc -= wedge.height()/4 + 2;
+				xLoc -= reference.width()/2 + 10;
+			}
+			if(i == 5)
+			{
+				yLoc -= wedge.height()/2 + 12;
+				xLoc -= reference.width()/4;
+			}
+			if(i == 6)
+			{
+				yLoc -= wedge.height()/2 + 11;
+				xLoc += wedge.width()/4;
 			}
 			rotationAmt += rotation;
 		}
