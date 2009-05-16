@@ -6,10 +6,12 @@ public class MainMenu
 {
 	Shift parent;
 	Sprite newGame, loadGame, levelEdit, options, quit;
+	private boolean isShown;
 	
 	public MainMenu(Shift parent)
 	{
 		this.parent = parent;
+		isShown = true;
 		newGame = parent.makeButton("NewGame", parent.getImage(Constants.IMG_DIR + "menu/newgame.png"), 300, 72);
 		loadGame = parent.makeButton("LoadGame", parent.getImage(Constants.IMG_DIR + "menu/loadgame.png"), 300, 72);
 		levelEdit = parent.makeButton("LevelEdit", parent.getImage(Constants.IMG_DIR + "menu/leveledit.png"), 300, 72);
@@ -35,6 +37,31 @@ public class MainMenu
 		levelEdit.draw();
 		options.draw();
 		quit.draw();
+	}
+	
+	public void hide()
+	{
+		isShown = false;
+		newGame.hide();
+		loadGame.hide();
+		levelEdit.hide();
+		options.hide();
+		quit.hide();
+	}
+	
+	public void show()
+	{
+		isShown = true;
+		newGame.show();
+		loadGame.show();
+		levelEdit.show();
+		options.show();
+		quit.show();
+	}
+	
+	public boolean isVisible()
+	{
+		return isShown;
 	}
 
 }

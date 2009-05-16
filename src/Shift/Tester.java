@@ -5,28 +5,28 @@ import ucigame.Ucigame;
 
 public class Tester 
 {
-	public static Level makeLevel(Ucigame helper)
+	public static Level makeLevel(Shift helper)
 	{
 		Level lev = new Level();
 		
 		lev.start = new Point(20, Shift.FRAME_HEIGHT - 80);
 		
-		Sprite wall = helper.makeSprite(helper.getImage(Constants.IMG_DIR + "levels/wall.gif"));
+		Wall wall = new Wall(helper, Walls.WALL1);
 		wall.position(Shift.FRAME_WIDTH / 2, Shift.FRAME_HEIGHT - wall.height());
-		lev.walls.add(wall);
+		lev.addObject(wall);
 		
-		wall = helper.makeSprite(helper.getImage(Constants.IMG_DIR + "levels/wall.gif"));
+		wall = new Wall(helper, Walls.WALL1);
 		wall.position(Shift.FRAME_WIDTH / 2 - 350, Shift.FRAME_HEIGHT - wall.height());
-		lev.walls.add(wall);
+		lev.addObject(wall);
 		
-		Sprite platform = helper.makeSprite(helper.getImage(Constants.IMG_DIR + "levels/platform.gif"));
-		platform.position(Shift.FRAME_WIDTH / 2 - 200, Shift.FRAME_HEIGHT - wall.height());
-		lev.walls.add(platform);
+		wall = new Wall(helper, Walls.PLATFORM1);
+		wall.position(Shift.FRAME_WIDTH / 2 - 200, Shift.FRAME_HEIGHT - 100);
+		lev.addObject(wall);
 		
-		wall = helper.makeSprite(helper.getImage(Constants.IMG_DIR + "levels/wall.gif"));
+		wall = new Wall(helper, Walls.WALL1);
 		wall.position(Shift.FRAME_WIDTH / 2 + 350, Shift.FRAME_HEIGHT - wall.height());
 		Dimension dim = new Dimension(Dimensions.DIM1);
-		dim.walls.add(wall);
+		dim.addObject(wall);
 		
 		lev.dimensions.add(dim);
 		

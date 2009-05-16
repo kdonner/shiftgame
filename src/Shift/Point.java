@@ -1,7 +1,8 @@
 package Shift;
 
-public class Point 
+public class Point implements java.io.Serializable
 {
+	private static final long serialVersionUID = 3627550956646622212L;
 	double xLoc, yLoc;
 	
 	public Point(double xLoc, double yLoc)
