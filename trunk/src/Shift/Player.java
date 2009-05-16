@@ -50,6 +50,7 @@ public class Player extends Sprite
 		jumping = false;
 		onSurface = false;
 		currentAction = Actions.STAND;
+		playAction(currentAction);
 		collision = false;
 		onWhat = null;
 		health = 100;
