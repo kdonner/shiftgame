@@ -128,7 +128,7 @@ public class Player extends Sprite
 		//TODO: This is temorary for the reverse time functionality, should actually check dimension 
 		if(dim != Dimensions.DIM2)
 		{
-			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, this.flipHoriz, this.flipVertical, currentAction));
+			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat));
 			super.move(); //If this doesn't occur before collision detection jumping gets screwed
 			collision = false;
 			if(flipHoriz)
@@ -137,7 +137,7 @@ public class Player extends Sprite
 				flipVertical();
 			if(onSurface)
 			{
-				if((x() + this.width()) < onWhat.x() || x() > (onWhat.x() + onWhat.width()))
+				if((x() + this.width()/2) < onWhat.x() || (x() + this.width()/2) > (onWhat.x() + onWhat.width()))
 				{
 					System.out.println("Fall off Surface: " + x()+width() + " : " + onWhat.x());
 					onSurface = false;
@@ -210,7 +210,8 @@ public class Player extends Sprite
 						flipVertical();
 					playAction(past.action);
 					this.setToFrame(past.frame);
-					onSurface = false;
+					onSurface = past.onSurface;
+					this.onWhat = past.onWhat;
 				}
 			}
 			catch(HistoryEmptyException e)

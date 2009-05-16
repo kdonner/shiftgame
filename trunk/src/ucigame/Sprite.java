@@ -104,7 +104,7 @@ public class Sprite {
 		rotationDegrees = 0;
 		addOnceDeltaX = addOnceDeltaY = 0;
 		deltaX = deltaY = 0;
-		opacity = 1f; rFilter = 1f; gFilter = 1f; bFilter = 1f;
+		opacity = 1f; rFilter = 1f; gFilter = 1f; bFilter = 1f; //These keep the filters to their normal values, nothing will be subtracted
 	}
 
 	/**
