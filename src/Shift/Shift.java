@@ -11,12 +11,14 @@ public class Shift extends Ucigame
 	public static final int FRAME_HEIGHT = 720;
 	private Player player;
 	private Level currLevel;
-	private float opac; //for testing opacity changes
 	private long startTime;
+	private MainMenu mainMenu;
 	private DimensionMenu dimMenu;
 	private boolean displayDimMenu;
 	private double mouseX, mouseY;
-	private GameState state;
+	public GameState state;
+	
+	private Sprite levelObject;
 //	Sprite testSprite; TODO: Remove test Sprite when done
 
 	public void setup()
@@ -29,108 +31,174 @@ public class Shift extends Ucigame
 		framerate(FRAME_RATE);
 		player = new Player(this);
 		player.position(30, FRAME_HEIGHT - 100);
-		player.stand();
-		currLevel = Tester.makeLevel(this);
-		dimMenu = new DimensionMenu(this, currLevel.dimensions.size());
-		startTime = System.currentTimeMillis();
-		opac = 1f;
+		mainMenu = new MainMenu(this);
 		displayDimMenu = false;
 		mouseX = -1;
 		mouseY = -1;
-		//Everything below this is just for testing purposes TODO: Remove this when everything runs well
-		player.armor = 100; 
-//		testSprite = makeSprite(getImage(Constants.IMG_DIR + "menu/Select8.png"));
-//		testSprite.position(400, 400);
 	}
 	
 	public void draw()
 	{
 		canvas.clear();
+		if(state == GameState.MAIN_MENU)
+		{
+			drawMainMenu();
+		}
+		else if(state == GameState.IN_GAME)
+		{
+			renderGameState();
+		}
+		else if(state == GameState.LEVEL_EDITOR)
+		{
+			drawEditorWindow();
+		}
+	}
+	
+	private void drawMainMenu()
+	{
+		mainMenu.draw();
+	}
+	
+	public void onClickNewGame()
+	{
+		loadLevelIntoSystem(Tester.makeLevel(this));
+		state = GameState.IN_GAME;
+	}
+	
+	public void onClickLoadGame()
+	{
+		
+	}
+	
+	public void onClickLevelEdit()
+	{
+		currLevel = new Level();
+		state = GameState.LEVEL_EDITOR;
+	}
+	
+	public void onClickOptions()
+	{
+		
+	}
+	
+	public void onClickQuit()
+	{
+		System.exit(0);
+	}
+	
+	private void loadLevelIntoSystem(Level toLoad)
+	{
+		currLevel = toLoad;
+		dimMenu = new DimensionMenu(this, currLevel.dimensions.size());
+		player.position(currLevel.start.xLoc, currLevel.start.yLoc);
+		startTime = System.currentTimeMillis();
+	}
+
+	private void renderGameState() 
+	{
 		currLevel.render();
 		drawUI();
 		player.draw(currLevel.getCurrDims());
-//		testSprite.draw();
+	}
+	
+	private void drawEditorWindow()
+	{
+		currLevel.render();
+		if(levelObject != null)
+		{
+			levelObject.position(mouse.x(), mouse.y());
+			levelObject.draw();
+		}
 	}
 	
 	public void onKeyPress()
 	{
-		if(keyboard.isDown(keyboard.RIGHT, keyboard.D))
+		if(state == GameState.LEVEL_EDITOR)
 		{
-			player.flipHoriz = false;
-			player.run();
-		}
-		if(keyboard.isDown(keyboard.UP, keyboard.W))
-		{
-			player.jump();
-		}
-		if(keyboard.isDown(keyboard.LEFT, keyboard.A))
-		{
-			player.run();
-			player.flipHoriz = true;
-		}
-		if(keyboard.isDown(keyboard.DOWN, keyboard.S))
-		{
-			
-		}
-		if(keyboard.isDown(keyboard.RIGHT, keyboard.D) && keyboard.isDown(keyboard.LEFT, keyboard.A))
-		{
-			player.stand();
-		}
-		if(keyboard.isDown(keyboard.SHIFT))
-		{
-			if(!displayDimMenu)
+			if(keyboard.isDown(keyboard.W))
 			{
-				displayDimMenu = true;
-				mouseX = mouse.x();
-				mouseY = mouse.y();
+				levelObject = makeSprite(getImage(Constants.IMG_DIR + "levels/wall.gif"));
+				levelObject.setOpacity(0.33f);
 			}
 		}
-		//The following controls are just for testing
-		if(keyboard.isDown(keyboard.J))
+		if(state == GameState.IN_GAME)
 		{
-			currLevel.switchDim(1); 
+			if(keyboard.isDown(keyboard.RIGHT, keyboard.D))
+			{
+				player.flipHoriz = false;
+				player.run();
+			}
+			if(keyboard.isDown(keyboard.UP, keyboard.W))
+			{
+				player.jump();
+			}
+			if(keyboard.isDown(keyboard.LEFT, keyboard.A))
+			{
+				player.run();
+				player.flipHoriz = true;
+			}
+			if(keyboard.isDown(keyboard.DOWN, keyboard.S))
+			{
+				
+			}
+			if(keyboard.isDown(keyboard.RIGHT, keyboard.D) && keyboard.isDown(keyboard.LEFT, keyboard.A))
+			{
+				player.stand();
+			}
+			if(keyboard.isDown(keyboard.SHIFT))
+			{
+				if(!displayDimMenu)
+				{
+					displayDimMenu = true;
+					mouseX = mouse.x();
+					mouseY = mouse.y();
+				}
+			}
+			//The following controls are just for testing
+			if(keyboard.isDown(keyboard.J))
+			{
+				currLevel.switchDim(1); 
+			}
+			if(keyboard.isDown(keyboard.K))
+			{
+				currLevel.switchDim(0); 
+			}
+			if(keyboard.isDown(keyboard.Y))
+			{
+				player.lossHealth((short)1);
+			}
 		}
-		if(keyboard.isDown(keyboard.K))
+	}
+	
+	public void onMousePressed()
+	{
+		if(state == GameState.LEVEL_EDITOR)
 		{
-			currLevel.switchDim(0); 
-		}
-		if(keyboard.isDown(keyboard.EQUALS))
-		{
-			opac += 0.01f;
-			player.setOpacity(opac);
-		}
-		if(keyboard.isDown(keyboard.DASH))
-		{
-			opac -= 0.01f;
-			player.setOpacity(opac);
-		}
-		if(keyboard.isDown(keyboard.Y))
-		{
-			player.lossHealth((short)1);
-		}
-		if(keyboard.isDown(keyboard.Q))
-		{
-			player.inven.items[0].found();
-		}
-		if(keyboard.isDown(keyboard.TAB))
-		{
-			player.inven.items[0].use();
+			if(levelObject != null)
+			{
+				levelObject.setOpacity(1f);
+				currLevel.walls.add(levelObject);
+				levelObject = null;
+			}
 		}
 	}
 	
 	public void onKeyRelease()
 	{
-		if(!(keyboard.isDown(keyboard.RIGHT, keyboard.D) || keyboard.isDown(keyboard.LEFT, keyboard.A)))
+		if(state == GameState.IN_GAME)
 		{
-			player.stand();
-		}
-		if(displayDimMenu)
-		{
-			if(!keyboard.isDown(keyboard.SHIFT))
+			if(!(keyboard.isDown(keyboard.RIGHT, keyboard.D) || keyboard.isDown(keyboard.LEFT, keyboard.A)))
 			{
-				displayDimMenu = false;
-				//TODO ShiftDimensions shiftDimension(startX, endX, startY, endY)
-				// shiftDimension(mouseX, mouse.x(), mouseY, mouse.y());
+				player.stand();
+			}
+			if(displayDimMenu)
+			{
+				if(!keyboard.isDown(keyboard.SHIFT))
+				{
+					displayDimMenu = false;
+					//TODO ShiftDimensions shiftDimension(startX, endX, startY, endY)
+					// shiftDimension(mouseX, mouse.x(), mouseY, mouse.y());
+				}
 			}
 		}
 	}

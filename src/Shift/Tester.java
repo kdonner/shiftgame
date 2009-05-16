@@ -7,7 +7,9 @@ public class Tester
 {
 	public static Level makeLevel(Ucigame helper)
 	{
-		Level lev = new Level(1);
+		Level lev = new Level();
+		
+		lev.start = new Point(20, Shift.FRAME_HEIGHT - 80);
 		
 		Sprite wall = helper.makeSprite(helper.getImage(Constants.IMG_DIR + "levels/wall.gif"));
 		wall.position(Shift.FRAME_WIDTH / 2, Shift.FRAME_HEIGHT - wall.height());
@@ -30,12 +32,6 @@ public class Tester
 		
 		dim = new Dimension(Dimensions.DIM2);
 		
-		lev.dimensions.add(dim);
-		lev.dimensions.add(dim);
-		lev.dimensions.add(dim);
-		lev.dimensions.add(dim);
-		lev.dimensions.add(dim);
-		lev.dimensions.add(dim);
 		lev.dimensions.add(dim);
 		
 		return lev;

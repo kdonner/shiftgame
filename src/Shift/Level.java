@@ -10,12 +10,16 @@ public class Level implements java.io.Serializable
 	Area end; //The end location of the level
 	ArrayList<Sprite> walls; //These walls will always be drawn
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
-	int currDimension = 0;
+	Dimension currDim;
+	int currDimension;
 	
-	public Level(int numDims)
+	public Level()
 	{
 		walls = new ArrayList<Sprite>();
-		dimensions = new ArrayList<Dimension>(numDims);
+		dimensions = new ArrayList<Dimension>();
+		currDim = new Dimension(Dimensions.DIM1);
+		dimensions.add(currDim);
+		currDimension = 0;
 	}
 	
 	public void render()
