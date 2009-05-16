@@ -6,6 +6,8 @@ import ucigame.Sprite;
 public class Level implements java.io.Serializable 
 {
 	private static final long serialVersionUID = 3627550956646622212L;
+	Point start; //Player's start location
+	Area end; //The end location of the level
 	ArrayList<Sprite> walls; //These walls will always be drawn
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	int currDimension = 0;

@@ -16,6 +16,7 @@ public class Shift extends Ucigame
 	private DimensionMenu dimMenu;
 	private boolean displayDimMenu;
 	private double mouseX, mouseY;
+	private GameState state;
 //	Sprite testSprite; TODO: Remove test Sprite when done
 
 	public void setup()
@@ -23,10 +24,11 @@ public class Shift extends Ucigame
 		window.size(FRAME_WIDTH, FRAME_HEIGHT);
 		window.title("Shift");
 		window.showFPS();
+		state = GameState.MAIN_MENU;
 		canvas.background(200, 200, 200);
 		framerate(FRAME_RATE);
 		player = new Player(this);
-		player.position(FRAME_WIDTH / 2, FRAME_HEIGHT / 2);
+		player.position(30, FRAME_HEIGHT - 100);
 		player.stand();
 		currLevel = Tester.makeLevel(this);
 		dimMenu = new DimensionMenu(this, currLevel.dimensions.size());
