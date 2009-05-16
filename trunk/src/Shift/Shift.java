@@ -1,5 +1,14 @@
 package Shift;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 import ucigame.*;
 
 @SuppressWarnings("serial")
@@ -18,7 +27,7 @@ public class Shift extends Ucigame
 	private double mouseX, mouseY;
 	public GameState state;
 	
-	private Sprite levelObject;
+	private LevelObject levelObject;
 //	Sprite testSprite; TODO: Remove test Sprite when done
 
 	public void setup()
@@ -42,13 +51,19 @@ public class Shift extends Ucigame
 		canvas.clear();
 		if(state == GameState.MAIN_MENU)
 		{
+			if(!mainMenu.isVisible())
+				mainMenu.show();
 			drawMainMenu();
 		}
-		else if(state == GameState.IN_GAME)
+		else
+		{
+			mainMenu.hide();
+		}
+		if(state == GameState.IN_GAME)
 		{
 			renderGameState();
 		}
-		else if(state == GameState.LEVEL_EDITOR)
+		if(state == GameState.LEVEL_EDITOR)
 		{
 			drawEditorWindow();
 		}
@@ -113,16 +128,35 @@ public class Shift extends Ucigame
 	
 	public void onKeyPress()
 	{
+		// Controls for the Level Editor
 		if(state == GameState.LEVEL_EDITOR)
 		{
+			keyboard.typematicOff();
 			if(keyboard.isDown(keyboard.W))
 			{
-				levelObject = makeSprite(getImage(Constants.IMG_DIR + "levels/wall.gif"));
+				if(levelObject != null && levelObject.type == ObjectType.WALL)
+				{
+					levelObject = new Wall(this, ((Wall)levelObject).wallType.next());
+				}
+				else
+				{
+					levelObject = new Wall(this, Walls.WALL1);
+				}
 				levelObject.setOpacity(0.33f);
 			}
+			if(keyboard.isDown(keyboard.F5))
+			{
+				saveLevel();
+			}
+			if(keyboard.isDown(keyboard.F8))
+			{
+				loadLevel();
+			}
 		}
+		// Controls for in game
 		if(state == GameState.IN_GAME)
 		{
+			keyboard.typematicOn();
 			if(keyboard.isDown(keyboard.RIGHT, keyboard.D))
 			{
 				player.flipHoriz = false;
@@ -177,7 +211,7 @@ public class Shift extends Ucigame
 			if(levelObject != null)
 			{
 				levelObject.setOpacity(1f);
-				currLevel.walls.add(levelObject);
+				currLevel.addObject(levelObject);
 				levelObject = null;
 			}
 		}
@@ -201,6 +235,69 @@ public class Shift extends Ucigame
 				}
 			}
 		}
+	}
+	
+	private void saveLevel()
+	{
+		//TODO Finish Level Saving Function
+//		Frame parent = new Frame();
+//		parent.setVisible(false);
+//		FileDialog fd = new FileDialog(parent, "Save", FileDialog.SAVE);
+//        fd.setVisible(true);
+//        if (fd.getFile() == null)
+//            return;
+//        String file = fd.getDirectory() + fd.getFile();
+//		try
+//		{
+//	        FileOutputStream fileOut = new FileOutputStream(file);
+//			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+//			out.writeObject(currLevel);
+//			out.close();
+//		}
+//		catch(IOException e)
+//		{
+//			System.err.println(e);
+//		}
+//		finally
+//		{
+//			parent.dispose();
+//		}
+	}
+	
+	private void loadLevel()
+	{
+		//TODO Finish Level Saving Function
+//		Frame parent = new Frame();
+//		parent.setVisible(false);
+//		FileDialog fd = new FileDialog(parent, "Open", FileDialog.LOAD);
+//        fd.setVisible(true);
+//        if (fd.getFile() == null)
+//            return;
+//        String file = fd.getDirectory() + fd.getFile();
+//        
+//        if(new File(file).exists())
+//        {
+//        	try
+//        	{
+//        		FileInputStream fileIn = new FileInputStream(file);
+//    	        ObjectInputStream in = new ObjectInputStream(fileIn);
+//    	        Level loading = (Level)in.readObject();
+//    	        currLevel = loading;
+//    	        in.close();
+//        	}
+//        	catch(ClassNotFoundException e)
+//        	{
+//        		System.err.println(e);
+//        	}
+//        	catch(IOException e)
+//        	{
+//        		System.err.println(e);
+//        	}
+//	        finally
+//	        {
+//	        	parent.dispose();
+//	        }
+//        }
 	}
 	
 	private void drawUI()

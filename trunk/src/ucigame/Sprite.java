@@ -40,8 +40,8 @@ import java.awt.geom.AffineTransform;
  * clicks. Sprites can have text written on them, and multiple sprites can be
  * "pinned" together so that when one moves the pinned Sprites follow.
  */
-public class Sprite {
-
+public class Sprite 
+{
 	class PinnedSprite // inner class
 	{
 		Sprite sprite;

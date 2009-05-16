@@ -1,7 +1,8 @@
 package Shift;
 
-public class Area 
+public class Area implements java.io.Serializable
 {
+	private static final long serialVersionUID = 3627550956646622212L;
 	Point xy;
 	double width, height;
 	
