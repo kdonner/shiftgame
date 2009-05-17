@@ -121,6 +121,14 @@ public class Shift extends Ucigame
 	private void drawEditorWindow()
 	{
 		currLevel.render();
+		if(editor.grabObject)
+		{
+			mouse.setCursor(mouse.HAND);
+		}
+		else
+		{
+			mouse.setCursor(mouse.DEFAULT);
+		}
 		if(levelObject != null)
 		{
 			if(!editor.snapToGrid)
@@ -156,6 +164,15 @@ public class Shift extends Ucigame
 			if(keyboard.isDown(keyboard.M))
 			{
 				editor.snapToGrid = !editor.snapToGrid;
+			}	
+			if(keyboard.isDown(keyboard.G))
+			{
+				levelObject = null;
+				editor.grabObject = true;
+			}
+			else
+			{
+				editor.grabObject = false;
 			}
 			if(keyboard.isDown(keyboard.F5))
 			{
@@ -226,6 +243,14 @@ public class Shift extends Ucigame
 				levelObject.setOpacity(1f);
 				currLevel.addObject(levelObject);
 				levelObject = null;
+			}
+			if(editor.grabObject)
+			{
+				levelObject = editor.findObject(mouse.sprite(), currLevel);
+				if(levelObject != null)
+					levelObject.setOpacity(0.33f);
+				editor.grabObject = false;
+				mouse.setCursor(mouse.MOVE);
 			}
 		}
 	}
