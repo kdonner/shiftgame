@@ -25,6 +25,7 @@ public class Shift extends Ucigame
 	private DimensionMenu dimMenu;
 	private boolean displayDimMenu;
 	private double mouseX, mouseY;
+	private LevelEditor editor;
 	public GameState state;
 	
 	private LevelObject levelObject;
@@ -88,6 +89,7 @@ public class Shift extends Ucigame
 	public void onClickLevelEdit()
 	{
 		currLevel = new Level();
+		editor = new LevelEditor();
 		state = GameState.LEVEL_EDITOR;
 	}
 	
@@ -121,7 +123,14 @@ public class Shift extends Ucigame
 		currLevel.render();
 		if(levelObject != null)
 		{
-			levelObject.position(mouse.x(), mouse.y());
+			if(!editor.snapToGrid)
+			{
+				levelObject.position(mouse.x(), mouse.y());
+			}
+			else
+			{
+				levelObject.position((mouse.x() - mouse.x() % editor.gridSize), (mouse.y() - mouse.y() % editor.gridSize));
+			}
 			levelObject.draw();
 		}
 	}
@@ -143,6 +152,10 @@ public class Shift extends Ucigame
 					levelObject = new Wall(this, Walls.WALL1);
 				}
 				levelObject.setOpacity(0.33f);
+			}
+			if(keyboard.isDown(keyboard.M))
+			{
+				editor.snapToGrid = !editor.snapToGrid;
 			}
 			if(keyboard.isDown(keyboard.F5))
 			{
