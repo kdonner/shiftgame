@@ -33,6 +33,7 @@ public class Tester
 		dim = new Dimension(Dimensions.DIM2);
 		
 		lev.dimensions.add(dim);
+//		lev.background = helper.getImage(Constants.IMG_DIR + "levels/bkg/Background2.png");
 		
 		return lev;
 	}

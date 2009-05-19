@@ -1,21 +1,24 @@
 package Shift;
 
 import java.util.ArrayList;
+
+import ucigame.Image;
 import ucigame.Sprite;
 
 public class Level 
 {
 	Point start; //Player's start location
 	Area end; //The end location of the level
-	ArrayList<Wall> walls; //These walls will always be drawn
+	Image background;
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	Dimension currDim;
 	int currDimension;
 	
 	public Level()
 	{
-		walls = new ArrayList<Wall>();
 		dimensions = new ArrayList<Dimension>();
+		currDim = new Dimension(Dimensions.DIM0);
+		dimensions.add(currDim);
 		currDim = new Dimension(Dimensions.DIM1);
 		dimensions.add(currDim);
 		currDimension = 0;
@@ -23,10 +26,8 @@ public class Level
 	
 	public void addObject(LevelObject obj)
 	{
-		if(obj.type == ObjectType.WALL)
-		{
-			walls.add(((Wall)obj));
-		}
+		//TODO Create actual logic for adding object to current dimension
+		dimensions.get(currDimension).addObject(obj);
 	}
 	
 	public void render()
@@ -35,10 +36,9 @@ public class Level
 //		{
 //			s.draw();
 //		}
-		for(int i = 0; i < walls.size(); i++)
-		{
-			walls.get(i).draw();
-		}
+		if(background != null)
+			background.draw(0, 0);
+		dimensions.get(0).render();
 		dimensions.get(currDimension).render();
 	}
 	

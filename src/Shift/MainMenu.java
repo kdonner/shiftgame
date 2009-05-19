@@ -5,13 +5,14 @@ import ucigame.Sprite;
 public class MainMenu 
 {
 	Shift parent;
-	Sprite newGame, loadGame, levelEdit, options, quit;
+	Sprite newGame, loadGame, levelEdit, options, quit, bkg;
 	private boolean isShown;
 	
 	public MainMenu(Shift parent)
 	{
 		this.parent = parent;
 		isShown = true;
+		bkg = parent.makeSprite(parent.getImage(Constants.IMG_DIR + "levels/bkg/Background2.png"));
 		newGame = parent.makeButton("NewGame", parent.getImage(Constants.IMG_DIR + "menu/newgame.png"), 300, 72);
 		loadGame = parent.makeButton("LoadGame", parent.getImage(Constants.IMG_DIR + "menu/loadgame.png"), 300, 72);
 		levelEdit = parent.makeButton("LevelEdit", parent.getImage(Constants.IMG_DIR + "menu/leveledit.png"), 300, 72);
@@ -32,6 +33,7 @@ public class MainMenu
 	
 	public void draw()
 	{
+		bkg.draw();
 		newGame.draw();
 		loadGame.draw();
 		levelEdit.draw();
@@ -42,6 +44,7 @@ public class MainMenu
 	public void hide()
 	{
 		isShown = false;
+		bkg.hide();
 		newGame.hide();
 		loadGame.hide();
 		levelEdit.hide();
@@ -52,6 +55,7 @@ public class MainMenu
 	public void show()
 	{
 		isShown = true;
+		bkg.show();
 		newGame.show();
 		loadGame.show();
 		levelEdit.show();

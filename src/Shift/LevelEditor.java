@@ -22,33 +22,44 @@ public class LevelEditor
 	//TODO optimize these searches so I don't have to keep adding things everytime something new gets added to a level
 	public LevelObject findObject(Sprite toFind, Level objectIn)
 	{
-		LevelObject obj = null;
-		for(Wall w : objectIn.walls)
+		for(Wall w : objectIn.dimensions.get(0).walls)
 		{
 			if(w.x() == toFind.x() && w.y() == toFind.y())
 			{
-				obj = w;
-				return obj;
+				return w;
 			}
 		}
 		for(Wall w : objectIn.dimensions.get(objectIn.currDimension).walls)
 		{
 			if(w.x() == toFind.x() && w.y() == toFind.y())
 			{
-				obj = w;
-				return obj;
+				return w;
 			}
 		}
-		return obj;
+		for(PickupItem p : objectIn.dimensions.get(0).pickupItems)
+		{
+			if(p.x() == toFind.x() && p.y() == toFind.y())
+			{
+				return p;
+			}
+		}
+		for(PickupItem p : objectIn.dimensions.get(objectIn.currDimension).pickupItems)
+		{
+			if(p.x() == toFind.x() && p.y() == toFind.y())
+			{
+				return p;
+			}
+		}
+		return null;
 	}
 	
 	public void removeObject(LevelObject toRemove, Level objectIn)
 	{
-		for(int i = 0; i < objectIn.walls.size(); i++)
+		for(int i = 0; i < objectIn.dimensions.get(0).walls.size(); i++)
 		{
-			if(toRemove.equals(objectIn.walls.get(i)))
+			if(toRemove.equals(objectIn.dimensions.get(0).walls.get(i)))
 			{
-				objectIn.walls.remove(i);
+				objectIn.dimensions.get(0).walls.remove(i);
 				return;
 			}
 		}
@@ -58,6 +69,20 @@ public class LevelEditor
 			{
 				objectIn.dimensions.get(objectIn.currDimension).walls.remove(i);
 				return;
+			}
+		}
+		for(int i = 0; i < objectIn.dimensions.get(0).pickupItems.size(); i++)
+		{
+			if(toRemove.equals(objectIn.dimensions.get(0).pickupItems.get(i)))
+			{
+				objectIn.dimensions.get(0).pickupItems.remove(i);
+			}
+		}
+		for(int i = 0; i < objectIn.dimensions.get(objectIn.currDimension).pickupItems.size(); i++)
+		{
+			if(toRemove.equals(objectIn.dimensions.get(objectIn.currDimension).pickupItems.get(i)))
+			{
+				objectIn.dimensions.get(objectIn.currDimension).pickupItems.remove(i);
 			}
 		}
 	}
