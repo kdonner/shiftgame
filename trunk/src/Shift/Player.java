@@ -156,7 +156,7 @@ public class Player extends Sprite
 			}
 				
 			Level lev = parent.getCurrLevel();
-			for(Sprite s : lev.walls)
+			for(Sprite s : lev.dimensions.get(0).walls)
 			{
 				this.checkIfCollidesWith(s, parent.PIXELPERFECT); //PixelPerfect doesn't work well
 				//Commented out for self created collision direction/side detection

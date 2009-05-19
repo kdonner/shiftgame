@@ -164,6 +164,18 @@ public class Shift extends Ucigame
 					levelObject.setOpacity(0.33f);
 				}
 			}
+			if(keyboard.isDown(keyboard.B))
+			{
+				currLevel.background = getImage(Constants.IMG_DIR + "levels/bkg/Background2.png");
+			}
+			if(keyboard.isDown(keyboard.H))
+			{
+				levelObject = new PickupItem(this, Pickups.HEALTH_PACK);
+			}
+			if(keyboard.isDown(keyboard.A))
+			{
+				levelObject = new PickupItem(this, Pickups.ARMOR_PACK);
+			}
 			if(keyboard.isDown(keyboard.M))
 			{
 				editor.snapToGrid = !editor.snapToGrid;
@@ -175,9 +187,10 @@ public class Shift extends Ucigame
 			}
 			else
 			{
-				editor.grabObject = false;
+				if(levelObject == null)
+					editor.grabObject = false;
 			}
-			if(keyboard.isDown(keyboard.DELETE))
+			if(keyboard.isDown(keyboard.DELETE) || keyboard.isDown(keyboard.BACKSPACE))
 			{
 				if(levelObject != null)
 				{

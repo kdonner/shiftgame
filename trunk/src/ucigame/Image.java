@@ -39,6 +39,7 @@ import javax.swing.*;
  */
 public class Image
 {
+	private static final float[] filter = { 1f, 1f, 1f, 1f };
 	private Ucigame ucigame;
 	BufferedImage buffImage;
 	int iwidth, iheight;
@@ -122,13 +123,20 @@ public class Image
 	{
 		//This applies any filter to the image, this includes Opacity as well as many other options
 		//More details: http://72.5.124.55/docs/books/tutorial/2d/images/drawimage.html
-		BufferedImage bImage = rop.filter(buffImage, null);
+		BufferedImage bImage = buffImage;
+		if(!scalesAreEquals())
+			bImage = rop.filter(buffImage, null);
 		if (ucigame.offG != null)
 		{
 			ucigame.offG.drawImage(bImage, _Tx, null);
 		}
 		else
 			ucigame.logError("UImage.draw() used outside of draw()");
+	}
+	
+	private boolean scalesAreEquals()
+	{
+		return (scales[0] == filter[0] && scales[1] == filter[1] && scales[2] == filter[2] && scales[3] == filter[3]);
 	}
 	
 	
