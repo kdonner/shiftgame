@@ -18,9 +18,13 @@ public class Dimension implements java.io.Serializable
 	
 	public void render()
 	{
-		for(Wall s : walls)
+//		for(Wall s : walls)
+//		{
+//			s.draw();
+//		}
+		for(int i = 0; i < walls.size(); i++)
 		{
-			s.draw();
+			walls.get(i).draw();
 		}
 	}
 	

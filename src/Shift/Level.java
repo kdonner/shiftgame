@@ -31,9 +31,13 @@ public class Level
 	
 	public void render()
 	{
-		for(Wall s : walls)
+//		for(Wall s : walls)
+//		{
+//			s.draw();
+//		}
+		for(int i = 0; i < walls.size(); i++)
 		{
-			s.draw();
+			walls.get(i).draw();
 		}
 		dimensions.get(currDimension).render();
 	}
