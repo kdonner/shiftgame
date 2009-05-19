@@ -151,15 +151,18 @@ public class Shift extends Ucigame
 			keyboard.typematicOff();
 			if(keyboard.isDown(keyboard.W))
 			{
-				if(levelObject != null && levelObject.type == ObjectType.WALL)
+				if(!editor.grabObject)
 				{
-					levelObject = new Wall(this, ((Wall)levelObject).wallType.next());
+					if(levelObject != null && levelObject.type == ObjectType.WALL)
+					{
+						levelObject = new Wall(this, ((Wall)levelObject).wallType.next());
+					}
+					else
+					{
+						levelObject = new Wall(this, Walls.WALL1);
+					}
+					levelObject.setOpacity(0.33f);
 				}
-				else
-				{
-					levelObject = new Wall(this, Walls.WALL1);
-				}
-				levelObject.setOpacity(0.33f);
 			}
 			if(keyboard.isDown(keyboard.M))
 			{
@@ -173,6 +176,14 @@ public class Shift extends Ucigame
 			else
 			{
 				editor.grabObject = false;
+			}
+			if(keyboard.isDown(keyboard.DELETE))
+			{
+				if(levelObject != null)
+				{
+					editor.removeObject(levelObject, currLevel);
+					levelObject = null;
+				}
 			}
 			if(keyboard.isDown(keyboard.F5))
 			{
@@ -241,7 +252,14 @@ public class Shift extends Ucigame
 			if(levelObject != null)
 			{
 				levelObject.setOpacity(1f);
-				currLevel.addObject(levelObject);
+				if(!editor.grabObject)
+				{
+					currLevel.addObject(levelObject);
+				}
+				else
+				{
+					editor.grabObject = false;
+				}
 				levelObject = null;
 			}
 			if(editor.grabObject)
@@ -249,8 +267,7 @@ public class Shift extends Ucigame
 				levelObject = editor.findObject(mouse.sprite(), currLevel);
 				if(levelObject != null)
 					levelObject.setOpacity(0.33f);
-				editor.grabObject = false;
-				mouse.setCursor(mouse.MOVE);
+				//editor.grabObject = false;
 			}
 		}
 	}

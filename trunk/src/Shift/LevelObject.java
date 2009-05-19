@@ -14,4 +14,9 @@ public class LevelObject extends Sprite
 		this.parent = parent;
 		this.type = type;
 	}
+	
+	public boolean equals(LevelObject otherObj)
+	{
+		return (this.hashCode() == otherObj.hashCode());
+	}
 }
