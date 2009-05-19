@@ -24,33 +24,38 @@ public class LevelEditor
 	{
 		for(Wall w : objectIn.dimensions.get(0).walls)
 		{
-			if(w.x() == toFind.x() && w.y() == toFind.y())
+			if(equivalent(w, toFind))
 			{
 				return w;
 			}
 		}
 		for(Wall w : objectIn.dimensions.get(objectIn.currDimension).walls)
 		{
-			if(w.x() == toFind.x() && w.y() == toFind.y())
+			if(equivalent(w, toFind))
 			{
 				return w;
 			}
 		}
 		for(PickupItem p : objectIn.dimensions.get(0).pickupItems)
 		{
-			if(p.x() == toFind.x() && p.y() == toFind.y())
+			if(equivalent(p, toFind))
 			{
 				return p;
 			}
 		}
 		for(PickupItem p : objectIn.dimensions.get(objectIn.currDimension).pickupItems)
 		{
-			if(p.x() == toFind.x() && p.y() == toFind.y())
+			if(equivalent(p, toFind))
 			{
 				return p;
 			}
 		}
 		return null;
+	}
+	
+	private boolean equivalent(LevelObject obj, Sprite spr)
+	{
+		return obj.x() == spr.x() && obj.y() == spr.y() && obj.width() == spr.width() && obj.height() == spr.height();
 	}
 	
 	public void removeObject(LevelObject toRemove, Level objectIn)
