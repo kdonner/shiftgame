@@ -308,64 +308,65 @@ public class Shift extends Ucigame
 	private void saveLevel()
 	{
 		//TODO Finish Level Saving Function
-//		Frame parent = new Frame();
-//		parent.setVisible(false);
-//		FileDialog fd = new FileDialog(parent, "Save", FileDialog.SAVE);
-//        fd.setVisible(true);
-//        if (fd.getFile() == null)
-//            return;
-//        String file = fd.getDirectory() + fd.getFile();
-//		try
-//		{
-//	        FileOutputStream fileOut = new FileOutputStream(file);
-//			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-//			out.writeObject(currLevel);
-//			out.close();
-//		}
-//		catch(IOException e)
-//		{
-//			System.err.println(e);
-//		}
-//		finally
-//		{
-//			parent.dispose();
-//		}
+		LevelSaveFile saving = new LevelSaveFile(currLevel);
+		Frame parent = new Frame();
+		parent.setVisible(false);
+		FileDialog fd = new FileDialog(parent, "Save", FileDialog.SAVE);
+        fd.setVisible(true);
+        if (fd.getFile() == null)
+            return;
+        String file = fd.getDirectory() + fd.getFile();
+		try
+		{
+	        FileOutputStream fileOut = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(saving);
+			out.close();
+		}
+		catch(IOException e)
+		{
+			System.err.println(e);
+		}
+		finally
+		{
+			parent.dispose();
+		}
 	}
 	
 	private void loadLevel()
 	{
 		//TODO Finish Level Saving Function
-//		Frame parent = new Frame();
-//		parent.setVisible(false);
-//		FileDialog fd = new FileDialog(parent, "Open", FileDialog.LOAD);
-//        fd.setVisible(true);
-//        if (fd.getFile() == null)
-//            return;
-//        String file = fd.getDirectory() + fd.getFile();
-//        
-//        if(new File(file).exists())
-//        {
-//        	try
-//        	{
-//        		FileInputStream fileIn = new FileInputStream(file);
-//    	        ObjectInputStream in = new ObjectInputStream(fileIn);
-//    	        Level loading = (Level)in.readObject();
-//    	        currLevel = loading;
-//    	        in.close();
-//        	}
-//        	catch(ClassNotFoundException e)
-//        	{
-//        		System.err.println(e);
-//        	}
-//        	catch(IOException e)
-//        	{
-//        		System.err.println(e);
-//        	}
-//	        finally
-//	        {
-//	        	parent.dispose();
-//	        }
-//        }
+		Frame parent = new Frame();
+		parent.setVisible(false);
+		FileDialog fd = new FileDialog(parent, "Open", FileDialog.LOAD);
+        fd.setVisible(true);
+        if (fd.getFile() == null)
+            return;
+        String file = fd.getDirectory() + fd.getFile();
+        
+        if(new File(file).exists())
+        {
+        	try
+        	{
+        		FileInputStream fileIn = new FileInputStream(file);
+    	        ObjectInputStream in = new ObjectInputStream(fileIn);
+    	        LevelSaveFile loading = (LevelSaveFile)in.readObject();
+    	        currLevel.unpackSaveFile(this, loading);
+    	        in.close();
+        	}
+        	catch(ClassNotFoundException e)
+        	{
+        		System.err.println(e);
+        	}
+        	catch(IOException e)
+        	{
+        		System.err.println(e);
+        	}
+	        finally
+	        {
+	        	parent.dispose();
+	        }
+        }
 	}
 	
 	private void drawUI()

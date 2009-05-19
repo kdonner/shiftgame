@@ -2,11 +2,8 @@ package Shift;
 
 import java.util.ArrayList;
 
-import ucigame.Sprite;
-
 public class Dimension implements java.io.Serializable
 {
-	private static final long serialVersionUID = 3627550956646622212L;
 	Dimensions dims;
 	ArrayList<Wall> walls;
 	ArrayList<PickupItem> pickupItems;
@@ -20,10 +17,6 @@ public class Dimension implements java.io.Serializable
 	
 	public void render()
 	{
-//		for(Wall s : walls)
-//		{
-//			s.draw();
-//		}
 		for(int i = 0; i < walls.size(); i++)
 		{
 			walls.get(i).draw();
