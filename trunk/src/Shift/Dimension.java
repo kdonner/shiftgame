@@ -15,6 +15,23 @@ public class Dimension implements java.io.Serializable
 		pickupItems = new ArrayList<PickupItem>();
 	}
 	
+	public static Dimensions getDims(int forNum)
+	{
+		switch(forNum)
+		{
+		case 0: return Dimensions.DIM0;
+		case 1: return Dimensions.DIM1;
+		case 2: return Dimensions.DIM2;
+		case 3: return Dimensions.DIM3;
+		case 4: return Dimensions.DIM4;
+		case 5: return Dimensions.DIM5;
+		case 6: return Dimensions.DIM6;
+		case 7: return Dimensions.DIM7;
+		case 8: return Dimensions.DIM8;
+		default: return null;
+		}
+	}
+	
 	public void render()
 	{
 		for(int i = 0; i < walls.size(); i++)
