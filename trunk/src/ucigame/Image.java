@@ -39,11 +39,11 @@ import javax.swing.*;
  */
 public class Image
 {
-	private static final float[] filter = { 1f, 1f, 1f, 1f };
 	private Ucigame ucigame;
-	BufferedImage buffImage;
+	BufferedImage buffImage, prevImage;
 	int iwidth, iheight;
-	float[] scales = { 1f, 1f, 1f, 1f };
+	float[] scales;
+	float[] prevScales;
 	float[] offsets = new float[4];
 	RescaleOp rop;
 
@@ -60,6 +60,8 @@ public class Image
 		buffImage = toBufferedImage(_i);
 		iwidth = buffImage.getWidth(ucigame);
 		iheight = buffImage.getHeight(ucigame);
+		scales = new float[]{ 1f, 1f, 1f, 1f };
+		prevScales = new float[4];
 		rop = new RescaleOp(scales, offsets, null);
 	}
 
@@ -123,12 +125,14 @@ public class Image
 	{
 		//This applies any filter to the image, this includes Opacity as well as many other options
 		//More details: http://72.5.124.55/docs/books/tutorial/2d/images/drawimage.html
-		BufferedImage bImage = buffImage;
 		if(!scalesAreEquals())
-			bImage = rop.filter(buffImage, null);
+		{
+			prevImage = rop.filter(buffImage, null);
+			prevScales = copyScale();
+		}
 		if (ucigame.offG != null)
 		{
-			ucigame.offG.drawImage(bImage, _Tx, null);
+			ucigame.offG.drawImage(prevImage, _Tx, null);
 		}
 		else
 			ucigame.logError("UImage.draw() used outside of draw()");
@@ -136,7 +140,12 @@ public class Image
 	
 	private boolean scalesAreEquals()
 	{
-		return (scales[0] == filter[0] && scales[1] == filter[1] && scales[2] == filter[2] && scales[3] == filter[3]);
+		return (scales[0] == prevScales[0] && scales[1] == prevScales[1] && scales[2] == prevScales[2] && scales[3] == prevScales[3]);
+	}
+	
+	private float[] copyScale()
+	{
+		return new float[] {scales[0], scales[1], scales[2], scales[3]};
 	}
 	
 	
