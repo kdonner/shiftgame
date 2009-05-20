@@ -198,6 +198,42 @@ public class Shift extends Ucigame
 					levelObject = null;
 				}
 			}
+			if(keyboard.isDown(keyboard.K0))
+			{
+				currLevel.switchDim(0);
+			}
+			if(keyboard.isDown(keyboard.K1))
+			{
+				currLevel.switchDim(1);
+			}
+			if(keyboard.isDown(keyboard.K2))
+			{
+				currLevel.switchDim(2);
+			}
+			if(keyboard.isDown(keyboard.K3))
+			{
+				currLevel.switchDim(3);
+			}
+			if(keyboard.isDown(keyboard.K4))
+			{
+				currLevel.switchDim(4);
+			}
+			if(keyboard.isDown(keyboard.K5))
+			{
+				currLevel.switchDim(5);
+			}
+			if(keyboard.isDown(keyboard.K6))
+			{
+				currLevel.switchDim(6);
+			}
+			if(keyboard.isDown(keyboard.K7))
+			{
+				currLevel.switchDim(7);
+			}
+			if(keyboard.isDown(keyboard.K8))
+			{
+				currLevel.switchDim(8);
+			}
 			if(keyboard.isDown(keyboard.F5))
 			{
 				saveLevel();

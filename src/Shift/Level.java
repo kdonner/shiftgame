@@ -59,10 +59,29 @@ public class Level
 	
 	public void switchDim(int newDim)
 	{ 
-		if(newDim >= 0 && newDim < dimensions.size())
+		if(newDim >= 0 && newDim <= 8)
 		{
-			currDimension = newDim;
-			currDim = dimensions.get(currDimension);
+			
+			Dimensions searchingFor = Dimension.getDims(newDim);
+			for(int i = 0; i < dimensions.size(); i++)
+			{
+				if(dimensions.get(i).dims == searchingFor)
+				{
+					currDimension = i;
+					currDim = dimensions.get(currDimension);
+					return;
+				}
+				if(dimensions.get(i).dims.dimNum > searchingFor.dimNum)
+				{
+					currDimension = i;
+					currDim = new Dimension(searchingFor);
+					dimensions.add(i, currDim);
+					return;
+				}
+			}
+			currDim = new Dimension(searchingFor);
+			dimensions.add(currDim);
+			currDimension = dimensions.size()-1;
 		}
 	}
 	
