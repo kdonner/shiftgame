@@ -24,7 +24,6 @@ public class Level
 		dimensions = new ArrayList<Dimension>();
 		currDim = new Dimension(Dimensions.DIM0);
 		dimensions.add(currDim);
-		dimensions.add(new Dimension(Dimensions.DIM1));
 		currDimension = 0;
 	}
 	
@@ -57,11 +56,26 @@ public class Level
 		return dimensions.get(currDimension).dims;
 	}
 	
-	public void switchDim(int newDim)
+	public int numDimensions()
+	{
+		return dimensions.size() - 1; // Because dimension 0 doesn't count
+	}
+	
+	public int[] dimLabels()
+	{
+		int[] labels = new int[numDimensions()];
+		for(int i = 1; i < dimensions.size(); i++)
+		{
+			labels[i-1] = dimensions.get(i).dims.dimNum;
+		}
+		return labels;
+	}
+	
+	public void switchDim(int newDim, boolean addNew)
 	{ 
 		if(newDim >= 0 && newDim <= 8)
 		{
-			
+			System.out.println("Switch to Dim: " + newDim);
 			Dimensions searchingFor = Dimension.getDims(newDim);
 			for(int i = 0; i < dimensions.size(); i++)
 			{
@@ -73,15 +87,21 @@ public class Level
 				}
 				if(dimensions.get(i).dims.dimNum > searchingFor.dimNum)
 				{
-					currDimension = i;
-					currDim = new Dimension(searchingFor);
-					dimensions.add(i, currDim);
+					if(addNew)
+					{
+						currDimension = i;
+						currDim = new Dimension(searchingFor);
+						dimensions.add(i, currDim);
+					}
 					return;
 				}
 			}
-			currDim = new Dimension(searchingFor);
-			dimensions.add(currDim);
-			currDimension = dimensions.size()-1;
+			if(addNew)
+			{
+				currDim = new Dimension(searchingFor);
+				dimensions.add(currDim);
+				currDimension = dimensions.size()-1;
+			}
 		}
 	}
 	

@@ -24,7 +24,7 @@ public class Shift extends Ucigame
 	private MainMenu mainMenu;
 	private DimensionMenu dimMenu;
 	private boolean displayDimMenu;
-	private double mouseX, mouseY;
+	private int mouseX, mouseY;
 	private LevelEditor editor;
 	public GameState state;
 	
@@ -39,8 +39,7 @@ public class Shift extends Ucigame
 		state = GameState.MAIN_MENU;
 		canvas.background(200, 200, 200);
 		framerate(FRAME_RATE);
-		player = new Player(this);
-		player.position(30, FRAME_HEIGHT - 100);
+		//TODO more properly set up the player
 		mainMenu = new MainMenu(this);
 		displayDimMenu = false;
 		mouseX = -1;
@@ -106,7 +105,9 @@ public class Shift extends Ucigame
 	private void loadLevelIntoSystem(Level toLoad)
 	{
 		currLevel = toLoad;
-		dimMenu = new DimensionMenu(this, currLevel.dimensions.size());
+		currLevel.switchDim(1, false);
+		dimMenu = new DimensionMenu(this, currLevel.dimLabels());
+		player = new Player(this);
 		player.position(currLevel.start.xLoc, currLevel.start.yLoc);
 		startTime = System.currentTimeMillis();
 	}
@@ -200,39 +201,39 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.K0))
 			{
-				currLevel.switchDim(0);
+				currLevel.switchDim(0, true);
 			}
 			if(keyboard.isDown(keyboard.K1))
 			{
-				currLevel.switchDim(1);
+				currLevel.switchDim(1, true);
 			}
 			if(keyboard.isDown(keyboard.K2))
 			{
-				currLevel.switchDim(2);
+				currLevel.switchDim(2, true);
 			}
 			if(keyboard.isDown(keyboard.K3))
 			{
-				currLevel.switchDim(3);
+				currLevel.switchDim(3, true);
 			}
 			if(keyboard.isDown(keyboard.K4))
 			{
-				currLevel.switchDim(4);
+				currLevel.switchDim(4, true);
 			}
 			if(keyboard.isDown(keyboard.K5))
 			{
-				currLevel.switchDim(5);
+				currLevel.switchDim(5, true);
 			}
 			if(keyboard.isDown(keyboard.K6))
 			{
-				currLevel.switchDim(6);
+				currLevel.switchDim(6, true);
 			}
 			if(keyboard.isDown(keyboard.K7))
 			{
-				currLevel.switchDim(7);
+				currLevel.switchDim(7, true);
 			}
 			if(keyboard.isDown(keyboard.K8))
 			{
-				currLevel.switchDim(8);
+				currLevel.switchDim(8, true);
 			}
 			if(keyboard.isDown(keyboard.F5))
 			{
@@ -281,11 +282,11 @@ public class Shift extends Ucigame
 			//The following controls are just for testing
 			if(keyboard.isDown(keyboard.J))
 			{
-				currLevel.switchDim(1); 
+				currLevel.switchDim(5, false); 
 			}
 			if(keyboard.isDown(keyboard.K))
 			{
-				currLevel.switchDim(0); 
+				currLevel.switchDim(1, false); 
 			}
 			if(keyboard.isDown(keyboard.Y))
 			{
@@ -334,6 +335,7 @@ public class Shift extends Ucigame
 				if(!keyboard.isDown(keyboard.SHIFT))
 				{
 					displayDimMenu = false;
+					currLevel.switchDim(dimMenu.calcSwitch(mouseX, mouse.x(), mouseY, mouse.y()), false);
 					//TODO ShiftDimensions shiftDimension(startX, endX, startY, endY)
 					// shiftDimension(mouseX, mouse.x(), mouseY, mouse.y());
 				}

@@ -126,8 +126,7 @@ public class Player extends Sprite
 	
 	public void move(Dimensions dim)
 	{
-		//TODO: This is temorary for the reverse time functionality, should actually check dimension 
-		if(dim != Dimensions.DIM2)
+		if(dim != Dimensions.DIM5)
 		{
 			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat));
 			super.move(); //If this doesn't occur before collision detection jumping gets screwed
@@ -165,25 +164,6 @@ public class Player extends Sprite
 					System.out.println("basic Collision");
 					checkCollision(s);
 				}
-//				if(!onSurface)
-//				{
-//					if(this.collided(parent.TOP))
-//					{
-//						stopFall(s);
-//					}
-//					else if(this.collided(parent.BOTTOM))
-//					{
-//						stopRise(s);
-//					}
-//				}
-//				if(this.collided(parent.LEFT))
-//				{
-//					stopXMovement(s, true);
-//				}
-//				else if(this.collided(parent.RIGHT))
-//				{
-//					stopXMovement(s, false);
-//				}
 			}
 			if(!onSurface)
 			{
@@ -220,25 +200,6 @@ public class Player extends Sprite
 				System.out.println(e);
 			}
 		}
-//		if((y() + HEIGHT) < Shift.FRAME_HEIGHT)
-//		{
-//			motion(xspeed(), yspeed() + dim.getGravity());
-//		}
-//		else
-//		{
-//			if(jumping)
-//			{
-//				onSurface = false;
-//				jumping = false;
-//			}
-//			else
-//			{
-//				motion(xspeed(), 0);
-//				this.position(x(), Shift.FRAME_HEIGHT - HEIGHT);
-//				jumping = false;
-//				onSurface = true;
-//			}
-//		}
 	}
 	
 	/**

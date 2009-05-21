@@ -715,7 +715,7 @@ public class Sprite
 		img.setOpacity(opacity);
 		img.setRFilter(rFilter);
 		img.setGFilter(gFilter);
-		img.setRFilter(rFilter);
+		img.setBFilter(bFilter);
 	}
 
 	// Sets currFrame, which is an index into the frameImage Vector,

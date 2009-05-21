@@ -10,60 +10,119 @@ public class DimensionMenu
 	class DimensionWedge extends Sprite
 	{
 		double rotation;
+		int label;
 		
-		public DimensionWedge(Shift parent, String imgDir)
+		public DimensionWedge(Shift parent, String imgDir, int label)
 		{
 			super(parent.getImage(imgDir));
+			this.label = label;
+			font("Arial", parent.BOLD, 16);
 		}
 		
 		public void draw()
 		{
 			this.rotate(rotation);
+			putText(label, width()/2 - 4, height()/2 + 4);
 			super.draw();
 		}
 	}
 	
 	private ArrayList<DimensionWedge> wedges;
 	private Shift parent;
+	private int[] labels;
 	
-	public DimensionMenu(Shift parent, int numDims)
+	public DimensionMenu(Shift parent, int[] labels)
 	{
 		this.parent = parent;
+		this.labels = labels;
 		//These Simply check to make sure the numDims is within the expected range
 		//If it isn't it forces the value to the nearest bound
-		if(numDims < 2)
-			numDims = 2;
-		if(numDims > 8)
-			numDims = 8;
-		wedges = new ArrayList<DimensionWedge>(numDims);
+		if(labels.length < 2 || labels.length > 8)
+			return;
 		
+		wedges = new ArrayList<DimensionWedge>(labels.length);
 		
-		switch(numDims)
+		switch(labels.length)
 		{
 			case 2:
-				create2(numDims);
+				create2(labels.length);
 				break;
 			case 3:
-				create3(numDims);
+				create3(labels.length);
 				break;
 			case 4:
-				create4(numDims);
+				create4(labels.length);
 				break;
 			case 5:
-				create5(numDims);
+				create5(labels.length);
 				break;
 			case 6:
-				create6(numDims);
+				create6(labels.length);
 				break;
 			case 7:
-				create7(numDims);
+				create7(labels.length);
 				break;
 			case 8:
-				create8(numDims);
+				create8(labels.length);
 				break;
 			default:
 				break;
 		}
+	}
+	
+	public int calcSwitch(int oldX, int newX, int oldY, int newY)
+	{
+		double x = newX - oldX;
+		double y = -(newY - oldY);
+		double degrees = 1;
+		if(x > 0 && y > 0) //Quad 1
+		{
+			degrees = 90 - Math.toDegrees(Math.atan(y/x));
+		}
+		else if(x > 0 && y < 0) //Quad 2
+		{
+			degrees = 90 + Math.toDegrees(Math.atan(-y/x));
+		}
+		else if(x < 0 && y < 0) //Quad 3
+		{
+			degrees = 270 - Math.toDegrees(Math.atan(-y/-x));
+		}
+		else if(x < 0 && y > 0) //Quad 4
+		{
+			degrees = 270 + Math.toDegrees(Math.atan(y/-x));
+		}
+		else if(x == 0)
+		{
+			if(y > 0)
+				degrees = 0;
+			else
+				degrees = 180;
+		}
+		else if(y == 0)
+		{
+			if(x > 0)
+				degrees = 90;
+			else
+				degrees = 270;
+		}
+		else
+		{
+			System.out.println("What?");
+		}
+		
+		double inc = 360 / labels.length;
+		if(degrees < inc/2 || degrees > (360 - inc/2))
+			return labels[0];
+		int i = 0;
+		for(double deg = inc/2; deg < 360; deg += inc)
+		{
+			if(degrees < deg)
+				return labels[i];
+			i++;
+		}
+		
+		System.out.println("X: " + x + "  Y : " + y + "  Deg: " + degrees);
+		return 1;
 	}
 	
 	private void create2(int numDims)
@@ -75,7 +134,7 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
 			wedge.rotation = rotationAmt;
 			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
@@ -94,7 +153,7 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
 			wedge.rotation = rotationAmt;
 			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
@@ -121,7 +180,7 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
 			wedge.rotation = rotationAmt;
 			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
@@ -153,7 +212,7 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
 			wedge.rotation = rotationAmt;
 			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
@@ -190,7 +249,7 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
 			wedge.rotation = rotationAmt;
 			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
@@ -231,7 +290,7 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
 			wedge.rotation = rotationAmt;
 			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
@@ -279,7 +338,7 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
 			wedge.rotation = rotationAmt;
 			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
@@ -324,9 +383,12 @@ public class DimensionMenu
 	
 	public void draw()
 	{
-		for(int i = 0; i < wedges.size(); i++)
+		if(wedges != null)
 		{
-			wedges.get(i).draw();
+			for(int i = 0; i < wedges.size(); i++)
+			{
+				wedges.get(i).draw();
+			}
 		}
 	}
 }
