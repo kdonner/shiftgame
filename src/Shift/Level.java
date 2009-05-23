@@ -122,6 +122,7 @@ public class Level
 			{
 				Wall wall = new Wall(help, w.type);
 				wall.position(w.xPos, w.yPos);
+				wall.setFilters(dim.dims.filters);
 				newDim.walls.add(wall);
 			}
 			

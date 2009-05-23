@@ -80,6 +80,26 @@ public class Image
 	
 	//Added by Matt Crain, these next four functions allow the modification of the different fields of the scaling array
 	//They allow for opacity changes and reduction of different color amounts
+	
+	void setScales(float[] filters)
+	{
+		if(filters.length == 4)
+		{
+			if(hasValidValues(filters))
+				scales = filters;
+		}
+	}
+	
+	boolean hasValidValues(float[] filters)
+	{
+		for(int i = 0; i < filters.length; i++)
+		{
+			if(!(0f <= filters[i] && 1f >= filters[i]))
+				return false;
+		}
+		return true;
+	}
+	
 	void setOpacity(float opacity)
 	{
 		if(scales[3] != opacity)

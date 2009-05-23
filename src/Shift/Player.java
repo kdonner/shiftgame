@@ -9,7 +9,7 @@ public class Player extends Sprite
 	private static final double RUN_SPEED = 4.5;
 	private static final int HEIGHT = 64;
 	private static final int WIDTH = 64;
-	private static final int JUMP_FORCE = -10;
+	private static final int JUMP_FORCE = -7;
 	Shift parent;
 	boolean flipHoriz, flipVertical;
 	private boolean jumping, onSurface, collision;
@@ -18,6 +18,7 @@ public class Player extends Sprite
 	Actions currentAction;
 	private HistoryManager history;
 	short health, armor; //These will be between 0 and 100
+	Dimensions currDim;
 	
 	public Player(Shift parent)
 	{
@@ -126,6 +127,16 @@ public class Player extends Sprite
 	
 	public void move(Dimensions dim)
 	{
+		if(currDim == null)
+			currDim = dim;
+		if((dim.getGravity() < 0 && currDim.getGravity() > 0) ||
+			(dim.getGravity() > 0 && currDim.getGravity() < 0))
+		{
+			onSurface = false;
+			onWhat = null;
+			jumping = true;
+		}
+		currDim = dim;
 		if(dim != Dimensions.DIM5)
 		{
 			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat));
@@ -133,7 +144,7 @@ public class Player extends Sprite
 			collision = false;
 			if(flipHoriz)
 				flipHorizontal();
-			if(flipVertical)
+			if(currDim.getGravity() < 0)
 				flipVertical();
 			if(onSurface)
 			{
@@ -144,7 +155,6 @@ public class Player extends Sprite
 					onWhat = null;
 				}
 			}
-			//TODO make real check to see if you are already standing on something
 			if(!onSurface)
 			{
 				checkIfCollidesWith(parent.BOTTOMEDGE);
@@ -152,31 +162,29 @@ public class Player extends Sprite
 				{
 					stopFall(parent.BOTTOMEDGE);
 				}
+				checkIfCollidesWith(parent.TOPEDGE);
+				if(collided())
+				{
+					stopRise(parent.TOPEDGE);
+				}
 			}
 				
 			Level lev = parent.getCurrLevel();
 			for(Sprite s : lev.dimensions.get(0).walls)
 			{
-				this.checkIfCollidesWith(s, parent.PIXELPERFECT); //PixelPerfect doesn't work well
-				//Commented out for self created collision direction/side detection
-				if(this.collided())
-				{
-					System.out.println("basic Collision");
-					checkCollision(s);
-				}
+				checkSpriteForCollision(s);
+			}
+			for(Sprite s : lev.dimensions.get(lev.currDimension).walls)
+			{
+				checkSpriteForCollision(s);
 			}
 			if(!onSurface)
 			{
 				double yVel = yspeed() + dim.getGravity();
 				motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
 			}
-			
-			else
-			{
-				//TODO Make sure they are staying on the surface
-			}
 		}
-		else //for testing the rewind
+		else
 		{
 			try
 			{
@@ -201,6 +209,16 @@ public class Player extends Sprite
 			}
 		}
 	}
+
+	private void checkSpriteForCollision(Sprite s) 
+	{
+		this.checkIfCollidesWith(s, parent.PIXELPERFECT);
+		if(this.collided())
+		{
+			System.out.println("basic Collision");
+			checkCollision(s);
+		}
+	}
 	
 	/**
 	 * This self made collision detection is meant to aid with PIXELPERFECT
@@ -213,18 +231,17 @@ public class Player extends Sprite
 		{
 			if(collidedWith.y() < this.y() + this.height())
 			{
-				stopFall(collidedWith);
+				if((this.x() + this.width()/2 + this.width()/4) > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() + 1) //Checks to make sure you're on top
+					stopFall(collidedWith);
 			}
 		}
 		if(this.yspeed() < 0)
 		{
-//			if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width())
-//			{
-				if(collidedWith.y() < this.y())
-				{
+			if(collidedWith.y() < this.y())
+			{
+				if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() + 1) //Checks to make sure you're under
 					stopRise(collidedWith);
-				}
-//			}
+			}
 		}
 		if(this.xspeed() > 0)
 		{
@@ -273,9 +290,17 @@ public class Player extends Sprite
 		System.out.println("Collision: Stop Rise");
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() + collidedWith.height());
-		jumping = true;
-		onSurface = false;
-		onWhat = null;
+		if(currDim.getGravity() < 0)
+		{
+			onSurface = true;
+			onWhat = collidedWith;
+		}
+		else
+		{
+			jumping = true;
+			onSurface = false;
+			onWhat = null;
+		}
 	}
 	
 	private void stopFall(Sprite collidedWith)
@@ -284,9 +309,17 @@ public class Player extends Sprite
 		System.out.println("Collision: Stop Fall");
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() - HEIGHT);
-		jumping = false;
-		onSurface = true;
-		onWhat = collidedWith;
+		if(currDim.getGravity() > 0)
+		{
+			jumping = false;
+			onSurface = true;
+			onWhat = collidedWith;
+		}
+		else
+		{
+			onSurface = false;
+			onWhat = null;
+		}
 	}
 	
 	public void draw(Dimensions which)

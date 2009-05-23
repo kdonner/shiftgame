@@ -150,7 +150,7 @@ public class Shift extends Ucigame
 		if(state == GameState.LEVEL_EDITOR)
 		{
 			keyboard.typematicOff();
-			if(keyboard.isDown(keyboard.W))
+			if(keyboard.isDown(keyboard.W)) //Create Wall object
 			{
 				if(!editor.grabObject)
 				{
@@ -162,36 +162,44 @@ public class Shift extends Ucigame
 					{
 						levelObject = new Wall(this, Walls.WALL1);
 					}
+					levelObject.setFilters(currLevel.currDim.dims.filters);
 					levelObject.setOpacity(0.33f);
 				}
 			}
-			if(keyboard.isDown(keyboard.B))
+			if(keyboard.isDown(keyboard.S)) //Set Start Point
+			{
+				currLevel.start = new Point(mouse.x(), mouse.y());
+			}
+			if(keyboard.isDown(keyboard.B)) //Set a background
 			{
 				currLevel.background = getImage(Constants.IMG_DIR + "levels/bkg/Background2.png");
 			}
-			if(keyboard.isDown(keyboard.H))
+			if(keyboard.isDown(keyboard.H)) //Create health pack
 			{
 				levelObject = new PickupItem(this, Pickups.HEALTH_PACK);
 			}
-			if(keyboard.isDown(keyboard.A))
+			if(keyboard.isDown(keyboard.A)) //Create armor pack
 			{
 				levelObject = new PickupItem(this, Pickups.ARMOR_PACK);
 			}
-			if(keyboard.isDown(keyboard.M))
+			if(keyboard.isDown(keyboard.M)) //Enable/Disable magnatism
 			{
 				editor.snapToGrid = !editor.snapToGrid;
 			}	
-			if(keyboard.isDown(keyboard.G))
+			if(keyboard.isDown(keyboard.G)) //Grab Object
 			{
-				levelObject = null;
-				editor.grabObject = true;
+				if(!editor.grabObject)
+				{
+					levelObject = null;
+					editor.grabObject = true;
+				}
 			}
 			else
 			{
 				if(levelObject == null)
 					editor.grabObject = false;
 			}
-			if(keyboard.isDown(keyboard.DELETE) || keyboard.isDown(keyboard.BACKSPACE))
+			if(keyboard.isDown(keyboard.DELETE) || keyboard.isDown(keyboard.BACKSPACE)) //Delete grabbed object
 			{
 				if(levelObject != null)
 				{
@@ -199,7 +207,7 @@ public class Shift extends Ucigame
 					levelObject = null;
 				}
 			}
-			if(keyboard.isDown(keyboard.K0))
+			if(keyboard.isDown(keyboard.K0)) //These all switch dimension to the numbers they reference
 			{
 				currLevel.switchDim(0, true);
 			}
@@ -235,11 +243,11 @@ public class Shift extends Ucigame
 			{
 				currLevel.switchDim(8, true);
 			}
-			if(keyboard.isDown(keyboard.F5))
+			if(keyboard.isDown(keyboard.F5)) //Save
 			{
 				saveLevel();
 			}
-			if(keyboard.isDown(keyboard.F8))
+			if(keyboard.isDown(keyboard.F8)) //Load
 			{
 				loadLevel();
 			}
@@ -320,6 +328,27 @@ public class Shift extends Ucigame
 				//editor.grabObject = false;
 			}
 		}
+		if(state == GameState.IN_GAME)
+		{
+			if(!displayDimMenu)
+			{
+				displayDimMenu = true;
+				mouseX = mouse.x();
+				mouseY = mouse.y();
+			}
+		}
+	}
+	
+	public void onMouseReleased()
+	{
+		if(state == GameState.IN_GAME)
+		{
+			if(displayDimMenu)
+			{
+				displayDimMenu = false;
+				currLevel.switchDim(dimMenu.calcSwitch(mouseX, mouse.x(), mouseY, mouse.y()), false);
+			}
+		}
 	}
 	
 	public void onKeyRelease()
@@ -336,8 +365,6 @@ public class Shift extends Ucigame
 				{
 					displayDimMenu = false;
 					currLevel.switchDim(dimMenu.calcSwitch(mouseX, mouse.x(), mouseY, mouse.y()), false);
-					//TODO ShiftDimensions shiftDimension(startX, endX, startY, endY)
-					// shiftDimension(mouseX, mouse.x(), mouseY, mouse.y());
 				}
 			}
 		}
@@ -373,7 +400,6 @@ public class Shift extends Ucigame
 	
 	private void loadLevel()
 	{
-		//TODO Finish Level Saving Function
 		Frame parent = new Frame();
 		parent.setVisible(false);
 		FileDialog fd = new FileDialog(parent, "Open", FileDialog.LOAD);
@@ -382,15 +408,25 @@ public class Shift extends Ucigame
             return;
         String file = fd.getDirectory() + fd.getFile();
         
-        if(new File(file).exists())
+        Level temp = loadLevelFromDir(file);
+        if(temp != null)
+        	currLevel = temp;
+        parent.dispose();
+	}
+	
+	public Level loadLevelFromDir(String fileDir)
+	{
+		if(new File(fileDir).exists())
         {
         	try
         	{
-        		FileInputStream fileIn = new FileInputStream(file);
+        		FileInputStream fileIn = new FileInputStream(fileDir);
     	        ObjectInputStream in = new ObjectInputStream(fileIn);
     	        LevelSaveFile loading = (LevelSaveFile)in.readObject();
-    	        currLevel.unpackSaveFile(this, loading);
+    	        Level level = new Level();
+    	        level.unpackSaveFile(this, loading);
     	        in.close();
+    	        return level;
         	}
         	catch(ClassNotFoundException e)
         	{
@@ -400,11 +436,8 @@ public class Shift extends Ucigame
         	{
         		System.err.println(e);
         	}
-	        finally
-	        {
-	        	parent.dispose();
-	        }
         }
+		return null;
 	}
 	
 	private void drawUI()
