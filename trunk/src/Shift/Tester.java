@@ -1,5 +1,8 @@
 package Shift;
 
+import java.awt.FileDialog;
+import java.awt.Frame;
+
 import ucigame.Sprite;
 import ucigame.Ucigame;
 
@@ -7,32 +10,14 @@ public class Tester
 {
 	public static Level makeLevel(Shift helper)
 	{
-		Level lev = new Level();
-		
-		lev.start = new Point(20, Shift.FRAME_HEIGHT - 80);
-		
-		Wall wall = new Wall(helper, Walls.WALL1);
-		wall.position(Shift.FRAME_WIDTH / 2, Shift.FRAME_HEIGHT - wall.height());
-		lev.addObject(wall);
-		
-		wall = new Wall(helper, Walls.WALL1);
-		wall.position(Shift.FRAME_WIDTH / 2 - 350, Shift.FRAME_HEIGHT - wall.height());
-		lev.addObject(wall);
-		
-		wall = new Wall(helper, Walls.PLATFORM1);
-		wall.position(Shift.FRAME_WIDTH / 2 - 200, Shift.FRAME_HEIGHT - 100);
-		lev.addObject(wall);
-		
-		wall = new Wall(helper, Walls.WALL1);
-		wall.position(Shift.FRAME_WIDTH / 2 + 350, Shift.FRAME_HEIGHT - wall.height());
-		Dimension dim = new Dimension(Dimensions.DIM1);
-		dim.addObject(wall);
-		
-		lev.dimensions.add(dim);
-		
-		dim = new Dimension(Dimensions.DIM5);
-		lev.dimensions.add(dim);
-
-		return lev;
+		Frame parent = new Frame();
+		parent.setVisible(false);
+		FileDialog fd = new FileDialog(parent, "Open", FileDialog.LOAD);
+        fd.setVisible(true);
+        if (fd.getFile() == null)
+            return null;
+        String file = fd.getDirectory() + fd.getFile();
+		parent.dispose();
+		return helper.loadLevelFromDir(file);
 	}
 }

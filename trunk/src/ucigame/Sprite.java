@@ -208,6 +208,17 @@ public class Sprite
 		numFrames = 1;
 	}
 	
+	public void setFilters(float[] filters)
+	{
+		if(filters.length == 4)
+		{
+			setRFilter(filters[0]);
+			setGFilter(filters[1]);
+			setBFilter(filters[2]);
+			setOpacity(filters[3]);
+		}
+	}
+	
 	public void setOpacity(float newOpac)
 	{
 		//The range of valid values, otherwise leave it unchanged
