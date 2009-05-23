@@ -9,7 +9,7 @@ public class Player extends Sprite
 	private static final double RUN_SPEED = 4.5;
 	private static final int HEIGHT = 64;
 	private static final int WIDTH = 64;
-	private static final int JUMP_FORCE = -5;
+	private static final int JUMP_FORCE = -10;
 	Shift parent;
 	boolean flipHoriz, flipVertical;
 	private boolean jumping, onSurface, collision;
@@ -211,20 +211,20 @@ public class Player extends Sprite
 		//Doesn't check yspeed == 0 because it could never collide vertically
 		if(this.yspeed() > 0)
 		{
-			if(collidedWith.y() > this.y() + this.height())
+			if(collidedWith.y() < this.y() + this.height())
 			{
 				stopFall(collidedWith);
 			}
 		}
 		if(this.yspeed() < 0)
 		{
-			if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width())
-			{
+//			if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width())
+//			{
 				if(collidedWith.y() < this.y())
 				{
 					stopRise(collidedWith);
 				}
-			}
+//			}
 		}
 		if(this.xspeed() > 0)
 		{
