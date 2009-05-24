@@ -23,5 +23,11 @@ public class Inventory
 		items[1].draw();
 		items[2].draw();
 	}
+	
+	public void unlock(int item)
+	{
+		if(item >= 0 && item <= 2)
+			items[item].found();
+	}
 
 }

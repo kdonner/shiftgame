@@ -176,7 +176,8 @@ public class Player extends Sprite
 		currDim = dim;
 		if(dim != Dimensions.DIM5)
 		{
-			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat));
+			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, 
+					this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat, pushing, pushLeft, pushingWhat));
 			super.move(); //If this doesn't occur before collision detection jumping gets screwed
 			if(flipHoriz)
 				flipHorizontal();
@@ -210,9 +211,16 @@ public class Player extends Sprite
 			{
 				checkSpriteForCollision(s);
 			}
-			for(Sprite s : lev.dimensions.get(lev.currDimension).walls)
+			for(Sprite s : lev.currDim.walls)
 			{
 				checkSpriteForCollision(s);
+			}
+			for(int i = 0; i < lev.currDim.pickupItems.size(); i++)
+			{
+				if(checkForPickup(lev.currDim.pickupItems.get(i)))
+				{
+					lev.currDim.pickupItems.remove(i);
+				}
 			}
 			if(!onSurface)
 			{
@@ -240,12 +248,46 @@ public class Player extends Sprite
 					this.setToFrame(past.frame);
 					onSurface = past.onSurface;
 					this.onWhat = past.onWhat;
+					this.pushing = past.pushing;
+					this.pushLeft = past.pushLeft;
+					this.pushingWhat = past.pushWhat;
 				}
 			}
 			catch(HistoryEmptyException e)
 			{
 				System.out.println(e);
 			}
+		}
+	}
+	
+	private boolean checkForPickup(PickupItem item)
+	{
+		this.checkIfCollidesWith(item);
+		if(this.collided())
+		{
+			pickupItem(item);
+			return true;
+		}
+		return false;
+	}
+	
+	private void pickupItem(PickupItem item)
+	{
+		if(item.itemType == Pickups.ARMOR_PACK)
+		{
+			armor = 100;
+		}
+		else if(item.itemType == Pickups.HEALTH_PACK)
+		{
+			health = 100;
+		}
+		else if(item.itemType == Pickups.SILVER_KEY)
+		{
+			inven.unlock(0);
+		}
+		else if(item.itemType == Pickups.GOLD_KEY)
+		{
+			inven.unlock(1);
 		}
 	}
 
