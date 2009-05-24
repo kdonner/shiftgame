@@ -8,7 +8,7 @@ public class Player extends Sprite
 {
 	private static final int DAMAGE_VELOCITY = 10;
 	private static final double RUN_SPEED = 4.5;
-	private static final int HEIGHT = 64;
+	private static final int HEIGHT = 87;
 	private static final int WIDTH = 64;
 	private static final int JUMP_FORCE = -7;
 	Shift parent;
@@ -25,7 +25,24 @@ public class Player extends Sprite
 	{
 		super(WIDTH, HEIGHT);
 		this.parent = parent;
-		Image run = parent.getImage(Constants.IMG_DIR + "player/playerBack.png", 255, 0, 255);
+		
+//		Image run = parent.getImage(Constants.IMG_DIR + "player/playerBack.png", 255, 0, 255);
+//		addFrames(run, 
+//				0, 0, //Frame 0
+//				64, 0,
+//				128, 0,
+//				192, 0,
+//				256, 0,
+//				320, 0,
+//				384, 0,
+//				448, 0,
+//				512, 0,
+//				576, 0,
+//				640, 0,
+//				704, 0, //Frame 11
+//				576, 0); //Frame 12 Standing
+		//This is just for testing
+		Image run = parent.getImage(Constants.IMG_DIR + "Temp/StickManWorking.png", 255, 255, 255);
 		addFrames(run, 
 				0, 0, //Frame 0
 				64, 0,
@@ -39,7 +56,7 @@ public class Player extends Sprite
 				576, 0,
 				640, 0,
 				704, 0, //Frame 11
-				576, 0); //Frame 12 Standing  
+				192, 0); //Frame 12 Standing
 		defineSequence(Actions.RUN.name, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
 		defineSequence(Actions.STAND.name, 12); //TODO: make real stand sprite
 		defineSequence(Actions.JUMP.name, 12); //TODO: make real jump animation
