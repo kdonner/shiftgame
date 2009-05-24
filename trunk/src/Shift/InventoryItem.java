@@ -14,7 +14,7 @@ public class InventoryItem extends Sprite
 		this.parent = parent;
 		hasFound = false; //TODO: Change default to false, set to true only to ensure drawing correctly
 		this.position(xLoc, yLoc);
-		this.setOpacity(0.5f);
+		this.setOpacity(0.1f);
 	}
 	
 	public void use()

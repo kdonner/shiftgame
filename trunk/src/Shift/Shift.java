@@ -182,6 +182,10 @@ public class Shift extends Ucigame
 			{
 				levelObject = new PickupItem(this, Pickups.ARMOR_PACK);
 			}
+			if(keyboard.isDown(keyboard.K))
+			{
+				levelObject = new PickupItem(this, Pickups.SILVER_KEY);
+			}
 			if(keyboard.isDown(keyboard.M)) //Enable/Disable magnatism
 			{
 				editor.snapToGrid = !editor.snapToGrid;
@@ -338,7 +342,15 @@ public class Shift extends Ucigame
 			if(displayDimMenu)
 			{
 				displayDimMenu = false;
-				currLevel.switchDim(dimMenu.calcSwitch(mouseX, mouse.x(), mouseY, mouse.y()), false, this);
+				try
+				{
+					int newDim = dimMenu.calcSwitch(mouseX, mouse.x(), mouseY, mouse.y());
+					currLevel.switchDim(newDim, false, this);
+				}
+				catch(MouseBarelyMovedException e)
+				{
+					System.err.println(e);
+				}
 			}
 		}
 	}
@@ -356,7 +368,15 @@ public class Shift extends Ucigame
 				if(!keyboard.isDown(keyboard.SHIFT))
 				{
 					displayDimMenu = false;
-					currLevel.switchDim(dimMenu.calcSwitch(mouseX, mouse.x(), mouseY, mouse.y()), false, this);
+					try
+					{
+						int newDim = dimMenu.calcSwitch(mouseX, mouse.x(), mouseY, mouse.y());
+						currLevel.switchDim(newDim, false, this);
+					}
+					catch(MouseBarelyMovedException e)
+					{
+						System.err.println(e);
+					}
 				}
 			}
 		}

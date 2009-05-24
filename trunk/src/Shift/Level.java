@@ -118,9 +118,12 @@ public class Level
 	private void createNewDim(Shift parent, Dimensions searchingFor) 
 	{
 		currDim = new Dimension(searchingFor);
-		currDim.bkgType = dimensions.get(0).bkgType;
-		currDim.background = parent.makeSprite(parent.getImage(currDim.bkgType.img));
-		currDim.background.setFilters(currDim.dims.filters);
+		if(dimensions.get(0).bkgType != null)
+		{
+			currDim.bkgType = dimensions.get(0).bkgType;
+			currDim.background = parent.makeSprite(parent.getImage(currDim.bkgType.img));
+			currDim.background.setFilters(currDim.dims.filters);
+		}
 	}
 	
 	public void unpackSaveFile(Shift help, LevelSaveFile data)

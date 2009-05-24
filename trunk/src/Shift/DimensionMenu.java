@@ -7,6 +7,8 @@ import ucigame.Sprite;
 
 public class DimensionMenu 
 {
+	private static final int MIN_MOUSE_MOVE_DIST = 4;
+
 	class DimensionWedge extends Sprite
 	{
 		double rotation;
@@ -70,11 +72,15 @@ public class DimensionMenu
 		}
 	}
 	
-	public int calcSwitch(int oldX, int newX, int oldY, int newY)
+	public int calcSwitch(int oldX, int newX, int oldY, int newY) throws MouseBarelyMovedException
 	{
 		double x = newX - oldX;
 		double y = -(newY - oldY);
 		double degrees = 1;
+		
+		if(Math.sqrt(Math.pow(Math.abs(x), 2) + Math.pow(Math.abs(y), 2)) < MIN_MOUSE_MOVE_DIST)
+			throw new MouseBarelyMovedException();
+		
 		if(x > 0 && y > 0) //Quad 1
 		{
 			degrees = 90 - Math.toDegrees(Math.atan(y/x));
