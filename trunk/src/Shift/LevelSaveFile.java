@@ -9,14 +9,12 @@ public class LevelSaveFile implements Serializable
 	
 	Point start;
 	Area end;
-	Backgrounds bkgType;
 	ArrayList<DimensionSave> dimensions;
 	
 	public LevelSaveFile(Level toSave)
 	{
 		this.start = toSave.start;
 		this.end = toSave.end;
-		this.bkgType = toSave.bkgType;
 		dimensions = new ArrayList<DimensionSave>();
 		for(Dimension d : toSave.dimensions)
 		{
@@ -57,12 +55,14 @@ public class LevelSaveFile implements Serializable
 			}
 		}
 		
+		Backgrounds bkgType;
 		Dimensions dims;
 		ArrayList<WallSave> walls;
 		ArrayList<PickupSave> pickups;
 		
 		public DimensionSave(Dimension toSave)
 		{
+			this.bkgType = toSave.bkgType;
 			this.dims = toSave.dims;
 			walls = new ArrayList<WallSave>();
 			pickups = new ArrayList<PickupSave>();

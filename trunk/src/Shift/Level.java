@@ -13,8 +13,6 @@ public class Level
 {
 	Point start; //Player's start location
 	Area end; //The end location of the level
-	Sprite background;
-	Backgrounds bkgType;
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	Dimension currDim;
 	int currDimension;
@@ -29,27 +27,38 @@ public class Level
 	
 	public void addObject(LevelObject obj)
 	{
-		//TODO Create actual logic for adding object to current dimension
 		dimensions.get(currDimension).addObject(obj);
 	}
 	
-	public void render()
-	{
-//		for(Wall s : walls)
-//		{
-//			s.draw();
-//		}
-		if(background != null)
-			background.draw();
-		dimensions.get(0).render();
+	public void render(boolean renderZerothBKG)
+	{	
+		if(renderZerothBKG)
+		{
+			dimensions.get(0).drawBkg();
+		}
+		else if(currDim.dims != Dimensions.DIM0)
+		{
+			currDim.drawBkg();
+		}
+		if(currDim.dims != Dimensions.DIM0)
+		{
+			dimensions.get(0).render();
+		}
 		currDim.render();
 	}
 	
 	public void addBackground(Shift parent, Backgrounds type)
 	{
-		this.bkgType = type;
-		background = parent.makeSprite(parent.getImage(type.img));
-		background.position(0, 0);
+		for(Dimension d : dimensions)
+		{
+			d.bkgType = type;
+			d.background = parent.makeSprite(parent.getImage(type.img));
+			d.background.position(0, 0);
+			if(d.dims != Dimensions.DIM0)
+			{
+				d.background.setFilters(d.dims.filters);
+			}
+		}
 	}
 	
 	public Dimensions getCurrDims()
@@ -72,7 +81,7 @@ public class Level
 		return labels;
 	}
 	
-	public void switchDim(int newDim, boolean addNew)
+	public void switchDim(int newDim, boolean addNew, Shift parent)
 	{ 
 		if(newDim >= 0 && newDim <= 8)
 		{
@@ -84,8 +93,6 @@ public class Level
 				{
 					currDimension = i;
 					currDim = dimensions.get(currDimension);
-					if(background != null)
-						background.setFilters(currDim.dims.filters);
 					return;
 				}
 				if(dimensions.get(i).dims.dimNum > searchingFor.dimNum)
@@ -93,7 +100,7 @@ public class Level
 					if(addNew)
 					{
 						currDimension = i;
-						currDim = new Dimension(searchingFor);
+						createNewDim(parent, searchingFor);
 						dimensions.add(i, currDim);
 					}
 					return;
@@ -101,25 +108,37 @@ public class Level
 			}
 			if(addNew)
 			{
-				currDim = new Dimension(searchingFor);
+				createNewDim(parent, searchingFor);
 				dimensions.add(currDim);
 				currDimension = dimensions.size()-1;
 			}
 		}
+	}
+
+	private void createNewDim(Shift parent, Dimensions searchingFor) 
+	{
+		currDim = new Dimension(searchingFor);
+		currDim.bkgType = dimensions.get(0).bkgType;
+		currDim.background = parent.makeSprite(parent.getImage(currDim.bkgType.img));
+		currDim.background.setFilters(currDim.dims.filters);
 	}
 	
 	public void unpackSaveFile(Shift help, LevelSaveFile data)
 	{
 		this.start = data.start;
 		this.end = data.end;
-		this.bkgType = data.bkgType;
-		if(bkgType != null)
-			background = help.makeSprite(help.getImage(bkgType.img));
 		dimensions = new ArrayList<Dimension>();
 		
 		for(DimensionSave dim : data.dimensions)
 		{
 			Dimension newDim = new Dimension(dim.dims);
+			newDim.bkgType = dim.bkgType;
+			if(newDim.bkgType != null)
+			{
+				newDim.background = help.makeSprite(help.getImage(newDim.bkgType.img));
+				if(dim.dims != Dimensions.DIM0)
+					newDim.background.setFilters(newDim.dims.filters);
+			}
 			
 			for(WallSave w : dim.walls)
 			{
