@@ -72,7 +72,7 @@ public class Player extends Sprite
 		{
 			//TODO: Replace with playAction call once jump Action defined
 			currentAction = Actions.JUMP;
-			motion(xspeed(), yspeed() + JUMP_FORCE);
+			motion(xspeed(), yspeed() + (currDim.getGravity() < 0? -JUMP_FORCE : JUMP_FORCE));
 			jumping = true;
 			onSurface = false;
 			onWhat = null;
@@ -231,21 +231,25 @@ public class Player extends Sprite
 		{
 			if(collidedWith.y() < this.y() + this.height())
 			{
-				if((this.x() + this.width()/2 + this.width()/4) > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() + 1) //Checks to make sure you're on top
+				if((this.x() + this.width()/2) > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're on top
+				{
 					stopFall(collidedWith);
+				}
 			}
 		}
 		if(this.yspeed() < 0)
 		{
-			if(collidedWith.y() < this.y())
+			if(collidedWith.y() < this.y() + this.height()/2)
 			{
-				if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() + 1) //Checks to make sure you're under
+				if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're under
+				{
 					stopRise(collidedWith);
+				}
 			}
 		}
 		if(this.xspeed() > 0)
 		{
-			if(this.y() < collidedWith.y() + collidedWith.height() && !(this.x() + this.width()/2 > collidedWith.x() + collidedWith.width()))
+			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
 			{
 				if(this.x() + this.width() > collidedWith.x() && !(this.x() > collidedWith.x() + this.width()/2))
 				{
@@ -255,7 +259,7 @@ public class Player extends Sprite
 		}
 		if(this.xspeed() < 0)
 		{
-			if(this.y() < collidedWith.y() + collidedWith.height() && !(this.x() < collidedWith.x() + collidedWith.width()/8))
+			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
 			{
 				if(this.x() < collidedWith.x() + collidedWith.width())
 				{
@@ -294,6 +298,7 @@ public class Player extends Sprite
 		{
 			onSurface = true;
 			onWhat = collidedWith;
+			jumping = false;
 		}
 		else
 		{
@@ -319,6 +324,7 @@ public class Player extends Sprite
 		{
 			onSurface = false;
 			onWhat = null;
+			jumping = true;
 		}
 	}
 	
@@ -326,7 +332,6 @@ public class Player extends Sprite
 	{
 		move(which);
 		super.draw();
-		inven.draw();
 	}
 }
 

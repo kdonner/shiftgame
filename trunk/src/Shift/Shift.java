@@ -172,7 +172,7 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.B)) //Set a background
 			{
-				currLevel.background = getImage(Constants.IMG_DIR + "levels/bkg/Background2.png");
+				currLevel.addBackground(this, Backgrounds.BKG2);
 			}
 			if(keyboard.isDown(keyboard.H)) //Create health pack
 			{
@@ -527,7 +527,7 @@ public class Shift extends Ucigame
 	
 	private void drawInventory()
 	{
-		
+		player.inven.draw();
 	}
 	
 	public Level getCurrLevel()

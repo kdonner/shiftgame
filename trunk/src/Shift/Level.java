@@ -13,7 +13,7 @@ public class Level
 {
 	Point start; //Player's start location
 	Area end; //The end location of the level
-	Image background;
+	Sprite background;
 	Backgrounds bkgType;
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	Dimension currDim;
@@ -40,7 +40,7 @@ public class Level
 //			s.draw();
 //		}
 		if(background != null)
-			background.draw(0, 0);
+			background.draw();
 		dimensions.get(0).render();
 		currDim.render();
 	}
@@ -48,7 +48,8 @@ public class Level
 	public void addBackground(Shift parent, Backgrounds type)
 	{
 		this.bkgType = type;
-		background = parent.getImage(type.img);
+		background = parent.makeSprite(parent.getImage(type.img));
+		background.position(0, 0);
 	}
 	
 	public Dimensions getCurrDims()
@@ -83,6 +84,8 @@ public class Level
 				{
 					currDimension = i;
 					currDim = dimensions.get(currDimension);
+					if(background != null)
+						background.setFilters(currDim.dims.filters);
 					return;
 				}
 				if(dimensions.get(i).dims.dimNum > searchingFor.dimNum)
@@ -111,7 +114,7 @@ public class Level
 		this.end = data.end;
 		this.bkgType = data.bkgType;
 		if(bkgType != null)
-			background = help.getImage(bkgType.img);
+			background = help.makeSprite(help.getImage(bkgType.img));
 		dimensions = new ArrayList<Dimension>();
 		
 		for(DimensionSave dim : data.dimensions)
