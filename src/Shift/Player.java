@@ -6,6 +6,7 @@ import ucigame.Sprite;
 
 public class Player extends Sprite
 {
+	private static final int DAMAGE_VELOCITY = 10;
 	private static final double RUN_SPEED = 4.5;
 	private static final int HEIGHT = 64;
 	private static final int WIDTH = 64;
@@ -50,9 +51,9 @@ public class Player extends Sprite
 		flipVertical = false;
 		jumping = false;
 		onSurface = false;
+		collision = false;
 		currentAction = Actions.STAND;
 		playAction(currentAction);
-		collision = false;
 		onWhat = null;
 		health = 100;
 		armor = 0;
@@ -91,8 +92,9 @@ public class Player extends Sprite
 		motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
 	}
 	
-	public void lossHealth(short amt)
+	public void lossHealth(int amt)
 	{
+		System.out.println("Health Loss: " + amt);
 		if(armor > 0)
 		{
 			if(armor < amt)
@@ -118,11 +120,14 @@ public class Player extends Sprite
 				health -= amt;
 			}
 		}
+		if(health <= 0)
+			die();
 	}
 	
 	private void die()
 	{
-		//TODO send death signals, start level over, etc.
+		//TODO What happens when you die?
+		System.out.println("Die");
 	}
 	
 	public void move(Dimensions dim)
@@ -181,7 +186,10 @@ public class Player extends Sprite
 			if(!onSurface)
 			{
 				double yVel = yspeed() + dim.getGravity();
-				motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
+				if(currDim.gravIsDown)
+					motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
+				else
+					motion(xspeed(), (yVel < dim.terminalVelocity? dim.terminalVelocity : yVel));
 			}
 		}
 		else
@@ -292,9 +300,10 @@ public class Player extends Sprite
 	{
 		collision = true;
 		System.out.println("Collision: Stop Rise");
+		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() + collidedWith.height());
-		if(currDim.getGravity() < 0)
+		if(!currDim.gravIsDown)
 		{
 			onSurface = true;
 			onWhat = collidedWith;
@@ -307,14 +316,15 @@ public class Player extends Sprite
 			onWhat = null;
 		}
 	}
-	
+
 	private void stopFall(Sprite collidedWith)
 	{
 		collision = true;
 		System.out.println("Collision: Stop Fall");
+		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() - HEIGHT);
-		if(currDim.getGravity() > 0)
+		if(currDim.gravIsDown)
 		{
 			jumping = false;
 			onSurface = true;
@@ -326,6 +336,21 @@ public class Player extends Sprite
 			onWhat = null;
 			jumping = true;
 		}
+	}
+	
+	private void checkFallDamage() 
+	{
+		System.out.println("Y Speed: " + yspeed());
+		if(Math.abs(yspeed()) > DAMAGE_VELOCITY)
+		{
+			lossHealth(fallDamage(Math.abs(yspeed()) - DAMAGE_VELOCITY));
+		}
+	}
+	
+	private int fallDamage(double velocity) 
+	{
+		System.out.println("Velocity - Damage Speed : " + velocity * 10);
+		return (int) velocity * 10;
 	}
 	
 	public void draw(Dimensions which)
