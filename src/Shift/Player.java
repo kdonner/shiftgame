@@ -13,8 +13,8 @@ public class Player extends Sprite
 	private static final int JUMP_FORCE = -7;
 	Shift parent;
 	boolean flipHoriz, flipVertical;
-	private boolean jumping, onSurface, collision;
-	private Sprite onWhat; //Goes with onSurface
+	private boolean jumping, onSurface, pushing, pushLeft;
+	private Sprite onWhat, pushingWhat; //Goes with onSurface and pushing
 	Inventory inven;
 	Actions currentAction;
 	private HistoryManager history;
@@ -51,10 +51,12 @@ public class Player extends Sprite
 		flipVertical = false;
 		jumping = false;
 		onSurface = false;
-		collision = false;
+		pushing = false;
+		pushLeft = false;
 		currentAction = Actions.STAND;
 		playAction(currentAction);
 		onWhat = null;
+		pushingWhat = null;
 		health = 100;
 		armor = 0;
 		
@@ -88,8 +90,38 @@ public class Player extends Sprite
 	
 	public void run()
 	{
-		playAction(Actions.RUN);
-		motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
+		checkPush();
+		if(!pushing)
+		{
+			playAction(Actions.RUN);
+			motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
+		}
+	}
+	
+	private void checkPush()
+	{
+		if(pushingWhat != null)
+		{
+			if((y() + height()) < pushingWhat.y() || y() > (pushingWhat.y() + pushingWhat.height()))
+			{
+				System.out.println("Push off Surface: " + x()+width() + " : " + pushingWhat.x());
+				pushing = false;
+				pushingWhat = null;
+			}
+			if(pushing)
+			{
+				if(!((pushLeft && flipHoriz) || (!pushLeft && !flipHoriz)))
+				{
+					System.out.println("Walk away from Push");
+					pushing = false;
+					pushingWhat = null;
+				}
+			}
+		}
+		else
+		{
+			pushing = false;
+		}
 	}
 	
 	public void lossHealth(int amt)
@@ -146,14 +178,13 @@ public class Player extends Sprite
 		{
 			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat));
 			super.move(); //If this doesn't occur before collision detection jumping gets screwed
-			collision = false;
 			if(flipHoriz)
 				flipHorizontal();
 			if(currDim.getGravity() < 0)
 				flipVertical();
 			if(onSurface)
 			{
-				if((x() + this.width()/2) < onWhat.x() || (x() + this.width()/2) > (onWhat.x() + onWhat.width()))
+				if((x() + width()/2) < onWhat.x() || (x() + width()/2) > (onWhat.x() + onWhat.width()))
 				{
 					System.out.println("Fall off Surface: " + x()+width() + " : " + onWhat.x());
 					onSurface = false;
@@ -283,13 +314,17 @@ public class Player extends Sprite
 		motion(0, yspeed());
 		if(!collidedWith.equals(onWhat))
 		{
+			pushing = true;
+			pushingWhat = collidedWith;
 			playAction(Actions.PUSH);
 			if(leftSide)
 			{
+				pushLeft = false;
 				this.position(collidedWith.x() - this.width(), y());
 			}
 			else
 			{
+				pushLeft = true;
 				this.position(collidedWith.x() + collidedWith.width(), y());
 			}
 		}
@@ -298,7 +333,6 @@ public class Player extends Sprite
 	
 	private void stopRise(Sprite collidedWith)
 	{
-		collision = true;
 		System.out.println("Collision: Stop Rise");
 		checkFallDamage();
 		motion(xspeed(), 0);
@@ -319,7 +353,6 @@ public class Player extends Sprite
 
 	private void stopFall(Sprite collidedWith)
 	{
-		collision = true;
 		System.out.println("Collision: Stop Fall");
 		checkFallDamage();
 		motion(xspeed(), 0);
