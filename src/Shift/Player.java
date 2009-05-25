@@ -11,14 +11,17 @@ public class Player extends Sprite
 	private static final int HEIGHT = 95;
 	private static final int WIDTH = 64;
 	private static final int JUMP_FORCE = -7;
-	Shift parent;
-	boolean flipHoriz, flipVertical;
+	
 	private boolean jumping, onSurface, pushing, pushLeft;
+	boolean flipHoriz, flipVertical;
+	short health, armor; //These will be between 0 and 100
+	
 	private Sprite onWhat, pushingWhat; //Goes with onSurface and pushing
+	private HistoryManager history;
+	private ArrayList<SpecialEffect> effects;
+	Shift parent;
 	Inventory inven;
 	Actions currentAction;
-	private HistoryManager history;
-	short health, armor; //These will be between 0 and 100
 	Dimensions currDim;
 	
 	public Player(Shift parent)
@@ -58,14 +61,19 @@ public class Player extends Sprite
 				704, 0, //Frame 11
 				0, 95,  //Frame 12 Push
 				64, 95, //13 - Stand
-				128, 95); //14 - Jump Take Off
+				128, 95, //14 - Jump Take Off
+				192, 95, //15 - Jump Apex
+				256, 95); //16 - Jump Fall
 		defineSequence(Actions.RUN.name, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
-		defineSequence(Actions.STAND.name, 13); //TODO: make real stand sprite
+		defineSequence(Actions.STAND.name, 13); 
 		defineSequence(Actions.JUMP_TAKEOFF.name, 14); //TODO: make real jump animation
-		defineSequence(Actions.PUSH.name, 12); //TODO: make real push sprite
+		defineSequence(Actions.JUMP_FALL.name, 16);
+		defineSequence(Actions.JUMP_APEX.name, 15);
+		defineSequence(Actions.PUSH.name, 12); 
 		framerate(20);
 		
 		inven = new Inventory(parent);
+		effects = new ArrayList<SpecialEffect>();
 		flipHoriz = false;
 		flipVertical = false;
 		jumping = false;
@@ -95,12 +103,23 @@ public class Player extends Sprite
 			if(!pushing)
 			{
 				playAction(Actions.JUMP_TAKEOFF);
+				addJumpDust();
 			}
 			motion(xspeed(), yspeed() + (currDim.getGravity() < 0? -JUMP_FORCE : JUMP_FORCE));
 			jumping = true;
 			onSurface = false;
 			onWhat = null;
 		}
+	}
+
+	private void addJumpDust() 
+	{
+		DustJumpEffect dust = new DustJumpEffect(parent);
+		dust.flipVertical = flipVertical;
+		System.out.println(this.y() + "  " + flipVertical);
+		dust.position(this.x() - (flipHoriz? -20 : 20), (flipVertical? this.y() : this.y() + HEIGHT - dust.height()));
+		System.out.println("Dust X : " + dust.x() + "   Dust Y : " + dust.y());
+		effects.add(dust);
 	}
 
 	public void stand()
@@ -155,7 +174,18 @@ public class Player extends Sprite
 	{
 		if(!pushing)
 		{
-			playAction(Actions.JUMP_TAKEOFF);
+			if(yspeed() < 0.5 && yspeed() > -0.5)
+			{
+				playAction(Actions.JUMP_APEX);
+			}
+			else if((yspeed() < 0 && currDim.gravIsDown) || (yspeed() > 0 && !currDim.gravIsDown))
+			{
+				playAction(Actions.JUMP_TAKEOFF);
+			}
+			else
+			{
+				playAction(Actions.JUMP_FALL);
+			}
 		}
 	}
 	
@@ -208,7 +238,13 @@ public class Player extends Sprite
 			onWhat = null;
 			jumping = true;
 		}
-		currDim = dim;
+		if(dim != currDim)
+		{
+			currDim = dim;
+			flipVertical = !currDim.gravIsDown;
+		}
+		
+			
 		if(dim != Dimensions.DIM5)
 		{
 			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, 
@@ -216,7 +252,7 @@ public class Player extends Sprite
 			super.move(); //If this doesn't occur before collision detection jumping gets screwed
 			if(flipHoriz)
 				flipHorizontal();
-			if(currDim.getGravity() < 0)
+			if(flipVertical)
 				flipVertical();
 			if(onSurface)
 			{
@@ -471,6 +507,12 @@ public class Player extends Sprite
 	public void draw(Dimensions which)
 	{
 		move(which);
+		for(int i = 0; i < effects.size(); i++)
+		{
+			effects.get(i).draw();
+			if(effects.get(i).isDead())
+				effects.remove(i);
+		}
 		super.draw();
 	}
 }
