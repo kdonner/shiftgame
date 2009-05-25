@@ -27,7 +27,6 @@ public class Shift extends Ucigame
 	private int mouseX, mouseY;
 	private LevelEditor editor;
 	public GameState state;
-	
 	private LevelObject levelObject;
 //	Sprite testSprite; TODO: Remove test Sprite when done
 
