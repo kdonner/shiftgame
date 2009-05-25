@@ -8,7 +8,7 @@ public class Player extends Sprite
 {
 	private static final int DAMAGE_VELOCITY = 10;
 	private static final double RUN_SPEED = 4.5;
-	private static final int HEIGHT = 87;
+	private static final int HEIGHT = 95;
 	private static final int WIDTH = 64;
 	private static final int JUMP_FORCE = -7;
 	Shift parent;
@@ -56,11 +56,13 @@ public class Player extends Sprite
 				576, 0,
 				640, 0,
 				704, 0, //Frame 11
-				192, 0); //Frame 12 Standing
+				0, 95,  //Frame 12 Push
+				64, 95, //13 - Stand
+				128, 95); //14 - Jump Take Off
 		defineSequence(Actions.RUN.name, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
-		defineSequence(Actions.STAND.name, 12); //TODO: make real stand sprite
-		defineSequence(Actions.JUMP.name, 12); //TODO: make real jump animation
-		defineSequence(Actions.PUSH.name, 11); //TODO: make real push sprite
+		defineSequence(Actions.STAND.name, 13); //TODO: make real stand sprite
+		defineSequence(Actions.JUMP_TAKEOFF.name, 14); //TODO: make real jump animation
+		defineSequence(Actions.PUSH.name, 12); //TODO: make real push sprite
 		framerate(20);
 		
 		inven = new Inventory(parent);
@@ -90,8 +92,10 @@ public class Player extends Sprite
 	{
 		if(!jumping && onSurface)
 		{
-			//TODO: Replace with playAction call once jump Action defined
-			currentAction = Actions.JUMP;
+			if(!pushing)
+			{
+				playAction(Actions.JUMP_TAKEOFF);
+			}
 			motion(xspeed(), yspeed() + (currDim.getGravity() < 0? -JUMP_FORCE : JUMP_FORCE));
 			jumping = true;
 			onSurface = false;
@@ -101,7 +105,8 @@ public class Player extends Sprite
 
 	public void stand()
 	{
-		playAction(Actions.STAND);
+		if(!pushing && !jumping)
+			playAction(Actions.STAND);
 		motion(0, yspeed());
 	}
 	
@@ -110,7 +115,8 @@ public class Player extends Sprite
 		checkPush();
 		if(!pushing)
 		{
-			playAction(Actions.RUN);
+			if(!jumping)
+				playAction(Actions.RUN);
 			motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
 		}
 	}
@@ -124,6 +130,10 @@ public class Player extends Sprite
 				System.out.println("Push off Surface: " + x()+width() + " : " + pushingWhat.x());
 				pushing = false;
 				pushingWhat = null;
+				if(jumping)
+				{
+					checkJumpAnimation();
+				}
 			}
 			if(pushing)
 			{
@@ -138,6 +148,14 @@ public class Player extends Sprite
 		else
 		{
 			pushing = false;
+		}
+	}
+	
+	private void checkJumpAnimation() //Should only be called when jumping
+	{
+		if(!pushing)
+		{
+			playAction(Actions.JUMP_TAKEOFF);
 		}
 	}
 	
@@ -211,16 +229,20 @@ public class Player extends Sprite
 			}
 			if(!onSurface)
 			{
-				checkIfCollidesWith(parent.BOTTOMEDGE);
+				checkIfCollidesWith(parent.BOTTOMEDGE, parent.PIXELPERFECT);
 				if(collided())
 				{
 					stopFall(parent.BOTTOMEDGE);
 				}
-				checkIfCollidesWith(parent.TOPEDGE);
+				checkIfCollidesWith(parent.TOPEDGE, parent.PIXELPERFECT);
 				if(collided())
 				{
 					stopRise(parent.TOPEDGE);
 				}
+			}
+			if(jumping)
+			{
+				checkJumpAnimation();
 			}
 				
 			Level lev = parent.getCurrLevel();
@@ -375,6 +397,7 @@ public class Player extends Sprite
 		{
 			pushing = true;
 			pushingWhat = collidedWith;
+			currentAction = Actions.PUSH;
 			playAction(Actions.PUSH);
 			if(leftSide)
 			{

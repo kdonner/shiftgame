@@ -2,7 +2,9 @@ package Shift;
 
 public enum Actions {
 	RUN("Run"),
-	JUMP("Jump"),
+	JUMP_TAKEOFF("JumpTakeOff"),
+	JUMP_APEX("JumpApex"),
+	JUMP_FALL("JumpFall"),
 	STAND("Stand"),
 	PUSH("Push");
 	
