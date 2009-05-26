@@ -43,6 +43,7 @@ public class Shift extends Ucigame
 		displayDimMenu = false;
 		mouseX = -1;
 		mouseY = -1;
+		
 	}
 	
 	public void draw()
@@ -131,13 +132,15 @@ public class Shift extends Ucigame
 		}
 		if(levelObject != null)
 		{
+			double xOffset = gameCamera.getXOffset();
+			double yOffset = gameCamera.getYOffset();
 			if(!editor.snapToGrid)
 			{
-				levelObject.position(mouse.x(), mouse.y());
+				levelObject.position(mouse.x() + xOffset, mouse.y() - yOffset);
 			}
 			else
 			{
-				levelObject.position((mouse.x() - mouse.x() % editor.gridSize), (mouse.y() - mouse.y() % editor.gridSize));
+				levelObject.position((mouse.x() - mouse.x() % editor.gridSize) + xOffset, (mouse.y() - mouse.y() % editor.gridSize) - yOffset);
 			}
 			levelObject.draw();
 		}
@@ -181,7 +184,7 @@ public class Shift extends Ucigame
 			{
 				levelObject = new PickupItem(this, Pickups.ARMOR_PACK);
 			}
-			if(keyboard.isDown(keyboard.K))
+			if(keyboard.isDown(keyboard.K)) //Create a silver key
 			{
 				levelObject = new PickupItem(this, Pickups.SILVER_KEY);
 			}
@@ -253,6 +256,22 @@ public class Shift extends Ucigame
 			if(keyboard.isDown(keyboard.F8)) //Load
 			{
 				loadLevel();
+			}
+			if(keyboard.isDown(keyboard.RIGHT))
+			{
+				gameCamera.setXOffset(gameCamera.getXOffset() + 40);
+			}
+			if(keyboard.isDown(keyboard.LEFT))
+			{
+				gameCamera.setXOffset(gameCamera.getXOffset() - 40);
+			}
+			if(keyboard.isDown(keyboard.UP))
+			{
+				gameCamera.setYOffset(gameCamera.getYOffset() - 40);
+			}
+			if(keyboard.isDown(keyboard.DOWN))
+			{
+				gameCamera.setYOffset(gameCamera.getYOffset() + 40);
 			}
 		}
 		// Controls for in game
