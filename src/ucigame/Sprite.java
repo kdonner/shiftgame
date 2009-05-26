@@ -662,7 +662,9 @@ public class Sprite
 		currY = nextY;
 
 		AffineTransform at = new AffineTransform(_Tx);
-		at.translate(currX + rotCenterX + _pinnedX, currY + rotCenterY + _pinnedY); // third
+		double transX = currX + rotCenterX + _pinnedX - ucigame.gameCamera.getXOffset();
+		double transY = currY + rotCenterY + _pinnedY + ucigame.gameCamera.getYOffset();
+		at.translate(transX, transY); // third
 		at.rotate(rotationDegrees * Math.PI / 180.0); // second
 		at.translate(-rotCenterX, -rotCenterY); // first
 		if (flipH || flipV) // flips happen, logically, before rotations

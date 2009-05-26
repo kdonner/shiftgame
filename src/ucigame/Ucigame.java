@@ -313,6 +313,8 @@ public abstract class Ucigame
 	public GameWindow window = new GameWindow(this);
 	public GameCanvas canvas = new GameCanvas(this);
 	public Keyboard keyboard = new Keyboard(this);
+	// Added by Matt Crain
+	public GameCamera gameCamera;
 
 	private void setupGUI()
 	{
@@ -343,6 +345,9 @@ public abstract class Ucigame
         gameComponent.addKeyListener(this);
         gameComponent.addFocusListener(gameComponent);
         gameComponent.requestFocusInWindow();
+        
+        //Added by Matt Crain
+        gameCamera = GameCamera.getInstance();
 
         // Let the game set up the window, especially its size.
         window.size(100, 100);		// in case setup() has no size()
