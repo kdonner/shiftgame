@@ -11,18 +11,23 @@ public class DimensionMenu
 
 	class DimensionWedge extends Sprite
 	{
-		double rotation;
+		double rotation, origX, origY;
 		int label;
+		private Shift parent;
 		
-		public DimensionWedge(Shift parent, String imgDir, int label)
+		public DimensionWedge(Shift parent, String imgDir, int label, double x, double y)
 		{
 			super(parent.getImage(imgDir));
+			this.parent = parent;
 			this.label = label;
+			origX = x;
+			origY = y;
 			font("Arial", parent.BOLD, 16);
 		}
 		
 		public void draw()
 		{
+			this.position(origX + parent.gameCamera.getXOffset(), origY - parent.gameCamera.getYOffset());
 			this.rotate(rotation);
 			putText(label, width()/2 - 4, height()/2 + 4);
 			super.draw();
@@ -140,9 +145,8 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i], xLoc, yLoc);
 			wedge.rotation = rotationAmt;
-			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
 			yLoc += reference.height();
 			//xLoc += reference.width()/2;
@@ -159,9 +163,8 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i], xLoc, yLoc);
 			wedge.rotation = rotationAmt;
-			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
 			if(i == 0)
 			{
@@ -186,9 +189,8 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i], xLoc, yLoc);
 			wedge.rotation = rotationAmt;
-			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
 			if(i == 0)
 			{
@@ -218,9 +220,8 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i], xLoc, yLoc);
 			wedge.rotation = rotationAmt;
-			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
 			if(i == 0)
 			{
@@ -255,9 +256,8 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i], xLoc, yLoc);
 			wedge.rotation = rotationAmt;
-			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
 			if(i == 0)
 			{
@@ -296,9 +296,8 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i], xLoc, yLoc);
 			wedge.rotation = rotationAmt;
-			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
 			if(i == 0)
 			{
@@ -344,9 +343,8 @@ public class DimensionMenu
 		double xLoc = Shift.FRAME_WIDTH/2 - reference.width()/2, yLoc = Shift.FRAME_HEIGHT/2 - reference.height()/2 - reference.height()/2; 
 		for(int i = 0; i < numDims; i++)
 		{
-			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i]);
+			DimensionWedge wedge = new DimensionWedge(parent, menuImgDir, labels[i], xLoc, yLoc);
 			wedge.rotation = rotationAmt;
-			wedge.position(xLoc, yLoc);
 			wedges.add(wedge);
 			if(i == 0)
 			{

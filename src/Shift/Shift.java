@@ -14,6 +14,7 @@ import ucigame.*;
 @SuppressWarnings("serial")
 public class Shift extends Ucigame
 {
+	private static final int CAMERA_MOVE_AMOUNT = 40;
 	private static final int TIME_OFFSET = 15;
 	public static final double FRAME_RATE = 30;
 	public static final int FRAME_WIDTH = 1280;
@@ -111,9 +112,28 @@ public class Shift extends Ucigame
 		player.position(currLevel.start.xLoc, currLevel.start.yLoc);
 		startTime = System.currentTimeMillis();
 	}
+	
+	private void centerCameraOnPlayer()
+	{
+		boolean cameraMoved = false;
+		if(player.centerX() - FRAME_WIDTH/2 >=0 && player.centerX() + FRAME_WIDTH/2 <= currLevel.width)
+		{
+			gameCamera.setXOffset((int)player.centerX() - FRAME_WIDTH/2);
+			cameraMoved = true;
+		}
+		
+		if(player.centerY() + FRAME_HEIGHT/2 <= currLevel.height && player.centerY() - FRAME_HEIGHT/2 <= 0)
+		{	
+			gameCamera.setYOffset((int)(FRAME_HEIGHT - player.centerY() - FRAME_HEIGHT/2));
+			cameraMoved = true;
+		}
+		if(cameraMoved)
+			updateEdgeSprites();
+	}
 
 	private void renderGameState() 
 	{
+		centerCameraOnPlayer();
 		currLevel.render(false);
 		drawUI();
 		player.draw(currLevel.getCurrDims());
@@ -259,19 +279,33 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.RIGHT))
 			{
-				gameCamera.setXOffset(gameCamera.getXOffset() + 40);
+				if(FRAME_WIDTH + gameCamera.getXOffset() + CAMERA_MOVE_AMOUNT > currLevel.width)
+				{
+					currLevel.width = FRAME_WIDTH + gameCamera.getXOffset() + CAMERA_MOVE_AMOUNT;
+				}
+				gameCamera.setXOffset(gameCamera.getXOffset() + CAMERA_MOVE_AMOUNT);
 			}
 			if(keyboard.isDown(keyboard.LEFT))
 			{
-				gameCamera.setXOffset(gameCamera.getXOffset() - 40);
+				if(FRAME_WIDTH - gameCamera.getXOffset() - CAMERA_MOVE_AMOUNT >= 0)
+				{
+					gameCamera.setXOffset(gameCamera.getXOffset() - CAMERA_MOVE_AMOUNT);
+				}
 			}
 			if(keyboard.isDown(keyboard.UP))
 			{
-				gameCamera.setYOffset(gameCamera.getYOffset() - 40);
+				if(FRAME_HEIGHT - gameCamera.getYOffset() - CAMERA_MOVE_AMOUNT >= 0)
+				{
+					gameCamera.setYOffset(gameCamera.getYOffset() - CAMERA_MOVE_AMOUNT);
+				}
 			}
 			if(keyboard.isDown(keyboard.DOWN))
 			{
-				gameCamera.setYOffset(gameCamera.getYOffset() + 40);
+				if(FRAME_HEIGHT + gameCamera.getYOffset() + CAMERA_MOVE_AMOUNT > currLevel.height)
+				{
+					currLevel.height = FRAME_HEIGHT + gameCamera.getYOffset() + CAMERA_MOVE_AMOUNT;
+				}
+				gameCamera.setYOffset(gameCamera.getYOffset() + CAMERA_MOVE_AMOUNT);
 			}
 		}
 		// Controls for in game
@@ -486,8 +520,8 @@ public class Shift extends Ucigame
 	{
 		if(player.health > 0)
 		{
-			int x = 10;
-			int y = 10;
+			int x = gameCamera.getXOffset() + 10;
+			int y = -gameCamera.getYOffset() + 10;
 			Sprite heal = makeSprite(getImage(Constants.IMG_DIR + "player/HealthLeft.png"));
 			heal.position(x, y);
 			heal.draw();
@@ -511,8 +545,8 @@ public class Shift extends Ucigame
 	{
 		if(player.armor > 0)
 		{
-			int x = 10;
-			int y = 30;
+			int x = gameCamera.getXOffset() + 10;
+			int y = -gameCamera.getYOffset() + 30;
 			Sprite armor = makeSprite(getImage(Constants.IMG_DIR + "player/ArmorLeft.png"));
 			armor.position(x, y);
 			armor.draw();

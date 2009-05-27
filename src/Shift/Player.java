@@ -504,6 +504,16 @@ public class Player extends Sprite
 		return (int) velocity * 10;
 	}
 	
+	public double centerX()
+	{
+		return x() + width()/2;
+	}
+	
+	public double centerY()
+	{
+		return y() + height()/2;
+	}
+	
 	public void draw(Dimensions which)
 	{
 		move(which);

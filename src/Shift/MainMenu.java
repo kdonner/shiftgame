@@ -43,24 +43,30 @@ public class MainMenu
 	
 	public void hide()
 	{
-		isShown = false;
-		bkg.hide();
-		newGame.hide();
-		loadGame.hide();
-		levelEdit.hide();
-		options.hide();
-		quit.hide();
+		if(isShown)
+		{
+			isShown = false;
+			bkg.hide();
+			newGame.hide();
+			loadGame.hide();
+			levelEdit.hide();
+			options.hide();
+			quit.hide();
+		}
 	}
 	
 	public void show()
 	{
-		isShown = true;
-		bkg.show();
-		newGame.show();
-		loadGame.show();
-		levelEdit.show();
-		options.show();
-		quit.show();
+		if(!isShown)
+		{
+			isShown = true;
+			bkg.show();
+			newGame.show();
+			loadGame.show();
+			levelEdit.show();
+			options.show();
+			quit.show();
+		}
 	}
 	
 	public boolean isVisible()
