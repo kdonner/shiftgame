@@ -52,6 +52,7 @@ public class Shift extends Ucigame
 		canvas.clear();
 		if(state == GameState.MAIN_MENU)
 		{
+			resetGameCamera();
 			if(!mainMenu.isVisible())
 				mainMenu.show();
 			drawMainMenu();
@@ -107,10 +108,17 @@ public class Shift extends Ucigame
 	{
 		currLevel = toLoad;
 		currLevel.switchDim(1, false, this);
+		resetGameCamera();
 		dimMenu = new DimensionMenu(this, currLevel.dimLabels());
 		player = new Player(this);
 		player.position(currLevel.start.xLoc, currLevel.start.yLoc);
 		startTime = System.currentTimeMillis();
+	}
+
+	private void resetGameCamera() 
+	{
+		gameCamera.setXOffset(0);
+		gameCamera.setYOffset(0);
 	}
 	
 	private void centerCameraOnPlayer()
@@ -122,9 +130,19 @@ public class Shift extends Ucigame
 			cameraMoved = true;
 		}
 		
-		if(player.centerY() + FRAME_HEIGHT/2 <= currLevel.height && player.centerY() - FRAME_HEIGHT/2 <= 0)
-		{	
-			gameCamera.setYOffset((int)(FRAME_HEIGHT - player.centerY() - FRAME_HEIGHT/2));
+//		if(player.centerY() + FRAME_HEIGHT/2 <= currLevel.height && FRAME_HEIGHT/2 - player.centerY() >= 0)
+//		{	
+//			gameCamera.setYOffset((int)(FRAME_HEIGHT/2 - player.centerY()));
+//			cameraMoved = true;
+//		}
+//		if((player.centerY() + FRAME_HEIGHT/2 <= currLevel.height) && (player.centerY() - FRAME_HEIGHT/2 >= FRAME_HEIGHT - currLevel.height)) //&& player.centerY() + currLevel.height - FRAME_HEIGHT/2 >= 0)
+//		{
+//			gameCamera.setYOffset((int)(FRAME_HEIGHT/2 - player.centerY()));
+//			cameraMoved = true;
+//		}
+		if(player.centerY() - FRAME_HEIGHT/2 >= 0 && player.centerY() + FRAME_HEIGHT/2 <= currLevel.height)
+		{
+			gameCamera.setYOffset((int)((currLevel.height - player.centerY()) - FRAME_HEIGHT/2));
 			cameraMoved = true;
 		}
 		if(cameraMoved)
@@ -168,6 +186,10 @@ public class Shift extends Ucigame
 	
 	public void onKeyPress()
 	{
+		if(keyboard.isDown(keyboard.DASH)) //Go To Main Menu
+		{
+			state = GameState.MAIN_MENU;
+		}
 		// Controls for the Level Editor
 		if(state == GameState.LEVEL_EDITOR)
 		{
@@ -292,14 +314,14 @@ public class Shift extends Ucigame
 					gameCamera.setXOffset(gameCamera.getXOffset() - CAMERA_MOVE_AMOUNT);
 				}
 			}
-			if(keyboard.isDown(keyboard.UP))
+			if(keyboard.isDown(keyboard.DOWN))
 			{
 				if(FRAME_HEIGHT - gameCamera.getYOffset() - CAMERA_MOVE_AMOUNT >= 0)
 				{
 					gameCamera.setYOffset(gameCamera.getYOffset() - CAMERA_MOVE_AMOUNT);
 				}
 			}
-			if(keyboard.isDown(keyboard.DOWN))
+			if(keyboard.isDown(keyboard.UP))
 			{
 				if(FRAME_HEIGHT + gameCamera.getYOffset() + CAMERA_MOVE_AMOUNT > currLevel.height)
 				{

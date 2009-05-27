@@ -1247,9 +1247,11 @@ public abstract class Ucigame
 		if (lastKeyPressed == e.VK_ESCAPE)
 		{
 			if (shiftPressed)
-				suspended = !suspended;
-			else
 				playing = false;
+		}
+		if(lastKeyPressed == e.VK_P)
+		{
+			suspended = !suspended;
 		}
 		else if (suspended && lastKeyPressed == e.VK_F1)
 		{
