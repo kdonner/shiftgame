@@ -7,12 +7,15 @@ public class LevelSaveFile implements Serializable
 {
 	private static final long serialVersionUID = 3627550956646622212L;
 	
+	int width, height;
 	Point start;
 	Area end;
 	ArrayList<DimensionSave> dimensions;
 	
 	public LevelSaveFile(Level toSave)
 	{
+		this.width = toSave.width;
+		this.height = toSave.height;
 		this.start = toSave.start;
 		this.end = toSave.end;
 		dimensions = new ArrayList<DimensionSave>();

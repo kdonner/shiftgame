@@ -815,6 +815,17 @@ public abstract class Ucigame
 		}
 		return new Sprite(cols, rows, tileWidth, tileHeight);
 	}
+	
+	public void updateEdgeSprites()
+	{
+		int edgeWidth = 200;
+		int overlap = 200;
+		int halfOverlap = overlap / 2;
+		TOPEDGE.position(-halfOverlap + gameCamera.xOffset, -edgeWidth - gameCamera.yOffset);
+		BOTTOMEDGE.position(-halfOverlap + gameCamera.xOffset, canvas.height() - gameCamera.yOffset);
+		LEFTEDGE.position(-edgeWidth + gameCamera.xOffset, -halfOverlap - gameCamera.yOffset);
+		RIGHTEDGE.position(canvas.width() + gameCamera.xOffset, -halfOverlap - gameCamera.yOffset);
+	}
 
 
 	private void createEdgeSprites()

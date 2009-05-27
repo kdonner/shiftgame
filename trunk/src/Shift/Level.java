@@ -16,6 +16,7 @@ public class Level
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	Dimension currDim;
 	int currDimension;
+	int width, height;
 	
 	public Level()
 	{
@@ -23,6 +24,8 @@ public class Level
 		currDim = new Dimension(Dimensions.DIM0);
 		dimensions.add(currDim);
 		currDimension = 0;
+		width = Shift.FRAME_WIDTH;
+		height = Shift.FRAME_HEIGHT;
 	}
 	
 	public void addObject(LevelObject obj)
@@ -128,6 +131,8 @@ public class Level
 	
 	public void unpackSaveFile(Shift help, LevelSaveFile data)
 	{
+		this.width = data.width;
+		this.height = data.height;
 		this.start = data.start;
 		this.end = data.end;
 		dimensions = new ArrayList<Dimension>();
