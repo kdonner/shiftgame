@@ -717,7 +717,7 @@ public class Sprite
 */
 		for (PinnedSprite ps : pinnedSprites)
 		{
-			ps.sprite.draw(at, ps.x, ps.y);
+			ps.sprite.draw(at, ps.x + ucigame.gameCamera.getXOffset(), ps.y - ucigame.gameCamera.getYOffset());
 			ucigame.addSpriteToList(ps.sprite);
 		}
 		rotationDegrees = rotCenterX = rotCenterY = 0;

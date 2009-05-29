@@ -233,7 +233,7 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.E))
 			{
-				currLevel.end = new Area(new Point(mouse.x(), mouse.y()), Player.WIDTH, Player.HEIGHT);
+				currLevel.end = new Area(new Point(mouse.x() + gameCamera.getXOffset(), mouse.y() - gameCamera.getYOffset()), Player.WIDTH, Player.HEIGHT);
 			}
 			if(keyboard.isDown(keyboard.B)) //Set a background
 			{
