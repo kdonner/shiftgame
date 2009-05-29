@@ -140,10 +140,20 @@ public class Shift extends Ucigame
 
 	private void renderGameState() 
 	{
+		checkEndState();
 		centerCameraOnPlayer();
 		currLevel.render(false);
 		drawUI();
 		player.draw(currLevel.getCurrDims());
+	}
+
+	private void checkEndState() 
+	{
+		Point playerLoc = new Point(player.centerX(), player.centerY());
+		if(currLevel.end.isInArea(playerLoc))
+		{
+			System.out.println("Win!!!");
+		}
 	}
 	
 	private void drawEditorWindow()
@@ -202,6 +212,10 @@ public class Shift extends Ucigame
 			if(keyboard.isDown(keyboard.S)) //Set Start Point
 			{
 				currLevel.start = new Point(mouse.x(), mouse.y());
+			}
+			if(keyboard.isDown(keyboard.E))
+			{
+				currLevel.end = new Area(new Point(mouse.x(), mouse.y()), Player.WIDTH, Player.HEIGHT);
 			}
 			if(keyboard.isDown(keyboard.B)) //Set a background
 			{

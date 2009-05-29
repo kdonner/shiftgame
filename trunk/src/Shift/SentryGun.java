@@ -4,7 +4,8 @@ import ucigame.Sprite;
 
 public class SentryGun extends LevelObject 
 {
-	private static final int ATTACK_DISTANCE = 200;
+	private static final int ENGAGE_SPEED = 40;
+	private static final int ATTACK_DISTANCE = 400;
 	Sprite top;
 	private boolean rotateRight;
 	private double centerX, centerY, rotation;
@@ -13,7 +14,7 @@ public class SentryGun extends LevelObject
 	{
 		super(parent, ObjectType.ENEMY, parent.getImage(Constants.IMG_DIR + "items/STBottom.png"));
 		top = parent.makeSprite(parent.getImage(Constants.IMG_DIR + "items/STTop.png"));
-		centerX = 0;
+		centerX = width()/2;
 		centerY = -top.height()/2;
 		pin(top, 0, -top.height()/2);
 		rotation = 0;
@@ -32,8 +33,8 @@ public class SentryGun extends LevelObject
 		double yOff = 0;
 		if(parent.player != null)
 		{
-			xOff = parent.player.centerX() - this.x();
-			yOff = -(parent.player.centerY() - (this.y() + this.centerY));
+			xOff = parent.player.centerX() - (this.x() + centerX);
+			yOff = -((parent.player.centerY() - 15) - (this.y() + this.centerY));
 		}
 		
 		if(parent.player != null && Constants.pythagorean(xOff, yOff) < ATTACK_DISTANCE)

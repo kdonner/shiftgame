@@ -8,8 +8,8 @@ public class Player extends Sprite
 {
 	private static final int DAMAGE_VELOCITY = 10;
 	private static final double RUN_SPEED = 4.5;
-	private static final int HEIGHT = 95;
-	private static final int WIDTH = 64;
+	public static final int HEIGHT = 95;
+	public static final int WIDTH = 64;
 	private static final int JUMP_FORCE = -7;
 	
 	private boolean jumping, onSurface, pushing, pushLeft;
