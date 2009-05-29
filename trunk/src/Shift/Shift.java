@@ -17,7 +17,7 @@ public class Shift extends Ucigame
 	private static final int CAMERA_MOVE_AMOUNT = 40;
 	private static final int TIME_OFFSET = 15;
 	public static final double FRAME_RATE = 30;
-	public static final int FRAME_WIDTH = 1280;
+	public static final int FRAME_WIDTH = 1024;
 	public static final int FRAME_HEIGHT = 720;
 	protected Player player;
 	private Level currLevel;
@@ -40,6 +40,7 @@ public class Shift extends Ucigame
 		window.showFPS();
 		state = GameState.MAIN_MENU;
 		canvas.background(200, 200, 200);
+		canvas.font("Arial", PLAIN, 14);
 		framerate(FRAME_RATE);
 		//TODO more properly set up the player
 		mainMenu = new MainMenu(this);
@@ -113,6 +114,8 @@ public class Shift extends Ucigame
 		currLevel = toLoad;
 		currLevel.switchDim(1, false, this);
 		resetGameCamera();
+		updateEdgeSprites();
+		canvas.font("Arial", PLAIN, 14);
 		dimMenu = new DimensionMenu(this, currLevel.dimLabels());
 		player = new Player(this);
 		player.position(currLevel.start.xLoc, currLevel.start.yLoc);

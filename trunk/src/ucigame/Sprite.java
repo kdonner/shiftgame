@@ -884,7 +884,7 @@ public class Sprite
 			return;
 		}
 		if (isShown) {
-			ucigame.offG.setClip(xPixel(), yPixel(), width, height);
+			ucigame.offG.setClip(xPixel() - ucigame.gameCamera.getXOffset(), yPixel() + ucigame.gameCamera.getYOffset(), width, height);
 			if (spriteFont != null)
 				ucigame.offG.setFont(spriteFont);
 			Color prevColor = ucigame.offG.getColor();
