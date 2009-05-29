@@ -19,7 +19,7 @@ public class Shift extends Ucigame
 	public static final double FRAME_RATE = 30;
 	public static final int FRAME_WIDTH = 1280;
 	public static final int FRAME_HEIGHT = 720;
-	private Player player;
+	protected Player player;
 	private Level currLevel;
 	private long startTime;
 	private MainMenu mainMenu;
@@ -129,17 +129,7 @@ public class Shift extends Ucigame
 			gameCamera.setXOffset((int)player.centerX() - FRAME_WIDTH/2);
 			cameraMoved = true;
 		}
-		
-//		if(player.centerY() + FRAME_HEIGHT/2 <= currLevel.height && FRAME_HEIGHT/2 - player.centerY() >= 0)
-//		{	
-//			gameCamera.setYOffset((int)(FRAME_HEIGHT/2 - player.centerY()));
-//			cameraMoved = true;
-//		}
-//		if((player.centerY() + FRAME_HEIGHT/2 <= currLevel.height) && (player.centerY() - FRAME_HEIGHT/2 >= FRAME_HEIGHT - currLevel.height)) //&& player.centerY() + currLevel.height - FRAME_HEIGHT/2 >= 0)
-//		{
-//			gameCamera.setYOffset((int)(FRAME_HEIGHT/2 - player.centerY()));
-//			cameraMoved = true;
-//		}
+	
 		if(player.centerY() - FRAME_HEIGHT/2 >= 0 && player.centerY() + FRAME_HEIGHT/2 <= currLevel.height)
 		{
 			gameCamera.setYOffset((int)((currLevel.height - player.centerY()) - FRAME_HEIGHT/2));
@@ -233,7 +223,11 @@ public class Shift extends Ucigame
 			if(keyboard.isDown(keyboard.M)) //Enable/Disable magnatism
 			{
 				editor.snapToGrid = !editor.snapToGrid;
-			}	
+			}
+			if(keyboard.isDown(keyboard.T))
+			{
+				levelObject = new SentryGun(this);
+			}
 			if(keyboard.isDown(keyboard.G)) //Grab Object
 			{
 				if(!editor.grabObject)
@@ -309,14 +303,15 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.LEFT))
 			{
-				if(FRAME_WIDTH - gameCamera.getXOffset() - CAMERA_MOVE_AMOUNT >= 0)
+				if(gameCamera.getXOffset() - CAMERA_MOVE_AMOUNT >= 0)
 				{
 					gameCamera.setXOffset(gameCamera.getXOffset() - CAMERA_MOVE_AMOUNT);
 				}
 			}
 			if(keyboard.isDown(keyboard.DOWN))
 			{
-				if(FRAME_HEIGHT - gameCamera.getYOffset() - CAMERA_MOVE_AMOUNT >= 0)
+				System.out.println("YOFfset: " + gameCamera.getYOffset());
+				if(gameCamera.getYOffset() - CAMERA_MOVE_AMOUNT >= 0)
 				{
 					gameCamera.setYOffset(gameCamera.getYOffset() - CAMERA_MOVE_AMOUNT);
 				}

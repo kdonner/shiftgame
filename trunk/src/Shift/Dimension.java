@@ -11,12 +11,14 @@ public class Dimension implements java.io.Serializable
 	Backgrounds bkgType;
 	ArrayList<Wall> walls;
 	ArrayList<PickupItem> pickupItems;
+	ArrayList<SentryGun> enemies;
 
 	public Dimension(Dimensions dims)
 	{
 		this.dims = dims;
 		walls = new ArrayList<Wall>();
 		pickupItems = new ArrayList<PickupItem>();
+		enemies = new ArrayList<SentryGun>();
 	}
 	
 	public static Dimensions getDims(int forNum)
@@ -52,6 +54,10 @@ public class Dimension implements java.io.Serializable
 		{
 			pickupItems.get(i).draw();
 		}
+		for(int i = 0; i < enemies.size(); i++)
+		{
+			enemies.get(i).draw();
+		}
 	}
 	
 	public void addObject(LevelObject obj)
@@ -63,6 +69,10 @@ public class Dimension implements java.io.Serializable
 		if(obj.type == ObjectType.ITEM)
 		{
 			pickupItems.add(((PickupItem)obj));
+		}
+		if(obj.type == ObjectType.ENEMY)
+		{
+			enemies.add(((SentryGun)obj));
 		}
 	}
 }

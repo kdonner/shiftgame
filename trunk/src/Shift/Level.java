@@ -3,6 +3,7 @@ package Shift;
 import java.util.ArrayList;
 
 import Shift.LevelSaveFile.DimensionSave;
+import Shift.LevelSaveFile.DimensionSave.EnemySave;
 import Shift.LevelSaveFile.DimensionSave.PickupSave;
 import Shift.LevelSaveFile.DimensionSave.WallSave;
 
@@ -161,6 +162,13 @@ public class Level
 				PickupItem pick = new PickupItem(help, p.type);
 				pick.position(p.xPos, p.yPos);
 				newDim.pickupItems.add(pick);
+			}
+			
+			for(EnemySave e : dim.enemies)
+			{
+				SentryGun gun = new SentryGun(help);
+				gun.position(e.xPos, e.yPos);
+				newDim.enemies.add(gun);
 			}
 			
 			dimensions.add(newDim);
