@@ -17,7 +17,7 @@ public class SentryGun extends LevelObject
 		centerX = width()/2;
 		centerY = -top.height()/2;
 		pin(top, 0, -top.height()/2);
-		rotation = 0;
+		rotation = parent.randomInt(180) - 180;
 		rotateRight = false;
 	}
 	

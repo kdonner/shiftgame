@@ -29,6 +29,8 @@ public class Shift extends Ucigame
 	private LevelEditor editor;
 	public GameState state;
 	private LevelObject levelObject;
+	protected boolean playerFinishedLevel;
+	private long timeForLevel;
 //	Sprite testSprite; TODO: Remove test Sprite when done
 
 	public void setup()
@@ -42,6 +44,8 @@ public class Shift extends Ucigame
 		//TODO more properly set up the player
 		mainMenu = new MainMenu(this);
 		displayDimMenu = false;
+		playerFinishedLevel = false;
+		timeForLevel = 0;
 		mouseX = -1;
 		mouseY = -1;
 		
@@ -112,6 +116,7 @@ public class Shift extends Ucigame
 		dimMenu = new DimensionMenu(this, currLevel.dimLabels());
 		player = new Player(this);
 		player.position(currLevel.start.xLoc, currLevel.start.yLoc);
+		playerFinishedLevel = false;
 		startTime = System.currentTimeMillis();
 	}
 
@@ -140,11 +145,22 @@ public class Shift extends Ucigame
 
 	private void renderGameState() 
 	{
-		checkEndState();
-		centerCameraOnPlayer();
+		if(!playerFinishedLevel)
+		{
+			checkEndState();
+			centerCameraOnPlayer();	
+		}
 		currLevel.render(false);
 		drawUI();
 		player.draw(currLevel.getCurrDims());
+		if(playerFinishedLevel)
+		{
+			Sprite win = makeSprite(getImage(Constants.IMG_DIR + "menu/youwin.png"));
+			win.position(FRAME_WIDTH/2 - win.width()/2 + gameCamera.getXOffset(),
+						FRAME_HEIGHT/2 - win.height()/2 - gameCamera.getYOffset());
+			win.draw();
+			drawEndTime();
+		}
 	}
 
 	private void checkEndState() 
@@ -152,6 +168,8 @@ public class Shift extends Ucigame
 		Point playerLoc = new Point(player.centerX(), player.centerY());
 		if(currLevel.end.isInArea(playerLoc))
 		{
+			playerFinishedLevel = true;
+			timeForLevel = System.currentTimeMillis() - startTime;
 			System.out.println("Win!!!");
 		}
 	}
@@ -538,7 +556,8 @@ public class Shift extends Ucigame
 	{
 		drawHealth();
 		drawArmor();
-		drawTime();
+		if(!playerFinishedLevel)
+			drawTime();
 		drawInventory();
 		if(displayDimMenu)
 		{
@@ -616,6 +635,34 @@ public class Shift extends Ucigame
 		}
 		build.append(sec);
 		canvas.putText(build.toString(), (FRAME_WIDTH / 2), TIME_OFFSET);
+		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
+	}
+	
+	private void drawEndTime()
+	{
+		canvas.font("Arial", PLAIN, 24);
+		StringBuilder build = Constants.strBuild;
+		long elapsed = timeForLevel;
+		long millis = timeForLevel % 1000;
+		elapsed = elapsed / 1000;
+		int hours = (int)elapsed / 3600;
+		if(hours > 0)
+		{
+			build.append(hours);
+			build.append(":");
+		}
+		int min = (int)(elapsed % 3600) / 60;
+		build.append(min);
+		build.append(":");
+		int sec = (int)elapsed % 60;
+		if(sec <= 9)
+		{
+			build.append("0");
+		}
+		build.append(sec);
+		build.append(":");
+		build.append(String.format("%03d", millis));
+		canvas.putText(build.toString(), (FRAME_WIDTH / 2) - 30, (FRAME_HEIGHT / 2) + 50);
 		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
 	}
 	

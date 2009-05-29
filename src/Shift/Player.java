@@ -92,8 +92,11 @@ public class Player extends Sprite
 	
 	public void playAction(Actions action)
 	{
-		currentAction = action;
-		play(action.name);
+		if(!parent.playerFinishedLevel)
+		{
+			currentAction = action;
+			play(action.name);
+		}
 	}
 	
 	public void jump()
@@ -516,7 +519,10 @@ public class Player extends Sprite
 	
 	public void draw(Dimensions which)
 	{
-		move(which);
+		if(!parent.playerFinishedLevel)
+		{
+			move(which);
+		}
 		for(int i = 0; i < effects.size(); i++)
 		{
 			effects.get(i).draw();
