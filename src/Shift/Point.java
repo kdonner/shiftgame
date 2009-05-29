@@ -10,4 +10,9 @@ public class Point implements java.io.Serializable
 		this.xLoc = xLoc;
 		this.yLoc = yLoc;
 	}
+	
+	public String toString()
+	{
+		return "X: " + xLoc + " Y: " + yLoc;
+	}
 }
