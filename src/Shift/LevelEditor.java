@@ -8,15 +8,12 @@ public class LevelEditor
 	boolean snapToGrid;
 	boolean grabObject;
 	int gridSize;
-	EditorToolBox toolBox;
 	
 	public LevelEditor()
 	{
 		snapToGrid = true;
 		grabObject = false;
 		gridSize = 5;
-		
-		toolBox = new EditorToolBox();
 	}
 	
 	//TODO optimize these searches so I don't have to keep adding things everytime something new gets added to a level
@@ -50,10 +47,29 @@ public class LevelEditor
 				return p;
 			}
 		}
+		for(SentryGun g : objectIn.dimensions.get(0).enemies)
+		{
+			if(equivalent(g, toFind) || equivalent(g.top, toFind))
+			{
+				return g;
+			}
+		}
+		for(SentryGun g : objectIn.dimensions.get(objectIn.currDimension).enemies)
+		{
+			if(equivalent(g, toFind) || equivalent(g.top, toFind))
+			{
+				return g;
+			}
+		}
 		return null;
 	}
 	
 	private boolean equivalent(LevelObject obj, Sprite spr)
+	{
+		return obj.x() == spr.x() && obj.y() == spr.y() && obj.width() == spr.width() && obj.height() == spr.height();
+	}
+	
+	private boolean equivalent(Sprite obj, Sprite spr)
 	{
 		return obj.x() == spr.x() && obj.y() == spr.y() && obj.width() == spr.width() && obj.height() == spr.height();
 	}

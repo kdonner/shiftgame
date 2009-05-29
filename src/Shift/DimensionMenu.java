@@ -83,43 +83,10 @@ public class DimensionMenu
 		double y = -(newY - oldY);
 		double degrees = 1;
 		
-		if(Math.sqrt(Math.pow(Math.abs(x), 2) + Math.pow(Math.abs(y), 2)) < MIN_MOUSE_MOVE_DIST)
+		if(Constants.pythagorean(x, y) < MIN_MOUSE_MOVE_DIST)
 			throw new MouseBarelyMovedException();
 		
-		if(x > 0 && y > 0) //Quad 1
-		{
-			degrees = 90 - Math.toDegrees(Math.atan(y/x));
-		}
-		else if(x > 0 && y < 0) //Quad 2
-		{
-			degrees = 90 + Math.toDegrees(Math.atan(-y/x));
-		}
-		else if(x < 0 && y < 0) //Quad 3
-		{
-			degrees = 270 - Math.toDegrees(Math.atan(-y/-x));
-		}
-		else if(x < 0 && y > 0) //Quad 4
-		{
-			degrees = 270 + Math.toDegrees(Math.atan(y/-x));
-		}
-		else if(x == 0)
-		{
-			if(y > 0)
-				degrees = 0;
-			else
-				degrees = 180;
-		}
-		else if(y == 0)
-		{
-			if(x > 0)
-				degrees = 90;
-			else
-				degrees = 270;
-		}
-		else
-		{
-			System.out.println("What?");
-		}
+		degrees = Constants.angleFromZero(x, y);
 		
 		double inc = 360 / labels.length;
 		if(degrees < inc/2 || degrees > (360 - inc/2))
