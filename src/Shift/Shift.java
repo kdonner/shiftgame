@@ -129,10 +129,9 @@ public class Shift extends Ucigame
 			gameCamera.setXOffset((int)player.centerX() - FRAME_WIDTH/2);
 			cameraMoved = true;
 		}
-	
-		if(player.centerY() - FRAME_HEIGHT/2 >= 0 && player.centerY() + FRAME_HEIGHT/2 <= currLevel.height)
+		if((player.centerY() - FRAME_HEIGHT/2 >= FRAME_HEIGHT - currLevel.height) && (player.centerY() <= FRAME_HEIGHT/2))
 		{
-			gameCamera.setYOffset((int)((currLevel.height - player.centerY()) - FRAME_HEIGHT/2));
+			gameCamera.setYOffset((int)-(player.centerY() - FRAME_HEIGHT/2));
 			cameraMoved = true;
 		}
 		if(cameraMoved)
