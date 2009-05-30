@@ -11,10 +11,13 @@ public class SentryGun extends LevelObject
 		private static final double LASER_SPEED = 20;
 		private double angle;
 		private Shift parent;
-		public Laser(Shift parent, double angle, double xPos, double yPos)
+		protected SentryGun creator;
+		
+		public Laser(Shift parent, double angle, double xPos, double yPos, SentryGun maker)
 		{
 			super(parent.getImage(Constants.IMG_DIR + "items/STLaser.png"));
 			this.parent = parent;
+			creator = maker;
 			
 			this.angle = angle % 360;
 	
@@ -90,6 +93,7 @@ public class SentryGun extends LevelObject
 	private boolean rotateRight;
 	private double centerX, centerY, rotation;
 	private int heat;
+	protected boolean alive;
 	
 	
 	public SentryGun(Shift parent)
@@ -104,6 +108,13 @@ public class SentryGun extends LevelObject
 		rotation = parent.randomInt(180) - 180;
 		rotateRight = false;
 		heat = parent.randomInt(COOL_DOWN_TIME);
+		alive = true;
+	}
+	
+	protected void die()
+	{
+		alive = false;
+		parent.currLevel.effects.add(new SentryExplosion(parent));
 	}
 	
 	public void draw()
@@ -129,7 +140,56 @@ public class SentryGun extends LevelObject
 		{
 			if(lasers.get(i).outOfBounds())
 				lasers.remove(i);
+			else
+			{
+				Laser las = lasers.get(i);
+				if(checkLevelCollision(parent.currLevel, las))
+				{
+					lasers.remove(i);
+				}
+				else
+				{
+					las.checkIfCollidesWith(parent.player, parent.PIXELPERFECT);
+					if(las.collided())
+					{
+						parent.player.laserHit(las.x(), las.y(), las.angle);
+						lasers.remove(i);
+					}
+				}
+			}
 		}
+	}
+	
+	private boolean checkLevelCollision(Level lev, Laser las)
+	{
+		return checkDimCollision(lev.dimensions.get(0), las) || checkDimCollision(lev.currDim, las);
+	}
+	
+	private boolean checkDimCollision(Dimension dim, Laser las)
+	{
+		for(Wall w : dim.walls)
+		{
+			las.checkIfCollidesWith(w, parent.PIXELPERFECT);
+			if(las.collided())
+			{
+				return true;
+			}
+		}
+		
+		for(SentryGun s : dim.enemies)
+		{
+			if(!s.equals(las.creator))
+			{
+				las.checkIfCollidesWith(s, parent.PIXELPERFECT);
+				if(las.collided())
+				{
+					s.die();
+					return true;
+				}
+			}
+		}
+		
+		return false;
 	}
 
 	private void calculateRotation() 
@@ -147,7 +207,7 @@ public class SentryGun extends LevelObject
 			rotation = Constants.angleFromZero(xOff, yOff) - 90;
 			if(heat < 0)
 			{
-				lasers.add(new Laser(this.parent, rotation + 90, this.x() + this.width()/2, this.y() - 6));
+				lasers.add(new Laser(this.parent, rotation + 90, this.x() + this.width()/2, this.y() - 6, this));
 				heat = COOL_DOWN_TIME;
 			}
 		}
