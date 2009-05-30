@@ -15,6 +15,7 @@ public class Level
 	Point start; //Player's start location
 	Area end; //The end location of the level
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
+	protected ArrayList<SpecialEffect> effects;
 	Dimension currDim;
 	int currDimension;
 	int width, height;
@@ -22,6 +23,7 @@ public class Level
 	public Level()
 	{
 		dimensions = new ArrayList<Dimension>();
+		effects = new ArrayList<SpecialEffect>();
 		currDim = new Dimension(Dimensions.DIM0);
 		dimensions.add(currDim);
 		currDimension = 0;
@@ -49,6 +51,12 @@ public class Level
 			dimensions.get(0).render();
 		}
 		currDim.render();
+		for(int i = 0; i < effects.size(); i++)
+		{
+			effects.get(i).draw();
+			if(effects.get(i).isDead())
+				effects.remove(i);
+		}
 	}
 	
 	public void addBackground(Shift parent, Backgrounds type)

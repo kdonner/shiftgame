@@ -16,11 +16,11 @@ public class Shift extends Ucigame
 {
 	private static final int CAMERA_MOVE_AMOUNT = 40;
 	private static final int TIME_OFFSET = 15;
-	public static final double FRAME_RATE = 30;
+	public static final int FRAME_RATE = 30;
 	public static final int FRAME_WIDTH = 1280;
 	public static final int FRAME_HEIGHT = 720;
 	protected Player player;
-	private Level currLevel;
+	protected Level currLevel;
 	private long startTime;
 	private MainMenu mainMenu;
 	private DimensionMenu dimMenu;
@@ -209,6 +209,7 @@ public class Shift extends Ucigame
 		if(keyboard.isDown(keyboard.DASH)) //Go To Main Menu
 		{
 			state = GameState.MAIN_MENU;
+			player = null;
 		}
 		// Controls for the Level Editor
 		if(state == GameState.LEVEL_EDITOR)

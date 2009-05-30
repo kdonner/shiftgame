@@ -16,7 +16,7 @@ public class DustJumpEffect extends SpecialEffect
 				320, 0);
 		defineSequence("Poof", 0, 1, 2, 3, 4);
 		play("Poof");
-		framerate(30);
+		framerate(Shift.FRAME_RATE);
 		lifeSpan = 5;
 	}
 }

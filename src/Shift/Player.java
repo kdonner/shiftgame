@@ -119,10 +119,22 @@ public class Player extends Sprite
 	{
 		DustJumpEffect dust = new DustJumpEffect(parent);
 		dust.flipVertical = flipVertical;
-		System.out.println(this.y() + "  " + flipVertical);
 		dust.position(this.x() - (flipHoriz? -20 : 20), (flipVertical? this.y() : this.y() + HEIGHT - dust.height()));
-		System.out.println("Dust X : " + dust.x() + "   Dust Y : " + dust.y());
 		effects.add(dust);
+	}
+	
+	protected void laserHit(double xLoc, double yLoc, double angle)
+	{
+		System.out.println("Laser Hit!!!  Angle: " + angle);
+		addBlood(xLoc, yLoc, angle);
+		lossHealth(1);
+	}
+
+	private void addBlood(double xLoc, double yLoc, double angle) 
+	{
+		LaserHitBlood blood = new LaserHitBlood(parent, angle);
+		blood.position(xLoc - blood.width()/2, yLoc - blood.height());
+		effects.add(blood);
 	}
 
 	public void stand()
@@ -458,7 +470,10 @@ public class Player extends Sprite
 		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() + collidedWith.height());
-		playAction(Actions.STAND);
+		if(!pushing)
+		{
+			playAction(Actions.STAND);
+		}
 		if(!currDim.gravIsDown)
 		{
 			onSurface = true;
@@ -479,7 +494,10 @@ public class Player extends Sprite
 		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() - HEIGHT);
-		playAction(Actions.STAND);
+		if(!pushing)
+		{
+			playAction(Actions.STAND);
+		}
 		if(currDim.gravIsDown)
 		{
 			jumping = false;
