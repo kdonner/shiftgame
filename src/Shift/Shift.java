@@ -84,7 +84,8 @@ public class Shift extends Ucigame
 	public void onClickNewGame()
 	{
 		loadLevelIntoSystem(Tester.makeLevel(this));
-		state = GameState.IN_GAME;
+		if(currLevel != null)
+			state = GameState.IN_GAME;
 	}
 	
 	public void onClickLoadGame()
@@ -111,16 +112,19 @@ public class Shift extends Ucigame
 	
 	private void loadLevelIntoSystem(Level toLoad)
 	{
-		currLevel = toLoad;
-		currLevel.switchDim(1, false, this);
-		resetGameCamera();
-		updateEdgeSprites();
-		canvas.font("Arial", PLAIN, 14);
-		dimMenu = new DimensionMenu(this, currLevel.dimLabels());
-		player = new Player(this);
-		player.position(currLevel.start.xLoc, currLevel.start.yLoc);
-		playerFinishedLevel = false;
-		startTime = System.currentTimeMillis();
+		if(toLoad != null)
+		{
+			currLevel = toLoad;
+			currLevel.switchDim(1, false, this);
+			resetGameCamera();
+			updateEdgeSprites();
+			canvas.font("Arial", PLAIN, 14);
+			dimMenu = new DimensionMenu(this, currLevel.dimLabels());
+			player = new Player(this);
+			player.position(currLevel.start.xLoc, currLevel.start.yLoc);
+			playerFinishedLevel = false;
+			startTime = System.currentTimeMillis();
+		}
 	}
 
 	private void resetGameCamera() 
