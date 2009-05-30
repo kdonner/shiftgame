@@ -458,6 +458,7 @@ public class Player extends Sprite
 		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() + collidedWith.height());
+		playAction(Actions.STAND);
 		if(!currDim.gravIsDown)
 		{
 			onSurface = true;
@@ -478,6 +479,7 @@ public class Player extends Sprite
 		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() - HEIGHT);
+		playAction(Actions.STAND);
 		if(currDim.gravIsDown)
 		{
 			jumping = false;

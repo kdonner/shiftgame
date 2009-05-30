@@ -2,11 +2,12 @@ package Shift;
 
 public enum Walls 
 {
-	WALL1(Constants.IMG_DIR + "levels/wall1.gif"),
-	WALL2(Constants.IMG_DIR + "levels/wall2.gif"),
-	PLATFORM1(Constants.IMG_DIR + "levels/platform1.gif"),
-	PLATFORM2(Constants.IMG_DIR + "levels/platform2.gif"),
-	BLOCK1(Constants.IMG_DIR + "levels/block1.gif");
+	WALL1(Constants.IMG_DIR + "levels/wall1.png"),
+	WALL2(Constants.IMG_DIR + "levels/wall2.png"),
+	PLATFORM1(Constants.IMG_DIR + "levels/platform1.png"),
+	PLATFORM2(Constants.IMG_DIR + "levels/platform2.png"),
+	BLOCK1(Constants.IMG_DIR + "levels/block1.png"),
+	BLOCK2(Constants.IMG_DIR + "levels/block2.png");
 	
 	String img;
 	Walls(String img)
@@ -24,6 +25,8 @@ public enum Walls
 			return PLATFORM2;
 		if(this == PLATFORM2)
 			return BLOCK1;
+		if(this == BLOCK1)
+			return BLOCK2;
 		return WALL1;
 	}
 }

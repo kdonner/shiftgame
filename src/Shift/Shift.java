@@ -17,7 +17,7 @@ public class Shift extends Ucigame
 	private static final int CAMERA_MOVE_AMOUNT = 40;
 	private static final int TIME_OFFSET = 15;
 	public static final double FRAME_RATE = 30;
-	public static final int FRAME_WIDTH = 1024;
+	public static final int FRAME_WIDTH = 1280;
 	public static final int FRAME_HEIGHT = 720;
 	protected Player player;
 	private Level currLevel;
