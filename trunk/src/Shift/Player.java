@@ -63,12 +63,14 @@ public class Player extends Sprite
 				64, 95, //13 - Stand
 				128, 95, //14 - Jump Take Off
 				192, 95, //15 - Jump Apex
-				256, 95); //16 - Jump Fall
+				256, 95, //16 - Jump Fall
+				320, 95); //17 - Fall Fast
 		defineSequence(Actions.RUN.name, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
 		defineSequence(Actions.STAND.name, 13); 
-		defineSequence(Actions.JUMP_TAKEOFF.name, 14); //TODO: make real jump animation
+		defineSequence(Actions.JUMP_TAKEOFF.name, 14); 
 		defineSequence(Actions.JUMP_FALL.name, 16);
 		defineSequence(Actions.JUMP_APEX.name, 15);
+		defineSequence(Actions.FALL_FAST.name, 17);
 		defineSequence(Actions.PUSH.name, 12); 
 		framerate(20);
 		
@@ -189,7 +191,8 @@ public class Player extends Sprite
 	{
 		if(!pushing)
 		{
-			if(yspeed() < 0.5 && yspeed() > -0.5)
+			double yVel = Math.abs(yspeed());
+			if(yVel < 0.5)
 			{
 				playAction(Actions.JUMP_APEX);
 			}
@@ -199,7 +202,14 @@ public class Player extends Sprite
 			}
 			else
 			{
-				playAction(Actions.JUMP_FALL);
+				if(yVel > DAMAGE_VELOCITY)
+				{
+					playAction(Actions.FALL_FAST);
+				}
+				else
+				{
+					playAction(Actions.JUMP_FALL);
+				}
 			}
 		}
 	}
@@ -244,6 +254,99 @@ public class Player extends Sprite
 	
 	public void move(Dimensions dim)
 	{
+		adjustDimension(dim);
+			
+		if(dim != Dimensions.DIM5)
+		{
+			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, 
+					this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat, pushing, pushLeft, pushingWhat));
+			super.move(); //If this doesn't occur before collision detection jumping gets screwed
+			checkOrientation();
+			checkFallOff();
+			checkEdges();
+			if(jumping)
+			{
+				checkJumpAnimation();
+			}
+			checkLevelCollision();
+			addGravity(dim);
+		}
+		else
+		{
+			rewindPlayerState();
+		}
+	}
+
+	private void rewindPlayerState() 
+	{
+		try
+		{
+			if(!history.isEmpty())
+			{
+				PlayerHistory past = history.remove();
+				this.position(past.xLoc, past.yLoc);
+				this.motion(past.xSpeed, past.ySpeed);
+				if(past.flipHoriz)
+					flipHorizontal();
+				if(past.flipVert)
+					flipVertical();
+				playAction(past.action);
+				this.setToFrame(past.frame);
+				onSurface = past.onSurface;
+				this.onWhat = past.onWhat;
+				this.pushing = past.pushing;
+				this.pushLeft = past.pushLeft;
+				this.pushingWhat = past.pushWhat;
+			}
+		}
+		catch(HistoryEmptyException e)
+		{
+			System.out.println(e);
+		}
+	}
+
+	private void addGravity(Dimensions dim) 
+	{
+		if(!onSurface)
+		{
+			double yVel = yspeed() + dim.getGravity();
+			if(currDim.gravIsDown)
+				motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
+			else
+				motion(xspeed(), (yVel < dim.terminalVelocity? dim.terminalVelocity : yVel));
+		}
+	}
+
+	private void checkLevelCollision() 
+	{
+		Level lev = parent.getCurrLevel();
+		for(Sprite s : lev.dimensions.get(0).walls)
+		{
+			checkSpriteForCollision(s);
+		}
+		for(Sprite s : lev.currDim.walls)
+		{
+			checkSpriteForCollision(s);
+		}
+		for(int i = 0; i < lev.currDim.pickupItems.size(); i++)
+		{
+			if(checkForPickup(lev.currDim.pickupItems.get(i)))
+			{
+				lev.currDim.pickupItems.remove(i);
+			}
+		}
+	}
+
+	private void checkOrientation() 
+	{
+		if(flipHoriz)
+			flipHorizontal();
+		if(flipVertical)
+			flipVertical();
+	}
+
+	private void adjustDimension(Dimensions dim) 
+	{
 		if(currDim == null)
 			currDim = dim;
 		if((dim.getGravity() < 0 && currDim.getGravity() > 0) ||
@@ -258,94 +361,44 @@ public class Player extends Sprite
 			currDim = dim;
 			flipVertical = !currDim.gravIsDown;
 		}
-		
-			
-		if(dim != Dimensions.DIM5)
+	}
+
+	private void checkEdges() 
+	{
+		if(!onSurface)
 		{
-			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, 
-					this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat, pushing, pushLeft, pushingWhat));
-			super.move(); //If this doesn't occur before collision detection jumping gets screwed
-			if(flipHoriz)
-				flipHorizontal();
-			if(flipVertical)
-				flipVertical();
-			if(onSurface)
+			checkIfCollidesWith(parent.BOTTOMEDGE, parent.PIXELPERFECT);
+			if(collided())
 			{
-				if((x() + width()/2) < onWhat.x() || (x() + width()/2) > (onWhat.x() + onWhat.width()))
-				{
-					System.out.println("Fall off Surface: " + x()+width() + " : " + onWhat.x());
-					onSurface = false;
-					onWhat = null;
-				}
+				stopFall(parent.BOTTOMEDGE);
 			}
-			if(!onSurface)
+			checkIfCollidesWith(parent.TOPEDGE, parent.PIXELPERFECT);
+			if(collided())
 			{
-				checkIfCollidesWith(parent.BOTTOMEDGE, parent.PIXELPERFECT);
-				if(collided())
-				{
-					stopFall(parent.BOTTOMEDGE);
-				}
-				checkIfCollidesWith(parent.TOPEDGE, parent.PIXELPERFECT);
-				if(collided())
-				{
-					stopRise(parent.TOPEDGE);
-				}
-			}
-			if(jumping)
-			{
-				checkJumpAnimation();
-			}
-				
-			Level lev = parent.getCurrLevel();
-			for(Sprite s : lev.dimensions.get(0).walls)
-			{
-				checkSpriteForCollision(s);
-			}
-			for(Sprite s : lev.currDim.walls)
-			{
-				checkSpriteForCollision(s);
-			}
-			for(int i = 0; i < lev.currDim.pickupItems.size(); i++)
-			{
-				if(checkForPickup(lev.currDim.pickupItems.get(i)))
-				{
-					lev.currDim.pickupItems.remove(i);
-				}
-			}
-			if(!onSurface)
-			{
-				double yVel = yspeed() + dim.getGravity();
-				if(currDim.gravIsDown)
-					motion(xspeed(), (yVel > dim.terminalVelocity? dim.terminalVelocity : yVel));
-				else
-					motion(xspeed(), (yVel < dim.terminalVelocity? dim.terminalVelocity : yVel));
+				stopRise(parent.TOPEDGE);
 			}
 		}
-		else
+		checkIfCollidesWith(parent.RIGHTEDGE, parent.PIXELPERFECT);
+		if(collided())
 		{
-			try
+			stopXMovement(parent.RIGHTEDGE, true);
+		}
+		checkIfCollidesWith(parent.LEFTEDGE, parent.PIXELPERFECT);
+		if(collided())
+		{
+			stopXMovement(parent.LEFTEDGE, false);
+		}
+	}
+
+	private void checkFallOff() 
+	{
+		if(onSurface)
+		{
+			if((x() + width()/2) < onWhat.x() || (x() + width()/2) > (onWhat.x() + onWhat.width()))
 			{
-				if(!history.isEmpty())
-				{
-					PlayerHistory past = history.remove();
-					this.position(past.xLoc, past.yLoc);
-					this.motion(past.xSpeed, past.ySpeed);
-					if(past.flipHoriz)
-						flipHorizontal();
-					if(past.flipVert)
-						flipVertical();
-					playAction(past.action);
-					this.setToFrame(past.frame);
-					onSurface = past.onSurface;
-					this.onWhat = past.onWhat;
-					this.pushing = past.pushing;
-					this.pushLeft = past.pushLeft;
-					this.pushingWhat = past.pushWhat;
-				}
-			}
-			catch(HistoryEmptyException e)
-			{
-				System.out.println(e);
+				System.out.println("Fall off Surface: " + x()+width() + " : " + onWhat.x());
+				onSurface = false;
+				onWhat = null;
 			}
 		}
 	}
@@ -397,6 +450,46 @@ public class Player extends Sprite
 	 */
 	private void checkCollision(Sprite collidedWith)
 	{
+//		if(this.yspeed() > 0)
+//		{
+//			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() - 8 < collidedWith.x() + collidedWith.width())
+//			{
+//				if(this.y() + this.height() - 5 < collidedWith.y())
+//				{
+//					stopFall(collidedWith);
+//				}
+//			}
+//		}
+//		if(this.yspeed() < 0)
+//		{
+//			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() + this.width()/4 - 6 < collidedWith.x() + collidedWith.width())
+//			{
+//				if(this.y() > collidedWith.y() + collidedWith.height() - 10)
+//				{
+//					stopRise(collidedWith);
+//				}
+//			}
+//		}
+//		if(this.xspeed() > 0)
+//		{
+//			if(this.x() + this.width() > collidedWith.x() && this.x() + this.width()/2 < collidedWith.x() + 6)
+//			{
+//				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
+//				{
+//					stopXMovement(collidedWith, true);
+//				}
+//			}
+//		}
+//		if(this.xspeed() < 0)
+//		{
+//			if(this.x() < collidedWith.x() + collidedWith.width() && this.x() + this.width()/2 + 6 > collidedWith.x() + collidedWith.width())
+//			{
+//				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
+//				{
+//					stopXMovement(collidedWith, false);
+//				}
+//			}
+//		}
 		//Doesn't check yspeed == 0 because it could never collide vertically
 		if(this.yspeed() > 0)
 		{

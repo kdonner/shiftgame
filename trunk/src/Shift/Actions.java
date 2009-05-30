@@ -5,6 +5,7 @@ public enum Actions {
 	JUMP_TAKEOFF("JumpTakeOff"),
 	JUMP_APEX("JumpApex"),
 	JUMP_FALL("JumpFall"),
+	FALL_FAST("FallFast"),
 	STAND("Stand"),
 	PUSH("Push");
 	
