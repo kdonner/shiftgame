@@ -450,52 +450,11 @@ public class Player extends Sprite
 	 */
 	private void checkCollision(Sprite collidedWith)
 	{
-//		if(this.yspeed() > 0)
-//		{
-//			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() - 8 < collidedWith.x() + collidedWith.width())
-//			{
-//				if(this.y() + this.height() - 5 < collidedWith.y())
-//				{
-//					stopFall(collidedWith);
-//				}
-//			}
-//		}
-//		if(this.yspeed() < 0)
-//		{
-//			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() + this.width()/4 - 6 < collidedWith.x() + collidedWith.width())
-//			{
-//				if(this.y() > collidedWith.y() + collidedWith.height() - 10)
-//				{
-//					stopRise(collidedWith);
-//				}
-//			}
-//		}
-//		if(this.xspeed() > 0)
-//		{
-//			if(this.x() + this.width() > collidedWith.x() && this.x() + this.width()/2 < collidedWith.x() + 6)
-//			{
-//				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
-//				{
-//					stopXMovement(collidedWith, true);
-//				}
-//			}
-//		}
-//		if(this.xspeed() < 0)
-//		{
-//			if(this.x() < collidedWith.x() + collidedWith.width() && this.x() + this.width()/2 + 6 > collidedWith.x() + collidedWith.width())
-//			{
-//				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
-//				{
-//					stopXMovement(collidedWith, false);
-//				}
-//			}
-//		}
-		//Doesn't check yspeed == 0 because it could never collide vertically
 		if(this.yspeed() > 0)
 		{
-			if(collidedWith.y() < this.y() + this.height())
+			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() - 8 < collidedWith.x() + collidedWith.width())
 			{
-				if((this.x() + this.width()/2) > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're on top
+				if(this.y() + this.height() - 5 < collidedWith.y())
 				{
 					stopFall(collidedWith);
 				}
@@ -503,9 +462,9 @@ public class Player extends Sprite
 		}
 		if(this.yspeed() < 0)
 		{
-			if(collidedWith.y() < this.y() + this.height()/2)
+			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() + this.width()/4 - 6 < collidedWith.x() + collidedWith.width())
 			{
-				if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're under
+				if(this.y() > collidedWith.y() + collidedWith.height() - 10)
 				{
 					stopRise(collidedWith);
 				}
@@ -513,9 +472,9 @@ public class Player extends Sprite
 		}
 		if(this.xspeed() > 0)
 		{
-			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
+			if(this.x() + this.width() > collidedWith.x() && this.x() + this.width()/2 < collidedWith.x() + 6)
 			{
-				if(this.x() + this.width() > collidedWith.x() && !(this.x() > collidedWith.x() + this.width()/2))
+				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
 				{
 					stopXMovement(collidedWith, true);
 				}
@@ -523,14 +482,55 @@ public class Player extends Sprite
 		}
 		if(this.xspeed() < 0)
 		{
-			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
+			if(this.x() < collidedWith.x() + collidedWith.width() && this.x() + this.width()/2 + 6 > collidedWith.x() + collidedWith.width())
 			{
-				if(this.x() < collidedWith.x() + collidedWith.width())
+				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
 				{
 					stopXMovement(collidedWith, false);
 				}
 			}
 		}
+		//Doesn't check yspeed == 0 because it could never collide vertically
+//		if(this.yspeed() > 0)
+//		{
+//			if(collidedWith.y() < this.y() + this.height())
+//			{
+//				if((this.x() + this.width()/2) > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're on top
+//				{
+//					stopFall(collidedWith);
+//				}
+//			}
+//		}
+//		if(this.yspeed() < 0)
+//		{
+//			if(collidedWith.y() < this.y() + this.height()/2)
+//			{
+//				if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're under
+//				{
+//					stopRise(collidedWith);
+//				}
+//			}
+//		}
+//		if(this.xspeed() > 0)
+//		{
+//			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
+//			{
+//				if(this.x() + this.width() > collidedWith.x() && !(this.x() > collidedWith.x() + this.width()/2))
+//				{
+//					stopXMovement(collidedWith, true);
+//				}
+//			}
+//		}
+//		if(this.xspeed() < 0)
+//		{
+//			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
+//			{
+//				if(this.x() < collidedWith.x() + collidedWith.width())
+//				{
+//					stopXMovement(collidedWith, false);
+//				}
+//			}
+//		}
 	}
 	
 	private void stopXMovement(Sprite collidedWith, boolean leftSide)
