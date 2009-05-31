@@ -53,6 +53,7 @@ public class GameWindow
 	 *  @param _height the height of the internal area of the window
 	 *
 	 */
+	
 	public void size(int _width, int _height)
 	{
 		if (ucigame.isApplet)
