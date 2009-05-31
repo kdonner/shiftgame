@@ -2,6 +2,7 @@ package Shift;
 
 import java.awt.FileDialog;
 import java.awt.Frame;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,6 +37,8 @@ public class Shift extends Ucigame
 	public void setup()
 	{
 		window.size(FRAME_WIDTH, FRAME_HEIGHT);
+		frameLocation((int)Toolkit.getDefaultToolkit().getScreenSize().getWidth()/2 - FRAME_WIDTH/2, //Centers Width
+					(int)Toolkit.getDefaultToolkit().getScreenSize().getHeight()/2 - FRAME_HEIGHT/2); //Centers Height
 		window.title("Shift");
 		window.showFPS();
 		state = GameState.MAIN_MENU;
@@ -49,7 +52,6 @@ public class Shift extends Ucigame
 		timeForLevel = 0;
 		mouseX = -1;
 		mouseY = -1;
-		
 	}
 	
 	public void draw()
@@ -194,14 +196,16 @@ public class Shift extends Ucigame
 		}
 		if(levelObject != null)
 		{
-			double xOffset = gameCamera.getXOffset();
-			double yOffset = gameCamera.getYOffset();
+			double xOffset = gameCamera.getXOffset() - levelObject.width()/2;
+			double yOffset = gameCamera.getYOffset() + levelObject.height()/2;
 			if(!editor.snapToGrid)
 			{
 				levelObject.position(mouse.x() + xOffset, mouse.y() - yOffset);
 			}
 			else
 			{
+				xOffset -= levelObject.width()/2 % editor.gridSize;
+				yOffset -= levelObject.height()/2 % editor.gridSize;
 				levelObject.position((mouse.x() - mouse.x() % editor.gridSize) + xOffset, (mouse.y() - mouse.y() % editor.gridSize) - yOffset);
 			}
 			levelObject.draw();
@@ -493,28 +497,35 @@ public class Shift extends Ucigame
 	private void saveLevel()
 	{
 		//TODO Finish Level Saving Function
-		LevelSaveFile saving = new LevelSaveFile(currLevel);
-		Frame parent = new Frame();
-		parent.setVisible(false);
-		FileDialog fd = new FileDialog(parent, "Save", FileDialog.SAVE);
-        fd.setVisible(true);
-        if (fd.getFile() == null)
-            return;
-        String file = fd.getDirectory() + fd.getFile();
-		try
+		if(currLevel.start == null || currLevel.end == null)
 		{
-	        FileOutputStream fileOut = new FileOutputStream(file);
-			ObjectOutputStream out = new ObjectOutputStream(fileOut);
-			out.writeObject(saving);
-			out.close();
+			logError("A Level requires a start and end point.");
 		}
-		catch(IOException e)
+		else
 		{
-			System.err.println(e);
-		}
-		finally
-		{
-			parent.dispose();
+			LevelSaveFile saving = new LevelSaveFile(currLevel);
+			Frame parent = new Frame();
+			parent.setVisible(false);
+			FileDialog fd = new FileDialog(parent, "Save", FileDialog.SAVE);
+	        fd.setVisible(true);
+	        if (fd.getFile() == null)
+	            return;
+	        String file = fd.getDirectory() + fd.getFile();
+			try
+			{
+		        FileOutputStream fileOut = new FileOutputStream(file);
+				ObjectOutputStream out = new ObjectOutputStream(fileOut);
+				out.writeObject(saving);
+				out.close();
+			}
+			catch(IOException e)
+			{
+				System.err.println(e);
+			}
+			finally
+			{
+				parent.dispose();
+			}
 		}
 	}
 	

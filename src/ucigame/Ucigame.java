@@ -297,6 +297,8 @@ public abstract class Ucigame
 
 	private int delayTime = 0;		// means no refreshing
 	private int fps = 0;
+	private int frameX = 0;
+	private int frameY = 0;
 	private Font fontFPS;
 
 	private javax.swing.Timer fpsTimer = null;
@@ -365,6 +367,7 @@ public abstract class Ucigame
 		else
         {
 			frame.pack();
+			frame.setLocation(frameX, frameY);
 			frame.setVisible(true);
 		}
 
@@ -387,7 +390,12 @@ public abstract class Ucigame
 
 	int r(double _x) { return (int)(Math.round(_x)); }  // should get rid of this
 
-
+	
+	public void frameLocation(int x, int y)
+	{
+		frameX = x;
+		frameY = y;
+	}
 	// The following methods are meant to be called by the game code.
 
 	/**
@@ -1192,10 +1200,10 @@ public abstract class Ucigame
 			for (int i=spritesFromBottomToTopList.size()-1; i >= 0; i--)
 			{
 				Sprite s = spritesFromBottomToTopList.get(i);
-				if ( mouseX >= s.currX &&
-					 mouseX <  (s.currX + s.width) &&
-					 mouseY >= s.currY &&
-					 mouseY <  (s.currY + s.height)
+				if ( mouseX + gameCamera.getXOffset() >= s.currX &&
+					 mouseX + gameCamera.getXOffset() <  (s.currX + s.width) &&
+					 mouseY - gameCamera.getYOffset() >= s.currY &&
+					 mouseY - gameCamera.getYOffset() <  (s.currY + s.height)
 				   )
 				{
 					mouseSprite = s;
@@ -1391,7 +1399,7 @@ public abstract class Ucigame
 
 	static int countOfErrors = 0;
 
-	static void logError(String _s)
+	protected static void logError(String _s)
 	{
 		++countOfErrors;
 		if (gameObject == null && countOfErrors > 1)  // we're an applet, and we've displayed the message already
