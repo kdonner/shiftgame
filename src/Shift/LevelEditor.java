@@ -4,16 +4,27 @@ import ucigame.Sprite;
 
 public class LevelEditor 
 {
-	
+	Sprite helpPage;
+	Shift parent;
 	boolean snapToGrid;
 	boolean grabObject;
+	boolean showHelp;
 	int gridSize;
 	
-	public LevelEditor()
+	public LevelEditor(Shift parent)
 	{
+		this.parent = parent;
 		snapToGrid = true;
 		grabObject = false;
+		showHelp = false;
 		gridSize = 5;
+		helpPage = parent.makeSprite(parent.getImage(Constants.IMG_DIR + "menu/editHelp.png"));
+	}
+	
+	public void drawHelp()
+	{
+		helpPage.position(parent.gameCamera.getXOffset(), -parent.gameCamera.getYOffset());
+		helpPage.draw();
 	}
 	
 	//TODO optimize these searches so I don't have to keep adding things everytime something new gets added to a level
@@ -62,11 +73,6 @@ public class LevelEditor
 			}
 		}
 		return null;
-	}
-	
-	private boolean equivalent(LevelObject obj, Sprite spr)
-	{
-		return obj.x() == spr.x() && obj.y() == spr.y() && obj.width() == spr.width() && obj.height() == spr.height();
 	}
 	
 	private boolean equivalent(Sprite obj, Sprite spr)

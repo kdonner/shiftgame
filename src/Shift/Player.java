@@ -6,6 +6,7 @@ import ucigame.Sprite;
 
 public class Player extends Sprite
 {
+	private static final int LASER_DAMAGE = 3;
 	private static final int DAMAGE_VELOCITY = 10;
 	private static final double RUN_SPEED = 4.5;
 	public static final int HEIGHT = 95;
@@ -125,11 +126,16 @@ public class Player extends Sprite
 		effects.add(dust);
 	}
 	
+	protected void clearHistory()
+	{
+
+	}
+	
 	protected void laserHit(double xLoc, double yLoc, double angle)
 	{
 		System.out.println("Laser Hit!!!  Angle: " + angle);
 		addBlood(xLoc, yLoc, angle);
-		lossHealth(1);
+		lossHealth(LASER_DAMAGE);
 	}
 
 	private void addBlood(double xLoc, double yLoc, double angle) 

@@ -11,12 +11,14 @@ public class SentryGun extends LevelObject
 		private static final double LASER_SPEED = 20;
 		private double angle;
 		private Shift parent;
+		protected boolean rewinding;
 		protected SentryGun creator;
 		
 		public Laser(Shift parent, double angle, double xPos, double yPos, SentryGun maker)
 		{
 			super(parent.getImage(Constants.IMG_DIR + "items/STLaser.png"));
 			this.parent = parent;
+			rewinding = false;
 			creator = maker;
 			
 			this.angle = angle % 360;
@@ -74,6 +76,11 @@ public class SentryGun extends LevelObject
 			double y = this.y() + parent.gameCamera.getYOffset();
 			return (x < -10 || x > Shift.FRAME_WIDTH + 10 || y < -10 || y > Shift.FRAME_HEIGHT + 10);
 		}
+		
+		protected void reverse()
+		{
+			motion(-xspeed(), -yspeed());
+		}
 
 		public void draw()
 		{
@@ -85,7 +92,7 @@ public class SentryGun extends LevelObject
 	
 	private static final int ENGAGE_SPEED = 40;
 	private static final int ATTACK_DISTANCE = 400;
-	private static final int COOL_DOWN_TIME = 30; //Number of Frames to cool down
+	private static final int COOL_DOWN_TIME = 5; //Number of Frames to cool down
 	private static final double FIRE_PROB = 0.05;
 	Sprite top;
 	Shift parent;
@@ -138,14 +145,19 @@ public class SentryGun extends LevelObject
 	{
 		for(int i = 0; i < lasers.size(); i++)
 		{
+			boolean removed = false;
 			if(lasers.get(i).outOfBounds())
+			{
 				lasers.remove(i);
+				removed = true;
+			}
 			else
 			{
 				Laser las = lasers.get(i);
 				if(checkLevelCollision(parent.currLevel, las))
 				{
 					lasers.remove(i);
+					removed = true;
 				}
 				else
 				{
@@ -154,6 +166,28 @@ public class SentryGun extends LevelObject
 					{
 						parent.player.laserHit(las.x(), las.y(), las.angle);
 						lasers.remove(i);
+						removed = true;
+					}
+				}
+			}
+			if(!removed)
+			{
+				if(parent.currLevel.currDim.dims == Dimensions.DIM5)
+				{
+					Laser las = lasers.get(i);
+					if(!las.rewinding)
+					{
+						las.rewinding = true;
+						las.reverse();
+					}
+				}
+				else
+				{
+					Laser las = lasers.get(i);
+					if(las.rewinding)
+					{
+						las.rewinding = false;
+						las.reverse();
 					}
 				}
 			}
@@ -204,11 +238,14 @@ public class SentryGun extends LevelObject
 		
 		if(parent.player != null && Constants.pythagorean(xOff, yOff) < ATTACK_DISTANCE)
 		{
-			rotation = Constants.angleFromZero(xOff, yOff) - 90;
-			if(heat < 0)
+			if(parent.currLevel.currDim.dims != Dimensions.DIM5)
 			{
-				lasers.add(new Laser(this.parent, rotation + 90, this.x() + this.width()/2, this.y() - 6, this));
-				heat = COOL_DOWN_TIME;
+				rotation = Constants.angleFromZero(xOff, yOff) - 90;
+				if(heat < 0)
+				{
+					lasers.add(new Laser(this.parent, rotation + 90, this.x() + this.width()/2, this.y() - 6, this));
+					heat = COOL_DOWN_TIME;
+				}
 			}
 		}
 		else

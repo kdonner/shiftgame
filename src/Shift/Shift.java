@@ -24,7 +24,9 @@ public class Shift extends Ucigame
 	protected Level currLevel;
 	private long startTime;
 	private MainMenu mainMenu;
+	private EndLevelMenu endMenu;
 	private DimensionMenu dimMenu;
+	private LevelManager levelManage;
 	private boolean displayDimMenu;
 	private int mouseX, mouseY;
 	private LevelEditor editor;
@@ -47,6 +49,9 @@ public class Shift extends Ucigame
 		framerate(FRAME_RATE);
 		//TODO more properly set up the player
 		mainMenu = new MainMenu(this);
+		endMenu = new EndLevelMenu(this);
+		endMenu.hide();
+		levelManage = LevelManager.getInstance(this);
 		displayDimMenu = false;
 		playerFinishedLevel = false;
 		timeForLevel = 0;
@@ -85,7 +90,7 @@ public class Shift extends Ucigame
 	
 	public void onClickNewGame()
 	{
-		loadLevelIntoSystem(Tester.makeLevel(this));
+		loadLevelIntoSystem(levelManage.loadLevel("1.1"));
 		if(currLevel != null)
 			state = GameState.IN_GAME;
 	}
@@ -95,10 +100,15 @@ public class Shift extends Ucigame
 		
 	}
 	
+	public void onClickTimeTrial()
+	{
+		
+	}
+	
 	public void onClickLevelEdit()
 	{
 		currLevel = new Level();
-		editor = new LevelEditor();
+		editor = new LevelEditor(this);
 		state = GameState.LEVEL_EDITOR;
 	}
 	
@@ -112,19 +122,38 @@ public class Shift extends Ucigame
 		System.exit(0);
 	}
 	
+	public void onClickMainMenu()
+	{
+		player = null;
+		currLevel = null;
+		resetGameCamera();
+		state = GameState.MAIN_MENU;
+	}
+	
+	public void onClickNextLevel()
+	{
+		if(!levelManage.loadingLevel)
+		{
+			loadLevelIntoSystem(levelManage.nextLevel());
+		}
+	}
+	
 	private void loadLevelIntoSystem(Level toLoad)
 	{
 		if(toLoad != null)
 		{
 			currLevel = toLoad;
-			currLevel.switchDim(1, false, this);
+			currLevel.switchDim(currLevel.dimensions.get(1).dims.dimNum, false, this);
 			resetGameCamera();
 			updateEdgeSprites();
 			canvas.font("Arial", PLAIN, 14);
 			dimMenu = new DimensionMenu(this, currLevel.dimLabels());
+			endMenu.hide();
 			player = new Player(this);
 			player.position(currLevel.start.xLoc, currLevel.start.yLoc);
 			playerFinishedLevel = false;
+			canvas.font("Arial", PLAIN, 14);
+			System.gc();
 			startTime = System.currentTimeMillis();
 		}
 	}
@@ -164,10 +193,9 @@ public class Shift extends Ucigame
 		player.draw(currLevel.getCurrDims());
 		if(playerFinishedLevel)
 		{
-			Sprite win = makeSprite(getImage(Constants.IMG_DIR + "menu/youwin.png"));
-			win.position(FRAME_WIDTH/2 - win.width()/2 + gameCamera.getXOffset(),
-						FRAME_HEIGHT/2 - win.height()/2 - gameCamera.getYOffset());
-			win.draw();
+			endMenu.show();
+			endMenu.draw();
+			
 			drawEndTime();
 		}
 	}
@@ -185,31 +213,51 @@ public class Shift extends Ucigame
 	
 	private void drawEditorWindow()
 	{
-		currLevel.render(true);
-		if(editor.grabObject)
+		if(currLevel.start != null)
 		{
-			mouse.setCursor(mouse.HAND);
+			Sprite start = makeSprite(getImage(Constants.IMG_DIR + "levels/start.png"));
+			start.position(currLevel.start.xLoc, currLevel.start.yLoc);
+			start.draw();
 		}
-		else
+		if(currLevel.end != null)
 		{
-			mouse.setCursor(mouse.DEFAULT);
+			Sprite end = makeSprite(getImage(Constants.IMG_DIR + "levels/end.png"));
+			end.position(currLevel.end.xy.xLoc, currLevel.end.xy.yLoc);
+			end.draw();
 		}
-		if(levelObject != null)
+		if(!editor.showHelp)
 		{
-			double xOffset = gameCamera.getXOffset() - levelObject.width()/2;
-			double yOffset = gameCamera.getYOffset() + levelObject.height()/2;
-			if(!editor.snapToGrid)
+			currLevel.render(true);
+			if(editor.grabObject)
 			{
-				levelObject.position(mouse.x() + xOffset, mouse.y() - yOffset);
+				mouse.setCursor(mouse.HAND);
 			}
 			else
 			{
-				xOffset -= levelObject.width()/2 % editor.gridSize;
-				yOffset -= levelObject.height()/2 % editor.gridSize;
-				levelObject.position((mouse.x() - mouse.x() % editor.gridSize) + xOffset, (mouse.y() - mouse.y() % editor.gridSize) - yOffset);
+				mouse.setCursor(mouse.DEFAULT);
 			}
-			levelObject.draw();
+			if(levelObject != null)
+			{
+				double xOffset = gameCamera.getXOffset() - levelObject.width()/2;
+				double yOffset = gameCamera.getYOffset() + levelObject.height()/2;
+				if(!editor.snapToGrid)
+				{
+					levelObject.position(mouse.x() + xOffset, mouse.y() - yOffset);
+				}
+				else
+				{
+					xOffset -= levelObject.width()/2 % editor.gridSize;
+					yOffset -= levelObject.height()/2 % editor.gridSize;
+					levelObject.position((mouse.x() - mouse.x() % editor.gridSize) + xOffset, (mouse.y() - mouse.y() % editor.gridSize) - yOffset);
+				}
+				levelObject.draw();
+			}
 		}
+		else
+		{
+			editor.drawHelp();
+		}
+
 	}
 	
 	public void onKeyPress()
@@ -241,7 +289,7 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.S)) //Set Start Point
 			{
-				currLevel.start = new Point(mouse.x(), mouse.y());
+				currLevel.start = new Point(mouse.x() + gameCamera.getXOffset(), mouse.y() - gameCamera.getYOffset());
 			}
 			if(keyboard.isDown(keyboard.E))
 			{
@@ -327,6 +375,10 @@ public class Shift extends Ucigame
 			if(keyboard.isDown(keyboard.K8))
 			{
 				currLevel.switchDim(8, true, this);
+			}
+			if(keyboard.isDown(keyboard.F1)) //Help
+			{
+				editor.showHelp = !editor.showHelp;
 			}
 			if(keyboard.isDown(keyboard.F5)) //Save
 			{
@@ -451,7 +503,7 @@ public class Shift extends Ucigame
 	{
 		if(state == GameState.IN_GAME)
 		{
-			if(displayDimMenu)
+			if(displayDimMenu && !playerFinishedLevel)
 			{
 				displayDimMenu = false;
 				try
@@ -499,7 +551,11 @@ public class Shift extends Ucigame
 		//TODO Finish Level Saving Function
 		if(currLevel.start == null || currLevel.end == null)
 		{
-			logError("A Level requires a start and end point.");
+			logWarning("A Level requires a start and end point.");
+		}
+		else if(currLevel.dimensions.size() == 1)
+		{
+			logWarning("A Level requires a dimension that is not the zeroth.");
 		}
 		else
 		{
@@ -576,12 +632,14 @@ public class Shift extends Ucigame
 		drawHealth();
 		drawArmor();
 		if(!playerFinishedLevel)
-			drawTime();
-		drawInventory();
-		if(displayDimMenu)
 		{
-			dimMenu.draw();
+			drawTime();
+			if(displayDimMenu)
+			{
+				dimMenu.draw();
+			}
 		}
+		drawInventory();
 	}
 	
 	private void drawHealth()
