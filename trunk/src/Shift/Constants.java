@@ -6,8 +6,9 @@ public class Constants
 	//TODO Check to make sure these directories are correct
 	//If you are receiving img not found or audio not found errors this might be why
 	//TODO Change these for final EXPORT to jar file when turning in the project
-	public static String IMG_DIR = "img/";
-	public static String AUDIO_DIR = "audio/";
+	public static final String IMG_DIR = "img/";
+	public static final String AUDIO_DIR = "audio/";
+	public static final String LEVEL_DIR = "levels/";
 	public static StringBuilder strBuild = new StringBuilder();
 	
 	public static void clearStringBuilder()

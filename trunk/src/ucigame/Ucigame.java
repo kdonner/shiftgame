@@ -1399,7 +1399,7 @@ public abstract class Ucigame
 
 	static int countOfErrors = 0;
 
-	protected static void logError(String _s)
+	public static void logError(String _s)
 	{
 		++countOfErrors;
 		if (gameObject == null && countOfErrors > 1)  // we're an applet, and we've displayed the message already
@@ -1412,7 +1412,7 @@ public abstract class Ucigame
 			System.exit(0);
 	}
 
-	static void logWarning(String _s)
+	public static void logWarning(String _s)
 	{
 		JOptionPane.showMessageDialog(null, _s, "Ucigame error", JOptionPane.ERROR_MESSAGE);
 	}
