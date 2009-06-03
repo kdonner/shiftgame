@@ -175,6 +175,7 @@ public class Shift extends Ucigame
 			canvas.font("Arial", PLAIN, 14);
 			System.gc();
 			startTime = System.currentTimeMillis();
+			state = GameState.IN_GAME;
 		}
 	}
 
@@ -518,6 +519,11 @@ public class Shift extends Ucigame
 				mouseX = mouse.x();
 				mouseY = mouse.y();
 			}
+		}
+		if(state == GameState.LEVEL_SELECT)
+		{
+			String levelSelect = selector.getTagAtMouse(mouse.x(), mouse.y());
+			loadLevelIntoSystem(levelManage.loadLevel(levelSelect.trim()));
 		}
 	}
 	
