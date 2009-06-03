@@ -6,8 +6,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.ListIterator;
 
 public class LevelManager 
@@ -17,13 +17,13 @@ public class LevelManager
 	String currLevel;
 	protected boolean loadingLevel;
 	Hashtable<String, String> manager; //First String if the level name, second is the locations
-	LinkedList<String> orderedKeys;
+	ArrayList<String> orderedKeys;
 	
 	private LevelManager(Shift parent)
 	{
 		this.parent = parent;
 		manager = new Hashtable<String, String>();
-		orderedKeys = new LinkedList<String>();
+		orderedKeys = new ArrayList<String>();
 		mapDefaultLevels();
 		currLevel = null;
 	}
