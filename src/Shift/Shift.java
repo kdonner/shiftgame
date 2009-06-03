@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import Shift.LevelSelect.LevelSelectBlock;
+
 import ucigame.*;
 
 @SuppressWarnings("serial")
@@ -236,21 +238,21 @@ public class Shift extends Ucigame
 	
 	private void drawEditorWindow()
 	{
-		if(currLevel.start != null)
-		{
-			Sprite start = makeSprite(getImage(Constants.IMG_DIR + "levels/start.png"));
-			start.position(currLevel.start.xLoc, currLevel.start.yLoc);
-			start.draw();
-		}
-		if(currLevel.end != null)
-		{
-			Sprite end = makeSprite(getImage(Constants.IMG_DIR + "levels/end.png"));
-			end.position(currLevel.end.xy.xLoc, currLevel.end.xy.yLoc);
-			end.draw();
-		}
 		if(!editor.showHelp)
 		{
 			currLevel.render(true);
+			if(currLevel.start != null)
+			{
+				Sprite start = makeSprite(getImage(Constants.IMG_DIR + "levels/start.png"));
+				start.position(currLevel.start.xLoc, currLevel.start.yLoc);
+				start.draw();
+			}
+			if(currLevel.end != null)
+			{
+				Sprite end = makeSprite(getImage(Constants.IMG_DIR + "levels/end.png"));
+				end.position(currLevel.end.xy.xLoc, currLevel.end.xy.yLoc);
+				end.draw();
+			}
 			if(editor.grabObject)
 			{
 				mouse.setCursor(mouse.HAND);
@@ -523,7 +525,10 @@ public class Shift extends Ucigame
 		if(state == GameState.LEVEL_SELECT)
 		{
 			String levelSelect = selector.getTagAtMouse(mouse.x(), mouse.y());
-			loadLevelIntoSystem(levelManage.loadLevel(levelSelect.trim()));
+			if(levelSelect != LevelSelectBlock.BLANK_LEVEL)
+			{
+				loadLevelIntoSystem(levelManage.loadLevel(levelSelect.trim()));
+			}
 		}
 	}
 	

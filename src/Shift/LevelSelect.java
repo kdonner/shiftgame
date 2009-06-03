@@ -8,6 +8,7 @@ public class LevelSelect
 {
 	class LevelSelectBlock extends Sprite
 	{
+		public static final String BLANK_LEVEL = "----------------";
 		private static final int MAX_TITLE = 16;
 		protected static final int WIDTH = 160;
 		protected static final int HEIGHT = 90;
@@ -18,7 +19,7 @@ public class LevelSelect
 			super(parent.getImage(Constants.IMG_DIR + "menu/levelselectblock.png"));
 			position(xLoc, yLoc);
 			this.font("Arial", parent.BOLD, 20, 0, 0, 0);
-			title = "----------------";
+			title = BLANK_LEVEL;
 		}
 		
 		public void draw()
