@@ -20,12 +20,12 @@ public class EndLevelMenu
 	
 	public void draw()
 	{
-		mainMenu.position(Shift.FRAME_WIDTH/2 - mainMenu.width() - 20 + parent.gameCamera.getXOffset(), 
-				Shift.FRAME_HEIGHT/2 + mainMenu.height() - parent.gameCamera.getYOffset());
-		nextLevel.position(Shift.FRAME_WIDTH/2 + 20 + parent.gameCamera.getXOffset(), 
-				Shift.FRAME_HEIGHT/2 + nextLevel.height() - parent.gameCamera.getYOffset());
-		win.position(Shift.FRAME_WIDTH/2 - win.width()/2 + parent.gameCamera.getXOffset(),
-				Shift.FRAME_HEIGHT/2 - win.height()/2 - parent.gameCamera.getYOffset());
+		mainMenu.position(Shift.FRAME_WIDTH/2 - mainMenu.width() - 20, 
+				Shift.FRAME_HEIGHT/2 + mainMenu.height());
+		nextLevel.position(Shift.FRAME_WIDTH/2 + 20, 
+				Shift.FRAME_HEIGHT/2 + nextLevel.height());
+		win.position(Shift.FRAME_WIDTH/2 - win.width()/2,
+				Shift.FRAME_HEIGHT/2 - win.height()/2);
 		mainMenu.draw();
 		nextLevel.draw();
 		win.draw();
@@ -38,6 +38,7 @@ public class EndLevelMenu
 			isShown = !isShown;
 			mainMenu.hide();
 			nextLevel.hide();
+			win.hide();
 		}
 	}
 	
@@ -48,6 +49,7 @@ public class EndLevelMenu
 			isShown = !isShown;
 			mainMenu.show();
 			nextLevel.show();
+			win.show();
 		}
 	}
 

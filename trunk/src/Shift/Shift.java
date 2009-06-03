@@ -90,7 +90,7 @@ public class Shift extends Ucigame
 	
 	public void onClickNewGame()
 	{
-		loadLevelIntoSystem(levelManage.loadLevel("1.1"));
+		loadLevelIntoSystem(levelManage.loadLevel("1.3"));
 		if(currLevel != null)
 			state = GameState.IN_GAME;
 	}
@@ -186,16 +186,16 @@ public class Shift extends Ucigame
 		if(!playerFinishedLevel)
 		{
 			checkEndState();
-			centerCameraOnPlayer();	
+			centerCameraOnPlayer();
+			currLevel.render(false);
+			drawUI();
+			player.draw(currLevel.getCurrDims());
 		}
-		currLevel.render(false);
-		drawUI();
-		player.draw(currLevel.getCurrDims());
 		if(playerFinishedLevel)
 		{
+			resetGameCamera();
 			endMenu.show();
 			endMenu.draw();
-			
 			drawEndTime();
 		}
 	}
