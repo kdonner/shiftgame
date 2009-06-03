@@ -11,6 +11,7 @@ public class LevelSaveFile implements Serializable
 	Point start;
 	Area end;
 	ArrayList<DimensionSave> dimensions;
+	HighScores scores;
 	
 	public LevelSaveFile(Level toSave)
 	{
@@ -18,6 +19,7 @@ public class LevelSaveFile implements Serializable
 		this.height = toSave.height;
 		this.start = toSave.start;
 		this.end = toSave.end;
+		this.scores = toSave.scores;
 		dimensions = new ArrayList<DimensionSave>();
 		for(Dimension d : toSave.dimensions)
 		{
