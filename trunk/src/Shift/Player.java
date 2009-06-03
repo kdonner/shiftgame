@@ -338,7 +338,7 @@ public class Player extends Sprite
 		{
 			if(checkForPickup(lev.currDim.pickupItems.get(i)))
 			{
-				lev.currDim.pickupItems.remove(i);
+				lev.currDim.pickupItems.get(i).aquired();
 			}
 		}
 	}

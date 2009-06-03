@@ -9,4 +9,9 @@ public class PickupItem extends LevelObject
 		super(parent, ObjectType.ITEM, parent.getImage(type.img));
 		itemType = type;
 	}
+
+	public void aquired() 
+	{
+		this.hide();
+	}
 }

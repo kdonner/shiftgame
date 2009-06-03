@@ -27,6 +27,7 @@ public class Shift extends Ucigame
 	private EndLevelMenu endMenu;
 	private DimensionMenu dimMenu;
 	private LevelManager levelManage;
+	private LevelSelect selector;
 	private boolean displayDimMenu;
 	private int mouseX, mouseY;
 	private LevelEditor editor;
@@ -81,6 +82,10 @@ public class Shift extends Ucigame
 		{
 			drawEditorWindow();
 		}
+		if(state == GameState.LEVEL_SELECT)
+		{
+			drawLevelSelect();
+		}
 	}
 	
 	private void drawMainMenu()
@@ -95,6 +100,11 @@ public class Shift extends Ucigame
 			state = GameState.IN_GAME;
 	}
 	
+	private void drawLevelSelect()
+	{
+		selector.draw();
+	}
+	
 	public void onClickLoadGame()
 	{
 		
@@ -102,7 +112,9 @@ public class Shift extends Ucigame
 	
 	public void onClickTimeTrial()
 	{
-		
+		resetGameCamera();
+		selector = new LevelSelect(levelManage, this);
+		state = GameState.LEVEL_SELECT;
 	}
 	
 	public void onClickLevelEdit()
