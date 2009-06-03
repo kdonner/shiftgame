@@ -50,6 +50,7 @@ public class LevelManager
 		addLevel("1.1", Constants.LEVEL_DIR + "level1.1");
 		addLevel("1.2", Constants.LEVEL_DIR + "level1.2");
 		addLevel("1.3", Constants.LEVEL_DIR + "level1.3");
+		addLevel("1.x", Constants.LEVEL_DIR + "level1.x");
 		addLevel("1.4", Constants.LEVEL_DIR + "level1.4");
 	}
 	
