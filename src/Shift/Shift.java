@@ -90,7 +90,7 @@ public class Shift extends Ucigame
 	
 	public void onClickNewGame()
 	{
-		loadLevelIntoSystem(levelManage.loadLevel("1.3"));
+		loadLevelIntoSystem(levelManage.loadLevel("1.1"));
 		if(currLevel != null)
 			state = GameState.IN_GAME;
 	}
@@ -128,6 +128,14 @@ public class Shift extends Ucigame
 		currLevel = null;
 		resetGameCamera();
 		state = GameState.MAIN_MENU;
+	}
+	
+	public void onClickPlayAgain()
+	{
+		if(!levelManage.loadingLevel)
+		{
+			loadLevelIntoSystem(levelManage.loadLevel(levelManage.currLevel));
+		}
 	}
 	
 	public void onClickNextLevel()
@@ -207,7 +215,9 @@ public class Shift extends Ucigame
 		{
 			playerFinishedLevel = true;
 			timeForLevel = System.currentTimeMillis() - startTime;
-			System.out.println("Win!!!");
+			currLevel.scores.addScore(timeForLevel, formatTime(timeForLevel, true), "Matt");//TODO change to user name
+			levelManage.saveCurrLevel();
+			System.out.println(currLevel.scores.formatScores());
 		}
 	}
 	
@@ -694,33 +704,24 @@ public class Shift extends Ucigame
 	
 	private void drawTime()
 	{
-		StringBuilder build = Constants.strBuild;
-		long elapsed = (System.currentTimeMillis() - startTime) / 1000; //Gets rid of milliseconds for display
-		int hours = (int)elapsed / 3600;
-		if(hours > 0)
-		{
-			build.append(hours);
-			build.append(":");
-		}
-		int min = (int)(elapsed % 3600) / 60;
-		build.append(min);
-		build.append(":");
-		int sec = (int)elapsed % 60;
-		if(sec <= 9)
-		{
-			build.append("0");
-		}
-		build.append(sec);
-		canvas.putText(build.toString(), (FRAME_WIDTH / 2), TIME_OFFSET);
+		String time = formatTime((System.currentTimeMillis() - startTime), false);
+		canvas.putText(time, (FRAME_WIDTH / 2), TIME_OFFSET);
 		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
 	}
 	
 	private void drawEndTime()
 	{
 		canvas.font("Arial", PLAIN, 24);
+		String time = formatTime(timeForLevel, true);
+		canvas.putText(time, (FRAME_WIDTH / 2) - 30, (FRAME_HEIGHT / 2) + 50);
+		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
+	}
+
+	private String formatTime(long time, boolean displayMillis) 
+	{
 		StringBuilder build = Constants.strBuild;
-		long elapsed = timeForLevel;
-		long millis = timeForLevel % 1000;
+		long elapsed = time;
+		long millis = time % 1000;
 		elapsed = elapsed / 1000;
 		int hours = (int)elapsed / 3600;
 		if(hours > 0)
@@ -737,11 +738,14 @@ public class Shift extends Ucigame
 			build.append("0");
 		}
 		build.append(sec);
-		build.append(":");
-		build.append(String.format("%03d", millis));
-		canvas.putText(build.toString(), (FRAME_WIDTH / 2) - 30, (FRAME_HEIGHT / 2) + 50);
-		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
+		if(displayMillis)
+		{
+			build.append(":");
+			build.append(String.format("%03d", millis));
+		}
+		return build.toString();
 	}
+	
 	
 	private void drawInventory()
 	{

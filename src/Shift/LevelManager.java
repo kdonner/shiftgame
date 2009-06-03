@@ -2,8 +2,10 @@ package Shift;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.ListIterator;
@@ -12,7 +14,7 @@ public class LevelManager
 {
 	private static LevelManager instance;
 	private Shift parent;
-	private String currLevel;
+	String currLevel;
 	protected boolean loadingLevel;
 	Hashtable<String, String> manager; //First String if the level name, second is the locations
 	LinkedList<String> orderedKeys;
@@ -50,7 +52,6 @@ public class LevelManager
 		addLevel("1.1", Constants.LEVEL_DIR + "level1.1");
 		addLevel("1.2", Constants.LEVEL_DIR + "level1.2");
 		addLevel("1.3", Constants.LEVEL_DIR + "level1.3");
-		addLevel("1.x", Constants.LEVEL_DIR + "level1.x");
 		addLevel("1.4", Constants.LEVEL_DIR + "level1.4");
 	}
 	
@@ -106,6 +107,21 @@ public class LevelManager
 		}
 		loadingLevel = false;
 		return null;
+	}
+	
+	public void saveCurrLevel()
+	{
+		try
+		{
+	        FileOutputStream fileOut = new FileOutputStream(manager.get(currLevel));
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(new LevelSaveFile(parent.currLevel));
+			out.close();
+		}
+		catch(IOException e)
+		{
+			System.err.println(e);
+		}
 	}
 	
 	private Level loadLevelFromDir(String fileDir)

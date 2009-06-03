@@ -16,6 +16,7 @@ public class Level
 	Area end; //The end location of the level
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	protected ArrayList<SpecialEffect> effects;
+	protected HighScores scores;
 	Dimension currDim;
 	int currDimension;
 	int width, height;
@@ -24,6 +25,7 @@ public class Level
 	{
 		dimensions = new ArrayList<Dimension>();
 		effects = new ArrayList<SpecialEffect>();
+		scores = new HighScores();
 		currDim = new Dimension(Dimensions.DIM0);
 		dimensions.add(currDim);
 		currDimension = 0;
@@ -144,6 +146,10 @@ public class Level
 		this.height = data.height;
 		this.start = data.start;
 		this.end = data.end;
+		if(data.scores == null)
+			this.scores = new HighScores();
+		else
+			this.scores = data.scores;
 		dimensions = new ArrayList<Dimension>();
 		
 		for(DimensionSave dim : data.dimensions)

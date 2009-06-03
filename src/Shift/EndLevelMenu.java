@@ -5,7 +5,7 @@ import ucigame.Sprite;
 public class EndLevelMenu 
 {
 	Shift parent;
-	Sprite mainMenu, nextLevel, win;
+	Sprite mainMenu, playAgain, nextLevel, win;
 	private boolean isShown;
 
 	public EndLevelMenu(Shift parent)
@@ -14,6 +14,7 @@ public class EndLevelMenu
 		isShown = true;
 		win = parent.makeSprite(parent.getImage(Constants.IMG_DIR + "menu/youwin.png"));
 		mainMenu = parent.makeButton("MainMenu", parent.getImage(Constants.IMG_DIR + "menu/mainmenu.png"), 150, 48);
+		playAgain = parent.makeButton("PlayAgain", parent.getImage(Constants.IMG_DIR + "menu/playagain.png"), 150, 48);
 		nextLevel = parent.makeButton("NextLevel", parent.getImage(Constants.IMG_DIR + "menu/nextlevel.png"), 150, 48);
 
 	}
