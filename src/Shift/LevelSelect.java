@@ -66,6 +66,13 @@ public class LevelSelect
 		}
 	}
 	
+	public String getTagAtMouse(int x, int y)
+	{
+		int i = x / LevelSelectBlock.WIDTH;
+		int j = y / LevelSelectBlock.HEIGHT;
+		return grid[i][j].title;
+	}
+	
 	public void draw()
 	{
 		for(int i = 0; i < grid.length; i++)
