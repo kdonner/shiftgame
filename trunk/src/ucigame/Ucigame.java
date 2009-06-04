@@ -325,7 +325,11 @@ public abstract class Ucigame
 		if (!isApplet)
 		{
 			frame = new JFrame("No Title");
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			frame.addWindowListener(new WindowAdapter() {   // anonymous inner class
+	            public void windowClosing(WindowEvent e) {
+	                exit();
+	            }
+	        });
 		}
         gameComponent = new GameComponent(this);
         gameComponent.setOpaque(true);
@@ -395,6 +399,12 @@ public abstract class Ucigame
 	{
 		frameX = x;
 		frameY = y;
+	}
+	
+	//Added this so the programmer can overwrite what all happens when the game is closed
+	protected void exit()
+	{
+		System.exit(0);
 	}
 	// The following methods are meant to be called by the game code.
 

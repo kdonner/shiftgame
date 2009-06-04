@@ -54,7 +54,7 @@ public class Shift extends Ucigame
 		mainMenu = new MainMenu(this);
 		endMenu = new EndLevelMenu(this);
 		endMenu.hide();
-		levelManage = LevelManager.getInstance(this);
+		levelManage = LevelManager.getInstance();
 		displayDimMenu = false;
 		playerFinishedLevel = false;
 		timeForLevel = 0;
@@ -97,7 +97,7 @@ public class Shift extends Ucigame
 	
 	public void onClickNewGame()
 	{
-		loadLevelIntoSystem(levelManage.loadLevel("1.1"));
+		loadLevelIntoSystem(levelManage.loadLevel("1.1", this));
 		if(currLevel != null)
 			state = GameState.IN_GAME;
 	}
@@ -133,7 +133,19 @@ public class Shift extends Ucigame
 	
 	public void onClickQuit()
 	{
-		System.exit(0);
+		exit();
+	}
+	
+	protected void exit()
+	{
+		saveImportantResources();
+		super.exit();
+	}
+	
+	private void saveImportantResources()
+	{
+		LevelManager.saveInstance();
+		System.out.println("Save Resources");
 	}
 	
 	public void onClickMainMenu()
@@ -148,7 +160,7 @@ public class Shift extends Ucigame
 	{
 		if(!levelManage.loadingLevel)
 		{
-			loadLevelIntoSystem(levelManage.loadLevel(levelManage.currLevel));
+			loadLevelIntoSystem(levelManage.loadLevel(levelManage.currLevel, this));
 		}
 	}
 	
@@ -156,7 +168,7 @@ public class Shift extends Ucigame
 	{
 		if(!levelManage.loadingLevel)
 		{
-			loadLevelIntoSystem(levelManage.nextLevel());
+			loadLevelIntoSystem(levelManage.nextLevel(this));
 		}
 	}
 	
@@ -231,7 +243,7 @@ public class Shift extends Ucigame
 			playerFinishedLevel = true;
 			timeForLevel = System.currentTimeMillis() - startTime;
 			currLevel.scores.addScore(timeForLevel, formatTime(timeForLevel, true), "Matt");//TODO change to user name
-			levelManage.saveCurrLevel();
+			levelManage.saveCurrLevel(this);
 			System.out.println(currLevel.scores.formatScores());
 		}
 	}
@@ -527,7 +539,7 @@ public class Shift extends Ucigame
 			String levelSelect = selector.getTagAtMouse(mouse.x(), mouse.y());
 			if(levelSelect != LevelSelectBlock.BLANK_LEVEL)
 			{
-				loadLevelIntoSystem(levelManage.loadLevel(levelSelect.trim()));
+				loadLevelIntoSystem(levelManage.loadLevel(levelSelect.trim(), this));
 			}
 		}
 	}
