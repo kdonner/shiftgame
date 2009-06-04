@@ -10,28 +10,85 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.ListIterator;
 
-public class LevelManager 
+public class LevelManager implements java.io.Serializable
 {
 	private static LevelManager instance;
-	private Shift parent;
-	String currLevel;
-	protected boolean loadingLevel;
+	private static final String saveDir = "levelmanager.man";
+	static String currLevel;
+	protected static boolean loadingLevel;
 	Hashtable<String, String> manager; //First String if the level name, second is the locations
 	ArrayList<String> orderedKeys;
 	
-	private LevelManager(Shift parent)
+	private LevelManager()
 	{
-		this.parent = parent;
+		if(new File(saveDir).exists())
+		{
+			try
+			{
+				loadInstance();
+			}
+			catch(IOException e)
+			{
+				createNewManager();
+			}
+			catch(ClassNotFoundException e)
+			{
+				createNewManager();
+			}
+		}
+		else
+		{
+			createNewManager();
+		}
+	}
+
+	private void createNewManager() 
+	{
 		manager = new Hashtable<String, String>();
 		orderedKeys = new ArrayList<String>();
 		mapDefaultLevels();
 		currLevel = null;
+		System.out.println("Making new Manager");
 	}
 	
-	public static LevelManager getInstance(Shift par)
+	private void loadInstance() throws IOException, ClassNotFoundException
+	{
+		FileInputStream fileIn = new FileInputStream(saveDir);
+		ObjectInputStream in = new ObjectInputStream(fileIn);
+		instance = (LevelManager)in.readObject();
+		manager = instance.manager;
+		orderedKeys = instance.orderedKeys;
+		if(manager == null || orderedKeys == null)
+		{
+			createNewManager();
+		}
+		in.close();
+	}
+	
+	public static void saveInstance()
+	{
+		if(instance != null)
+		{
+			try
+			{
+				currLevel = null;
+				loadingLevel = false;
+		        FileOutputStream fileOut = new FileOutputStream(saveDir);
+				ObjectOutputStream out = new ObjectOutputStream(fileOut);
+				out.writeObject(instance);
+				out.close();
+			}
+			catch(IOException e)
+			{
+				System.err.println(e);
+			}
+		}
+	}
+	
+	public static LevelManager getInstance()
 	{
 		if(instance == null)
-			instance = new LevelManager(par);
+			instance = new LevelManager();
 		return instance;
 	}
 	
@@ -53,7 +110,7 @@ public class LevelManager
 		addLevel("1.2", Constants.LEVEL_DIR + "level1.2");
 		addLevel("1.3", Constants.LEVEL_DIR + "level1.3");
 		addLevel("1.4", Constants.LEVEL_DIR + "level1.4");
-		addLevel("1.x", Constants.LEVEL_DIR + "level1.x");
+		//addLevel("1.x", Constants.LEVEL_DIR + "level1.x");
 	}
 	
 	public void addUserLevel(String levelName, String dir) throws NameTakenException
@@ -74,10 +131,10 @@ public class LevelManager
 		}
 	}
 	
-	public Level loadLevel(String levelTag)
+	public Level loadLevel(String levelTag, Shift parent)
 	{
 		loadingLevel = true;
-		Level retrieved = loadLevelFromDir(manager.get(levelTag));
+		Level retrieved = loadLevelFromDir(manager.get(levelTag), parent);
 		if(retrieved == null)
 		{
 			parent.logWarning("Couldn't locate Level: " + levelTag + " at Dir: " + manager.get(levelTag));
@@ -89,13 +146,13 @@ public class LevelManager
 		return retrieved;
 	}
 	
-	protected Level nextLevel()
+	protected Level nextLevel(Shift parent)
 	{
 		loadingLevel = true;
 		System.out.println("Next Called");
 		if(currLevel == null)
 		{
-			loadLevel("1.1");
+			loadLevel("1.1", parent);
 		}
 		else
 		{
@@ -105,7 +162,7 @@ public class LevelManager
 				if(keys.next().equals(currLevel))
 				{
 					if(keys.hasNext())
-						return loadLevel(keys.next());
+						return loadLevel(keys.next(), parent);
 					else
 						return null;
 				}
@@ -115,7 +172,7 @@ public class LevelManager
 		return null;
 	}
 	
-	public void saveCurrLevel()
+	public void saveCurrLevel(Shift parent)
 	{
 		try
 		{
@@ -130,7 +187,7 @@ public class LevelManager
 		}
 	}
 	
-	private Level loadLevelFromDir(String fileDir)
+	private Level loadLevelFromDir(String fileDir, Shift parent)
 	{
 		if(new File(fileDir).exists())
         {
