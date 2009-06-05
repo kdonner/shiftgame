@@ -72,12 +72,19 @@ public class LevelEditor
 				return g;
 			}
 		}
+		for(Door d : objectIn.dimensions.get(0).doors)
+		{
+			if(equivalent(d.door, toFind) || equivalent(d, toFind))
+			{
+				return d;
+			}
+		}
 		return null;
 	}
 	
 	private boolean equivalent(Sprite obj, Sprite spr)
 	{
-		return obj.x() == spr.x() && obj.y() == spr.y() && obj.width() == spr.width() && obj.height() == spr.height();
+		return obj.x() == spr.x() && obj.y() == spr.y(); //&& obj.width() == spr.width() && obj.height() == spr.height() && obj.hashCode();
 	}
 	
 	public void removeObject(LevelObject toRemove, Level objectIn)
@@ -103,6 +110,7 @@ public class LevelEditor
 			if(toRemove.equals(objectIn.dimensions.get(0).pickupItems.get(i)))
 			{
 				objectIn.dimensions.get(0).pickupItems.remove(i);
+				return;
 			}
 		}
 		for(int i = 0; i < objectIn.dimensions.get(objectIn.currDimension).pickupItems.size(); i++)
@@ -110,6 +118,39 @@ public class LevelEditor
 			if(toRemove.equals(objectIn.dimensions.get(objectIn.currDimension).pickupItems.get(i)))
 			{
 				objectIn.dimensions.get(objectIn.currDimension).pickupItems.remove(i);
+				return;
+			}
+		}
+		for(int i = 0; i < objectIn.dimensions.get(0).enemies.size(); i++)
+		{
+			if(toRemove.equals(objectIn.dimensions.get(0).enemies.get(i)))
+			{
+				objectIn.dimensions.get(0).enemies.remove(i);
+				return;
+			}
+		}
+		for(int i = 0; i < objectIn.dimensions.get(objectIn.currDimension).enemies.size(); i++)
+		{
+			if(toRemove.equals(objectIn.dimensions.get(objectIn.currDimension).enemies.get(i)))
+			{
+				objectIn.dimensions.get(objectIn.currDimension).enemies.remove(i);
+				return;
+			}
+		}
+		for(int i = 0; i < objectIn.dimensions.get(0).doors.size(); i++)
+		{
+			if(toRemove.equals(objectIn.dimensions.get(0).doors.get(i)))
+			{
+				objectIn.dimensions.get(0).doors.remove(i);
+				return;
+			}
+		}
+		for(int i = 0; i < objectIn.dimensions.get(objectIn.currDimension).doors.size(); i++)
+		{
+			if(toRemove.equals(objectIn.dimensions.get(objectIn.currDimension).doors.get(i)))
+			{
+				objectIn.dimensions.get(objectIn.currDimension).doors.remove(i);
+				return;
 			}
 		}
 	}

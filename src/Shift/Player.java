@@ -13,7 +13,7 @@ public class Player extends Sprite
 	public static final int WIDTH = 64;
 	private static final int JUMP_FORCE = -7;
 	
-	private boolean jumping, onSurface, pushing, pushLeft;
+	private boolean jumping, onSurface, pushing, pushLeft, moveThisFrame;
 	boolean flipHoriz, flipVertical;
 	short health, armor; //These will be between 0 and 100
 	
@@ -83,6 +83,7 @@ public class Player extends Sprite
 		onSurface = false;
 		pushing = false;
 		pushLeft = false;
+		moveThisFrame = false;
 		currentAction = Actions.STAND;
 		playAction(currentAction);
 		onWhat = null;
@@ -104,6 +105,7 @@ public class Player extends Sprite
 	
 	public void jump()
 	{
+		moveThisFrame = true;
 		if(!jumping && onSurface)
 		{
 			if(!pushing)
@@ -154,6 +156,7 @@ public class Player extends Sprite
 	
 	public void run()
 	{
+		moveThisFrame = true;
 		checkPush();
 		if(!pushing)
 		{
@@ -264,8 +267,8 @@ public class Player extends Sprite
 			
 		if(dim != Dimensions.DIM5)
 		{
-			history.add(new PlayerHistory(x(), y(), xspeed(), yspeed(), currFrame, 
-					this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat, pushing, pushLeft, pushingWhat));
+			history.add(new PlayerHistory(parent.currLevel.currDimension, x(), y(), xspeed(), yspeed(), currFrame, 
+					this.flipHoriz, this.flipVertical, this.onSurface, currentAction, onWhat, pushing, pushLeft, pushingWhat, jumping));
 			super.move(); //If this doesn't occur before collision detection jumping gets screwed
 			checkOrientation();
 			checkFallOff();
@@ -290,8 +293,12 @@ public class Player extends Sprite
 			if(!history.isEmpty())
 			{
 				PlayerHistory past = history.remove();
+				parent.currLevel.dimensions.get(past.currentDim).render();
 				this.position(past.xLoc, past.yLoc);
-				this.motion(past.xSpeed, past.ySpeed);
+				if(past.jumping)
+					this.motion(past.xSpeed, past.ySpeed);
+				else
+					this.motion(0, 0);
 				if(past.flipHoriz)
 					flipHorizontal();
 				if(past.flipVert)
@@ -303,6 +310,7 @@ public class Player extends Sprite
 				this.pushing = past.pushing;
 				this.pushLeft = past.pushLeft;
 				this.pushingWhat = past.pushWhat;
+				this.jumping = past.jumping;
 			}
 		}
 		catch(HistoryEmptyException e)
@@ -348,6 +356,7 @@ public class Player extends Sprite
 			if(inven.items[0].hasFound && collided())
 			{
 				lev.currDim.doors.get(i).retract();
+				inven.items[0].use();
 			}
 		}
 	}
@@ -658,6 +667,11 @@ public class Player extends Sprite
 				effects.remove(i);
 		}
 		super.draw();
+		if(!moveThisFrame)
+		{
+			playAction(Actions.STAND);
+		}
+		moveThisFrame = false;
 	}
 }
 
