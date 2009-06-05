@@ -7,7 +7,7 @@ public class HighScores implements java.io.Serializable
 {
 	private static final int MAX_SIZE = 100;
 	private static final String NO_TIME = "--:--:---";
-	private static final int MAX_RESULTS = 5;
+	private static final int MAX_RESULTS = 10;
 	private static final long serialVersionUID = 3627550956646622212L;
 	
 	class Score implements java.io.Serializable, Comparable<Score>
@@ -45,6 +45,20 @@ public class HighScores implements java.io.Serializable
 		{
 			scores.remove(scores.size()-1);
 		}
+	}
+	
+	public ArrayList<String> getTopScores()
+	{
+		ArrayList<String> topScores = new ArrayList<String>();
+		for(int i = 0; i < scores.size() && i < MAX_RESULTS; i++)
+		{
+			topScores.add(scores.get(i).name + ": " + scores.get(i).format);
+		}
+		for(int i = 0; i < MAX_RESULTS - scores.size(); i++)
+		{
+			topScores.add(NO_TIME);
+		}
+		return topScores;
 	}
 	
 	public String formatScores()

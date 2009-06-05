@@ -231,7 +231,6 @@ public class Shift extends Ucigame
 			resetGameCamera();
 			endMenu.show();
 			endMenu.draw();
-			drawEndTime();
 		}
 	}
 
@@ -244,7 +243,9 @@ public class Shift extends Ucigame
 			timeForLevel = System.currentTimeMillis() - startTime;
 			currLevel.scores.addScore(timeForLevel, formatTime(timeForLevel, true), "Matt");//TODO change to user name
 			levelManage.saveCurrLevel(this);
-			System.out.println(currLevel.scores.formatScores());
+			endMenu.highScores = currLevel.scores.getTopScores();
+			endMenu.endTime = formatTime(timeForLevel, true);
+			canvas.font("Arial", PLAIN, 24);
 		}
 	}
 	
@@ -747,17 +748,10 @@ public class Shift extends Ucigame
 		canvas.putText(time, (FRAME_WIDTH / 2), TIME_OFFSET);
 		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
 	}
-	
-	private void drawEndTime()
-	{
-		canvas.font("Arial", PLAIN, 24);
-		String time = formatTime(timeForLevel, true);
-		canvas.putText(time, (FRAME_WIDTH / 2) - 30, (FRAME_HEIGHT / 2) + 50);
-		Constants.clearStringBuilder(); //This clears the string builder for the next call to the string builder
-	}
 
 	private String formatTime(long time, boolean displayMillis) 
 	{
+		Constants.clearStringBuilder();
 		StringBuilder build = Constants.strBuild;
 		long elapsed = time;
 		long millis = time % 1000;
