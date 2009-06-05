@@ -28,9 +28,14 @@ public class Door extends LevelObject
 		}
 		else
 		{
-			door.position(this.x() + 10, this.y() + this.height());
+			door.position(this.x() + 10, this.y() + super.height());
 		}
 		door.draw();
 		super.draw();
+	}
+	
+	public int height()
+	{
+		return super.height() + door.height();
 	}
 }

@@ -12,7 +12,7 @@ public class InventoryItem extends Sprite
 	{
 		super(parent.getImage(Constants.IMG_DIR+imgDir));
 		this.parent = parent;
-		hasFound = false; //TODO: Change default to false, set to true only to ensure drawing correctly
+		hasFound = false;
 		this.position(xLoc, yLoc);
 		this.setOpacity(0.1f);
 	}

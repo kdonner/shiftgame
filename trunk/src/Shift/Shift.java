@@ -37,7 +37,6 @@ public class Shift extends Ucigame
 	private LevelObject levelObject;
 	protected boolean playerFinishedLevel;
 	private long timeForLevel;
-//	Sprite testSprite; TODO: Remove test Sprite when done
 
 	public void setup()
 	{
@@ -50,7 +49,6 @@ public class Shift extends Ucigame
 		canvas.background(200, 200, 200);
 		canvas.font("Arial", PLAIN, 14);
 		framerate(FRAME_RATE);
-		//TODO more properly set up the player
 		mainMenu = new MainMenu(this);
 		endMenu = new EndLevelMenu(this);
 		endMenu.hide();
