@@ -144,7 +144,8 @@ public class Shift extends Ucigame
 	
 	private void saveImportantResources()
 	{
-		LevelManager.saveInstance();
+		//TODO: Enable Important Saves
+		//LevelManager.saveInstance();
 		System.out.println("Save Resources");
 	}
 	
@@ -355,6 +356,10 @@ public class Shift extends Ucigame
 			if(keyboard.isDown(keyboard.T))
 			{
 				levelObject = new SentryGun(this);
+			}
+			if(keyboard.isDown(keyboard.D))
+			{
+				levelObject = new Door(this);
 			}
 			if(keyboard.isDown(keyboard.G)) //Grab Object
 			{

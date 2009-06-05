@@ -3,6 +3,7 @@ package Shift;
 import java.util.ArrayList;
 
 import Shift.LevelSaveFile.DimensionSave;
+import Shift.LevelSaveFile.DimensionSave.DoorSave;
 import Shift.LevelSaveFile.DimensionSave.EnemySave;
 import Shift.LevelSaveFile.DimensionSave.PickupSave;
 import Shift.LevelSaveFile.DimensionSave.WallSave;
@@ -183,6 +184,14 @@ public class Level
 				SentryGun gun = new SentryGun(help);
 				gun.position(e.xPos, e.yPos);
 				newDim.enemies.add(gun);
+			}
+			
+			for(DoorSave d : dim.doors)
+			{
+				Door door = new Door(help);
+				door.position(d.xPos, d.yPos);
+				door.setFilters(dim.dims.filters);
+				newDim.doors.add(door);
 			}
 			
 			dimensions.add(newDim);
