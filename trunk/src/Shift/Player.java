@@ -349,15 +349,24 @@ public class Player extends Sprite
 				lev.currDim.pickupItems.get(i).aquired();
 			}
 		}
-		for(int i = 0; i < lev.currDim.doors.size(); i++)
+		for(Door d : lev.dimensions.get(0).doors)
 		{
-			checkSpriteForCollision(lev.currDim.doors.get(i));
-			checkSpriteForCollision(lev.currDim.doors.get(i).door);
-			if(inven.items[0].hasFound && collided())
-			{
-				lev.currDim.doors.get(i).retract();
-				inven.items[0].use();
-			}
+			checkDoorOpen(d);
+		}
+		for(Door d : lev.currDim.doors)
+		{
+			checkDoorOpen(d);
+		}
+	}
+	
+	private void checkDoorOpen(Door d)
+	{
+		checkSpriteForCollision(d);
+		checkSpriteForCollision(d.door);
+		if(inven.items[0].hasFound && collided())
+		{
+			d.retract();
+			inven.items[0].use();
 		}
 	}
 

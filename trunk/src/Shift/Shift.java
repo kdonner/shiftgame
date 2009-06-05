@@ -120,6 +120,7 @@ public class Shift extends Ucigame
 	public void onClickLevelEdit()
 	{
 		currLevel = new Level();
+		currLevel.switchDim(0, false, this);
 		editor = new LevelEditor(this);
 		state = GameState.LEVEL_EDITOR;
 	}

@@ -97,6 +97,7 @@ public class LevelManager implements java.io.Serializable
 		try
 		{
 			mapLevel1();
+			mapLevel5();
 		}
 		catch(NameTakenException e)
 		{
@@ -111,6 +112,11 @@ public class LevelManager implements java.io.Serializable
 		addLevel("1.3", Constants.LEVEL_DIR + "level1.3");
 		addLevel("1.4", Constants.LEVEL_DIR + "level1.4");
 		addLevel("1.x", Constants.LEVEL_DIR + "level1.x");
+	}
+	
+	private void mapLevel5() throws NameTakenException
+	{
+		addLevel("5.0", Constants.LEVEL_DIR + "level5.0");
 	}
 	
 	public void addUserLevel(String levelName, String dir) throws NameTakenException
