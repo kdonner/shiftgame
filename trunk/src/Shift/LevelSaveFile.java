@@ -72,11 +72,24 @@ public class LevelSaveFile implements Serializable
 			}
 		}
 		
+		class DoorSave implements Serializable
+		{
+			private static final long serialVersionUID = 3627550956646622212L;
+			double xPos, yPos;
+			
+			public DoorSave(Door toSave)
+			{
+				this.xPos = toSave.x();
+				this.yPos = toSave.y();
+			}
+		}
+		
 		Backgrounds bkgType;
 		Dimensions dims;
 		ArrayList<WallSave> walls;
 		ArrayList<PickupSave> pickups;
 		ArrayList<EnemySave> enemies;
+		ArrayList<DoorSave> doors;
 		
 		public DimensionSave(Dimension toSave)
 		{
@@ -85,6 +98,7 @@ public class LevelSaveFile implements Serializable
 			walls = new ArrayList<WallSave>();
 			pickups = new ArrayList<PickupSave>();
 			enemies = new ArrayList<EnemySave>();
+			doors = new ArrayList<DoorSave>();
 			
 			for(Wall w : toSave.walls)
 			{
@@ -97,6 +111,10 @@ public class LevelSaveFile implements Serializable
 			for(SentryGun g : toSave.enemies)
 			{
 				enemies.add(new EnemySave(g));
+			}
+			for(Door d : toSave.doors)
+			{
+				doors.add(new DoorSave(d));
 			}
 		}
 	}

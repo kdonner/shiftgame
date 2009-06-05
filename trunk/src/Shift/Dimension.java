@@ -12,6 +12,7 @@ public class Dimension implements java.io.Serializable
 	ArrayList<Wall> walls;
 	ArrayList<PickupItem> pickupItems;
 	ArrayList<SentryGun> enemies;
+	ArrayList<Door> doors;
 
 	public Dimension(Dimensions dims)
 	{
@@ -19,6 +20,7 @@ public class Dimension implements java.io.Serializable
 		walls = new ArrayList<Wall>();
 		pickupItems = new ArrayList<PickupItem>();
 		enemies = new ArrayList<SentryGun>();
+		doors = new ArrayList<Door>();
 	}
 	
 	public static Dimensions getDims(int forNum)
@@ -57,6 +59,10 @@ public class Dimension implements java.io.Serializable
 		{
 			walls.get(i).draw();
 		}
+		for(int i = 0; i < doors.size(); i++)
+		{
+			doors.get(i).draw();
+		}
 		for(int i = 0; i < pickupItems.size(); i++)
 		{
 			pickupItems.get(i).draw();
@@ -76,6 +82,10 @@ public class Dimension implements java.io.Serializable
 		if(obj.type == ObjectType.ENEMY)
 		{
 			enemies.add(((SentryGun)obj));
+		}
+		if(obj.type == ObjectType.INTERACTIVE)
+		{
+			doors.add(((Door)obj));
 		}
 	}
 }

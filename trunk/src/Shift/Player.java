@@ -341,6 +341,15 @@ public class Player extends Sprite
 				lev.currDim.pickupItems.get(i).aquired();
 			}
 		}
+		for(int i = 0; i < lev.currDim.doors.size(); i++)
+		{
+			checkSpriteForCollision(lev.currDim.doors.get(i));
+			checkSpriteForCollision(lev.currDim.doors.get(i).door);
+			if(inven.items[0].hasFound && collided())
+			{
+				lev.currDim.doors.get(i).retract();
+			}
+		}
 	}
 
 	private void checkOrientation() 
