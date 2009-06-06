@@ -12,6 +12,7 @@ public class LevelSaveFile implements Serializable
 	Area end;
 	ArrayList<DimensionSave> dimensions;
 	HighScores scores;
+	Backgrounds bkgType;
 	
 	public LevelSaveFile(Level toSave)
 	{
@@ -20,6 +21,7 @@ public class LevelSaveFile implements Serializable
 		this.start = toSave.start;
 		this.end = toSave.end;
 		this.scores = toSave.scores;
+		this.bkgType = toSave.bkgType;
 		dimensions = new ArrayList<DimensionSave>();
 		for(Dimension d : toSave.dimensions)
 		{
@@ -84,7 +86,6 @@ public class LevelSaveFile implements Serializable
 			}
 		}
 		
-		Backgrounds bkgType;
 		Dimensions dims;
 		ArrayList<WallSave> walls;
 		ArrayList<PickupSave> pickups;
@@ -93,7 +94,6 @@ public class LevelSaveFile implements Serializable
 		
 		public DimensionSave(Dimension toSave)
 		{
-			this.bkgType = toSave.bkgType;
 			this.dims = toSave.dims;
 			walls = new ArrayList<WallSave>();
 			pickups = new ArrayList<PickupSave>();
