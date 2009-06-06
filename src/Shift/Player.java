@@ -334,13 +334,13 @@ public class Player extends Sprite
 	private void checkLevelCollision() 
 	{
 		Level lev = parent.getCurrLevel();
-		for(Sprite s : lev.dimensions.get(0).walls)
+		for(Wall w : lev.dimensions.get(0).walls)
 		{
-			checkSpriteForCollision(s);
+			checkSpriteForCollision(w, (w.wallType == Walls.ELECTRIC1 || w.wallType == Walls.ELECTRIC2));
 		}
-		for(Sprite s : lev.currDim.walls)
+		for(Wall w : lev.currDim.walls)
 		{
-			checkSpriteForCollision(s);
+			checkSpriteForCollision(w, (w.wallType == Walls.ELECTRIC1 || w.wallType == Walls.ELECTRIC2));
 		}
 		for(int i = 0; i < lev.currDim.pickupItems.size(); i++)
 		{
@@ -361,8 +361,8 @@ public class Player extends Sprite
 	
 	private void checkDoorOpen(Door d)
 	{
-		checkSpriteForCollision(d);
-		checkSpriteForCollision(d.door);
+		checkSpriteForCollision(d, false);
+		checkSpriteForCollision(d.door, false);
 		if(inven.items[0].hasFound && collided())
 		{
 			d.retract();
@@ -467,11 +467,15 @@ public class Player extends Sprite
 		}
 	}
 
-	private void checkSpriteForCollision(Sprite s) 
+	private void checkSpriteForCollision(Sprite s, boolean deathWall) 
 	{
 		this.checkIfCollidesWith(s, parent.PIXELPERFECT);
 		if(this.collided())
 		{
+			if(deathWall)
+			{
+				lossHealth(200);
+			}
 			System.out.println("basic Collision");
 			checkCollision(s);
 		}

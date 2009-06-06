@@ -14,6 +14,7 @@ public class LevelManager implements java.io.Serializable
 {
 	private static LevelManager instance;
 	private static final String saveDir = "levelmanager.man";
+	private int customIndex;
 	static String currLevel;
 	protected static boolean loadingLevel;
 	Hashtable<String, String> manager; //First String if the level name, second is the locations
@@ -98,6 +99,7 @@ public class LevelManager implements java.io.Serializable
 		{
 			mapLevel1();
 			mapLevel2();
+			customIndex = orderedKeys.size(); //This needs to come after all default levels have been entered
 		}
 		catch(NameTakenException e)
 		{
@@ -135,6 +137,21 @@ public class LevelManager implements java.io.Serializable
 			manager.put(tag, dir);
 			orderedKeys.add(tag);
 		}
+	}
+	
+	protected void clearAllHighScores(Shift parent)
+	{
+		loadingLevel = true;
+		for(String key : orderedKeys)
+		{
+			Level toClear = loadLevel(key, parent);
+			if(toClear != null)
+			{
+				toClear.scores.clear();
+			}
+		}
+		currLevel = "";
+		loadingLevel = false;
 	}
 	
 	public Level loadLevel(String levelTag, Shift parent)

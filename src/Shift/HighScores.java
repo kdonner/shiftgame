@@ -37,6 +37,11 @@ public class HighScores implements java.io.Serializable
 		scores = new ArrayList<Score>();
 	}
 	
+	protected void clear()
+	{
+		scores.clear();
+	}
+	
 	public void addScore(long time, String format, String name)
 	{
 		scores.add(new Score(time, format, name));

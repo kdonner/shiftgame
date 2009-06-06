@@ -6,5 +6,6 @@ public enum GameState
 	IN_GAME,
 	PAUSED,
 	LEVEL_EDITOR,
-	LEVEL_SELECT;
+	LEVEL_SELECT,
+	OPTIONS;
 }

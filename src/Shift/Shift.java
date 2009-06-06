@@ -303,7 +303,7 @@ public class Shift extends Ucigame
 	
 	public void onKeyPress()
 	{
-		if(keyboard.isDown(keyboard.DASH)) //Go To Main Menu
+		if(keyboard.isDown(keyboard.BACKSLASH)) //Go To Main Menu
 		{
 			state = GameState.MAIN_MENU;
 			currLevel = null;
