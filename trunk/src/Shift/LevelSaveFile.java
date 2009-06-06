@@ -39,12 +39,14 @@ public class LevelSaveFile implements Serializable
 			
 			Walls type;
 			double xPos, yPos;
+			boolean flip;
 			
 			public WallSave(Wall toSave)
 			{
 				this.type = toSave.wallType;
 				xPos = toSave.x();
 				yPos = toSave.y();
+				flip = toSave.flipVert;
 			}
 		}
 		
@@ -53,12 +55,14 @@ public class LevelSaveFile implements Serializable
 			private static final long serialVersionUID = 3627550956646622212L;
 			Pickups type;
 			double xPos, yPos;
+			boolean flip;
 			
 			public PickupSave(PickupItem toSave)
 			{
 				this.type = toSave.itemType;
 				xPos = toSave.x();
 				yPos = toSave.y();
+				flip = toSave.flipVert;
 			}
 		}
 		
@@ -66,11 +70,13 @@ public class LevelSaveFile implements Serializable
 		{
 			private static final long serialVersionUID = 3627550956646622212L;
 			double xPos, yPos;
+			boolean flip;
 			
 			public EnemySave(SentryGun toSave)
 			{
 				this.xPos = toSave.x();
 				this.yPos = toSave.y();
+				flip = toSave.flipVert;
 			}
 		}
 		
@@ -78,11 +84,13 @@ public class LevelSaveFile implements Serializable
 		{
 			private static final long serialVersionUID = 3627550956646622212L;
 			double xPos, yPos;
+			boolean flip;
 			
 			public DoorSave(Door toSave)
 			{
 				this.xPos = toSave.x();
 				this.yPos = toSave.y();
+				flip = toSave.flipVert;
 			}
 		}
 		

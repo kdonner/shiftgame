@@ -33,7 +33,6 @@ public class Background
 	{
 		int x = parent.gameCamera.getXOffset();
 		int y = parent.gameCamera.getYOffset();
-		System.out.println(Shift.FRAME_WIDTH + x);
 		if(bottomLeft.y() > Shift.FRAME_HEIGHT - y)
 		{
 			System.out.println("Move Up");

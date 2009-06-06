@@ -24,7 +24,14 @@ public class LevelSelect
 		
 		public void draw()
 		{
-			putText(title, 25, HEIGHT/2 + 10);
+			if(title.trim().length() < 8)
+			{
+				putText(title, 25, HEIGHT/2 + 10);
+			}
+			else
+			{
+				putText(title, 10, HEIGHT/2 + 10);
+			}
 			super.draw();
 		}
 		

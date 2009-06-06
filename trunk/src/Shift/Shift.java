@@ -122,6 +122,7 @@ public class Shift extends Ucigame
 		currLevel = new Level();
 		currLevel.switchDim(0, false, this);
 		editor = new LevelEditor(this);
+		levelManage.currLevel = "";
 		state = GameState.LEVEL_EDITOR;
 	}
 	
@@ -357,6 +358,13 @@ public class Shift extends Ucigame
 			if(keyboard.isDown(keyboard.M)) //Enable/Disable magnatism
 			{
 				editor.snapToGrid = !editor.snapToGrid;
+			}
+			if(keyboard.isDown(keyboard.I)) //Invert held object
+			{
+				if(levelObject != null)
+				{
+					levelObject.flipVert = !levelObject.flipVert;
+				}
 			}
 			if(keyboard.isDown(keyboard.T))
 			{
@@ -624,6 +632,9 @@ public class Shift extends Ucigame
 	        String file = fd.getDirectory() + fd.getFile();
 			try
 			{
+				if(!fd.getFile().equals(levelManage.currLevel)) //If you loaded this level and want to save over it, it's fine.
+					levelManage.addUserLevel(fd.getFile(), file);
+				levelManage.currLevel = fd.getFile();
 		        FileOutputStream fileOut = new FileOutputStream(file);
 				ObjectOutputStream out = new ObjectOutputStream(fileOut);
 				out.writeObject(saving);
@@ -632,6 +643,10 @@ public class Shift extends Ucigame
 			catch(IOException e)
 			{
 				System.err.println(e);
+			} 
+			catch (NameTakenException e) 
+			{
+				this.logWarning("That name is already taken for a level");
 			}
 			finally
 			{
@@ -649,7 +664,7 @@ public class Shift extends Ucigame
         if (fd.getFile() == null)
             return;
         String file = fd.getDirectory() + fd.getFile();
-        
+        levelManage.currLevel = fd.getFile();
         Level temp = loadLevelFromDir(file);
         if(temp != null)
         	currLevel = temp;
