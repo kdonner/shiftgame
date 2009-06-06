@@ -31,14 +31,79 @@ public class Background
 	
 	private void updatePositions()
 	{
+		int x = parent.gameCamera.getXOffset();
+		int y = parent.gameCamera.getYOffset();
+		System.out.println(Shift.FRAME_WIDTH + x);
+		if(bottomLeft.y() > Shift.FRAME_HEIGHT - y)
+		{
+			System.out.println("Move Up");
+			moveUp();
+		}
+		if(bottomLeft.y() + bottomLeft.height() < Shift.FRAME_HEIGHT - y)
+		{
+			System.out.println("Move Down");
+			moveDown();
+		}
+		if(bottomRight.x() < x)
+		{
+			moveRight();
+		}
+		if(bottomRight.x() > Shift.FRAME_WIDTH + x)
+		{
+			moveLeft();
+		}
 		//TODO update positions of background tiles with correct positions according to game camera
 	}
 	
-	public void setFilters(float[] filters)
+	private void moveLeft()
 	{
-		topLeft.setFilters(filters);
-		topRight.setFilters(filters);
-		bottomLeft.setFilters(filters);
-		bottomRight.setFilters(filters);
+		Sprite temp = bottomRight;
+		bottomRight = bottomLeft;
+		bottomLeft = temp;
+		bottomLeft.position(bottomRight.x() - Shift.FRAME_WIDTH, bottomLeft.y());
+		temp = topRight;
+		topRight = topLeft;
+		topLeft = temp;
+		topLeft.position(topRight.x() - Shift.FRAME_WIDTH, topLeft.y());
+		temp = null;
+	}
+	
+	private void moveRight()
+	{
+		Sprite temp = bottomLeft;
+		bottomLeft = bottomRight;
+		bottomRight = temp;
+		bottomRight.position(bottomLeft.x() + Shift.FRAME_WIDTH, bottomRight.y());
+		temp = topLeft;
+		topLeft = topRight;
+		topRight = temp;
+		topRight.position(topLeft.x() + Shift.FRAME_WIDTH, topRight.y());
+		temp = null;
+	}
+	
+	private void moveUp()
+	{
+		Sprite temp = bottomLeft;
+		bottomLeft = topLeft;
+		topLeft = temp;
+		topLeft.position(topLeft.x(), bottomLeft.y() - Shift.FRAME_HEIGHT);
+		temp = bottomRight;
+		bottomRight = topRight;
+		topRight = temp;
+		topRight.position(topRight.x(), bottomRight.y() - Shift.FRAME_HEIGHT);
+		temp = null;
+	}
+	
+	private void moveDown()
+	{
+		Sprite temp = topLeft;
+		topLeft = bottomLeft;
+		bottomLeft = temp;
+		bottomLeft.position(bottomLeft.x(), topLeft.y() + Shift.FRAME_HEIGHT);
+		temp = topRight;
+		topRight = bottomRight;
+		bottomRight = temp;
+		bottomRight.position(bottomRight.x(), topRight.y() + Shift.FRAME_HEIGHT);
+		temp = null;
 	}
 }
