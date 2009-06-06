@@ -17,6 +17,8 @@ import ucigame.*;
 @SuppressWarnings("serial")
 public class Shift extends Ucigame
 {
+	private static final int MAX_USER_LENGTH = 20;
+	private static final String NONAME = "Noname";
 	private static final int CAMERA_MOVE_AMOUNT = 40;
 	private static final int TIME_OFFSET = 15;
 	public static final int FRAME_RATE = 30;
@@ -37,6 +39,7 @@ public class Shift extends Ucigame
 	private LevelObject levelObject;
 	protected boolean playerFinishedLevel;
 	private long timeForLevel;
+	protected String currentUser;
 
 	public void setup()
 	{
@@ -58,12 +61,14 @@ public class Shift extends Ucigame
 		timeForLevel = 0;
 		mouseX = -1;
 		mouseY = -1;
+		currentUser = NONAME;
+		onClickMainMenu();
 	}
 	
 	public void draw()
 	{
 		canvas.clear();
-		if(state == GameState.MAIN_MENU)
+		if(state == GameState.MAIN_MENU || state == GameState.OPTIONS)
 		{
 			resetGameCamera();
 			if(!mainMenu.isVisible())
@@ -128,7 +133,8 @@ public class Shift extends Ucigame
 	
 	public void onClickOptions()
 	{
-		
+		currentUser = NONAME;
+		state = GameState.OPTIONS;
 	}
 	
 	public void onClickQuit()
@@ -153,6 +159,7 @@ public class Shift extends Ucigame
 	{
 		player = null;
 		currLevel = null;
+		canvas.font("Arial", PLAIN, 24);
 		resetGameCamera();
 		System.gc();
 		state = GameState.MAIN_MENU;
@@ -250,7 +257,7 @@ public class Shift extends Ucigame
 		{
 			playerFinishedLevel = true;
 			timeForLevel = System.currentTimeMillis() - startTime;
-			currLevel.scores.addScore(timeForLevel, formatTime(timeForLevel, true), "Matt");//TODO change to user name
+			currLevel.scores.addScore(timeForLevel, formatTime(timeForLevel, true), currentUser);
 			levelManage.saveCurrLevel(this);
 			endMenu.highScores = currLevel.scores.getTopScores();
 			endMenu.endTime = formatTime(timeForLevel, true);
@@ -305,10 +312,24 @@ public class Shift extends Ucigame
 	{
 		if(keyboard.isDown(keyboard.BACKSLASH)) //Go To Main Menu
 		{
-			state = GameState.MAIN_MENU;
-			currLevel = null;
-			player = null;
-			System.gc();
+			onClickMainMenu();
+		}
+		if(keyboard.isDown(keyboard.CONTROL) && keyboard.isDown(keyboard.SHIFT) && keyboard.isDown(keyboard.F9))  //Ctrl+Shift+F9 = Clear High Scores 
+		{
+			levelManage.clearAllHighScores(this);
+		}
+		if(state == GameState.OPTIONS)
+		{
+			keyboard.typematicOff();
+			if(currentUser.equals(NONAME))
+				currentUser = keyboard.lastCharacter();
+			else if(currentUser.length() < MAX_USER_LENGTH)
+				currentUser += keyboard.lastCharacter();
+			if(keyboard.isDown(keyboard.BACKSPACE))
+			{
+				if(currentUser.length() > 0)
+					currentUser = currentUser.substring(0, currentUser.length()-2);
+			}
 		}
 		// Controls for the Level Editor
 		if(state == GameState.LEVEL_EDITOR)
