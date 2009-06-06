@@ -7,7 +7,9 @@ public enum Walls
 	PLATFORM1(Constants.IMG_DIR + "levels/platform1.png"),
 	PLATFORM2(Constants.IMG_DIR + "levels/platform2.png"),
 	BLOCK1(Constants.IMG_DIR + "levels/block1.png"),
-	BLOCK2(Constants.IMG_DIR + "levels/block2.png");
+	BLOCK2(Constants.IMG_DIR + "levels/block2.png"),
+	ELECTRIC1(Constants.IMG_DIR + "levels/electricPlatform.png"),
+	ELECTRIC2(Constants.IMG_DIR + "levels/electricWall.png");
 	
 	String img;
 	Walls(String img)
@@ -27,6 +29,10 @@ public enum Walls
 			return BLOCK1;
 		if(this == BLOCK1)
 			return BLOCK2;
+		if(this == BLOCK2)
+			return ELECTRIC1;
+		if(this == ELECTRIC1)
+			return ELECTRIC2;
 		return WALL1;
 	}
 }
