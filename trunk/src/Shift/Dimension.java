@@ -7,8 +7,6 @@ import ucigame.Sprite;
 public class Dimension implements java.io.Serializable
 {
 	Dimensions dims;
-	Sprite background;
-	Backgrounds bkgType;
 	ArrayList<Wall> walls;
 	ArrayList<PickupItem> pickupItems;
 	ArrayList<SentryGun> enemies;
@@ -38,12 +36,6 @@ public class Dimension implements java.io.Serializable
 		case 8: return Dimensions.DIM8;
 		default: return null;
 		}
-	}
-	
-	public void drawBkg()
-	{
-		if(background != null)
-			background.draw();
 	}
 	
 	public void render()

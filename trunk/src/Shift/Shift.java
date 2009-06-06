@@ -153,6 +153,7 @@ public class Shift extends Ucigame
 		player = null;
 		currLevel = null;
 		resetGameCamera();
+		System.gc();
 		state = GameState.MAIN_MENU;
 	}
 	
@@ -177,6 +178,13 @@ public class Shift extends Ucigame
 		if(toLoad != null)
 		{
 			currLevel = toLoad;
+			for(Dimension d : currLevel.dimensions)
+			{
+				if(d.dims != Dimensions.DIM0)
+				{
+					currLevel.switchDim(d.dims.dimNum, false, this);
+				}
+			}
 			currLevel.switchDim(currLevel.dimensions.get(1).dims.dimNum, false, this);
 			resetGameCamera();
 			updateEdgeSprites();
@@ -222,7 +230,7 @@ public class Shift extends Ucigame
 		{
 			checkEndState();
 			centerCameraOnPlayer();
-			currLevel.render(false);
+			currLevel.render(this);
 			drawUI();
 			player.draw(currLevel.getCurrDims());
 		}
@@ -253,18 +261,12 @@ public class Shift extends Ucigame
 	{
 		if(!editor.showHelp)
 		{
-			currLevel.render(true);
+			currLevel.render(this);
 			if(currLevel.start != null)
 			{
 				Sprite start = makeSprite(getImage(Constants.IMG_DIR + "levels/start.png"));
 				start.position(currLevel.start.xLoc, currLevel.start.yLoc);
 				start.draw();
-			}
-			if(currLevel.end != null)
-			{
-				Sprite end = makeSprite(getImage(Constants.IMG_DIR + "levels/end.png"));
-				end.position(currLevel.end.xy.xLoc, currLevel.end.xy.yLoc);
-				end.draw();
 			}
 			if(editor.grabObject)
 			{
@@ -303,7 +305,9 @@ public class Shift extends Ucigame
 		if(keyboard.isDown(keyboard.DASH)) //Go To Main Menu
 		{
 			state = GameState.MAIN_MENU;
+			currLevel = null;
 			player = null;
+			System.gc();
 		}
 		// Controls for the Level Editor
 		if(state == GameState.LEVEL_EDITOR)
@@ -331,7 +335,8 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.E))
 			{
-				currLevel.end = new Area(new Point(mouse.x() + gameCamera.getXOffset(), mouse.y() - gameCamera.getYOffset()), Player.WIDTH, Player.HEIGHT);
+				currLevel.end = new Area(new Point(mouse.x() + gameCamera.getXOffset(), mouse.y() - gameCamera.getYOffset()), 76, 140);
+				currLevel.updateExit(this);
 			}
 			if(keyboard.isDown(keyboard.B)) //Set a background
 			{

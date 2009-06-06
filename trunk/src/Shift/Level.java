@@ -15,6 +15,9 @@ public class Level
 {
 	Point start; //Player's start location
 	Area end; //The end location of the level
+	Sprite endZone;
+	Background background;
+	Backgrounds bkgType;
 	ArrayList<Dimension> dimensions; //Each dimension has a unique set of Sprites that will be drawn
 	protected ArrayList<SpecialEffect> effects;
 	protected HighScores scores;
@@ -39,16 +42,26 @@ public class Level
 		dimensions.get(currDimension).addObject(obj);
 	}
 	
-	public void render(boolean renderZerothBKG)
+	public void drawBkg()
+	{
+		if(background != null)
+			background.draw();
+	}
+	
+	public void render(Shift renderTo)
 	{	
-		if(renderZerothBKG)
+		drawBkg();
+		
+		if(end != null && endZone == null)
 		{
-			dimensions.get(0).drawBkg();
+			updateExit(renderTo);
 		}
-		else if(currDim.dims != Dimensions.DIM0)
+		else
 		{
-			currDim.drawBkg();
+			if(endZone != null)
+				endZone.draw();
 		}
+		
 		if(currDim.dims != Dimensions.DIM0)
 		{
 			dimensions.get(0).render();
@@ -62,18 +75,22 @@ public class Level
 		}
 	}
 	
+	public void updateExit(Shift help)
+	{
+		if(end != null && endZone == null)
+		{
+			endZone = help.makeSprite(help.getImage(Constants.IMG_DIR + "levels/exit.png"));
+		}
+		if(end != null && endZone != null)
+		{
+			endZone.position(end.xy.xLoc, end.xy.yLoc);
+		}
+	}
+	
 	public void addBackground(Shift parent, Backgrounds type)
 	{
-		for(Dimension d : dimensions)
-		{
-			d.bkgType = type;
-			d.background = parent.makeSprite(parent.getImage(type.img));
-			d.background.position(0, 0);
-			if(d.dims != Dimensions.DIM0)
-			{
-				d.background.setFilters(d.dims.filters);
-			}
-		}
+		bkgType = type;
+		background = new Background(parent, type);
 	}
 	
 	public Dimensions getCurrDims()
@@ -133,12 +150,6 @@ public class Level
 	private void createNewDim(Shift parent, Dimensions searchingFor) 
 	{
 		currDim = new Dimension(searchingFor);
-		if(dimensions.get(0).bkgType != null)
-		{
-			currDim.bkgType = dimensions.get(0).bkgType;
-			currDim.background = parent.makeSprite(parent.getImage(currDim.bkgType.img));
-			currDim.background.setFilters(currDim.dims.filters);
-		}
 	}
 	
 	public void unpackSaveFile(Shift help, LevelSaveFile data)
@@ -147,6 +158,9 @@ public class Level
 		this.height = data.height;
 		this.start = data.start;
 		this.end = data.end;
+		this.bkgType = data.bkgType;
+		this.background = new Background(help, bkgType);
+		updateExit(help);
 		if(data.scores == null)
 			this.scores = new HighScores();
 		else
@@ -156,13 +170,6 @@ public class Level
 		for(DimensionSave dim : data.dimensions)
 		{
 			Dimension newDim = new Dimension(dim.dims);
-			newDim.bkgType = dim.bkgType;
-			if(newDim.bkgType != null)
-			{
-				newDim.background = help.makeSprite(help.getImage(newDim.bkgType.img));
-				if(dim.dims != Dimensions.DIM0)
-					newDim.background.setFilters(newDim.dims.filters);
-			}
 			
 			for(WallSave w : dim.walls)
 			{
