@@ -175,6 +175,7 @@ public class Level
 			{
 				Wall wall = new Wall(help, w.type);
 				wall.position(w.xPos, w.yPos);
+				wall.flipVert = w.flip;
 				wall.setFilters(dim.dims.filters);
 				newDim.walls.add(wall);
 			}
@@ -183,6 +184,7 @@ public class Level
 			{
 				PickupItem pick = new PickupItem(help, p.type);
 				pick.position(p.xPos, p.yPos);
+				pick.flipVert = p.flip;
 				newDim.pickupItems.add(pick);
 			}
 			
@@ -190,6 +192,7 @@ public class Level
 			{
 				SentryGun gun = new SentryGun(help);
 				gun.position(e.xPos, e.yPos);
+				gun.flipVert = e.flip;
 				newDim.enemies.add(gun);
 			}
 			
@@ -198,6 +201,7 @@ public class Level
 				Door door = new Door(help);
 				door.position(d.xPos, d.yPos);
 				door.setFilters(dim.dims.filters);
+				door.flipVert = d.flip;
 				newDim.doors.add(door);
 			}
 			
