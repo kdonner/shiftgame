@@ -113,7 +113,7 @@ public class LevelManager implements java.io.Serializable
 		addLevel("1.2", Constants.LEVEL_DIR + "level1.2");
 		addLevel("1.3", Constants.LEVEL_DIR + "level1.3");
 		addLevel("1.4", Constants.LEVEL_DIR + "level1.4");
-		addLevel("1.x", Constants.LEVEL_DIR + "level1.x");
+		addLevel("1.5", Constants.LEVEL_DIR + "level1.5");
 	}
 	
 	private void mapLevel2() throws NameTakenException
