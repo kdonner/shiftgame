@@ -43,6 +43,11 @@ public class MainMenu
 		levelEdit.draw();
 		options.draw();
 		quit.draw();
+		parent.canvas.putText("Current User: " + parent.currentUser, 30, 30);
+		if(parent.state == GameState.OPTIONS)
+		{
+			parent.canvas.putText("Options Enabled. Type to enter new user name. Backslash to leave Options", Shift.FRAME_WIDTH/2 - 300, Shift.FRAME_HEIGHT - 10);
+		}
 	}
 	
 	public void hide()
