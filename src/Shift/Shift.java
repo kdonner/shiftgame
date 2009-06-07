@@ -327,7 +327,7 @@ public class Shift extends Ucigame
 				currentUser += keyboard.lastCharacter();
 			if(keyboard.isDown(keyboard.BACKSPACE))
 			{
-				if(currentUser.length() > 0)
+				if(currentUser.length() > 1)
 					currentUser = currentUser.substring(0, currentUser.length()-2);
 			}
 		}
