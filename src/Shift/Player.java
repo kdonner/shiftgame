@@ -625,10 +625,15 @@ public class Player extends Sprite
 		System.out.println("Y Speed: " + yspeed());
 		if(Math.abs(yspeed()) > DAMAGE_VELOCITY)
 		{
-			lossHealth(fallDamage(Math.abs(yspeed()) - DAMAGE_VELOCITY));
+			int damage = fallDamage(Math.abs(yspeed()) - DAMAGE_VELOCITY);
+			lossHealth(damage);
 			if(!isAlive)
 			{
 				parent.getSound(Constants.AUDIO_DIR + "groundSmack.mp3").play();
+			}
+			else
+			{
+				parent.getSound(Constants.AUDIO_DIR + "groundSmackSoft.mp3").play();
 			}
 		}
 	}
