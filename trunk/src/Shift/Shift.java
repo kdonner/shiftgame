@@ -161,6 +161,7 @@ public class Shift extends Ucigame
 		currLevel = null;
 		canvas.font("Arial", PLAIN, 24);
 		resetGameCamera();
+		endMenu.hide();
 		System.gc();
 		state = GameState.MAIN_MENU;
 	}
@@ -170,6 +171,7 @@ public class Shift extends Ucigame
 		if(!levelManage.loadingLevel)
 		{
 			loadLevelIntoSystem(levelManage.loadLevel(levelManage.currLevel, this));
+			endMenu.hide();
 		}
 	}
 	
@@ -178,6 +180,7 @@ public class Shift extends Ucigame
 		if(!levelManage.loadingLevel)
 		{
 			loadLevelIntoSystem(levelManage.nextLevel(this));
+			endMenu.hide();
 		}
 	}
 	
@@ -267,6 +270,7 @@ public class Shift extends Ucigame
 	{
 		if(!player.isAlive && player.xspeed() == 0 && player.yspeed() == 0)
 		{
+			endMenu.show();
 			playerFinishedLevel = true;
 			endMenu.playerDied = true;
 			canvas.font("Arial", PLAIN, 24);
@@ -274,6 +278,7 @@ public class Shift extends Ucigame
 		Point playerLoc = new Point(player.centerX(), player.centerY());
 		if(currLevel.end.isInArea(playerLoc))
 		{
+			endMenu.show();
 			playerFinishedLevel = true;
 			timeForLevel = System.currentTimeMillis() - startTime;
 			currLevel.scores.addScore(timeForLevel, formatTime(timeForLevel, true), currentUser);
