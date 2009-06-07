@@ -2,7 +2,9 @@ package Shift;
 
 import java.util.ArrayList;
 
+import ucigame.Sound;
 import ucigame.Sprite;
+import ucigame.Ucigame;
 
 public class SentryGun extends LevelObject 
 {
@@ -94,6 +96,7 @@ public class SentryGun extends LevelObject
 	private static final int ATTACK_DISTANCE = 400;
 	private static final int COOL_DOWN_TIME = 5; //Number of Frames to cool down
 	private static final double FIRE_PROB = 0.05;
+	private static Sound laser; 
 	Sprite top;
 	Shift parent;
 	ArrayList<Laser> lasers;
@@ -116,6 +119,7 @@ public class SentryGun extends LevelObject
 		rotateRight = false;
 		heat = parent.randomInt(COOL_DOWN_TIME);
 		alive = true;
+		laser = parent.getSound(Constants.AUDIO_DIR + "laser.mp3");
 	}
 	
 	protected void die()
@@ -236,13 +240,14 @@ public class SentryGun extends LevelObject
 			yOff = -((parent.player.centerY() - 15) - (this.y() + this.centerY));
 		}
 		
-		if(parent.player != null && Constants.pythagorean(xOff, yOff) < ATTACK_DISTANCE)
+		if(parent.player != null && (parent.player.xspeed() != 0 || parent.player.yspeed() != 0) && Constants.pythagorean(xOff, yOff) < ATTACK_DISTANCE)
 		{
 			if(parent.currLevel.currDim.dims != Dimensions.DIM5)
 			{
 				rotation = Constants.angleFromZero(xOff, yOff) - 90;
 				if(heat < 0)
 				{
+					laser.play();
 					lasers.add(new Laser(this.parent, rotation + 90, this.x() + this.width()/2, this.y() - 6, this));
 					heat = COOL_DOWN_TIME;
 				}

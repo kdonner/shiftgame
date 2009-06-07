@@ -186,26 +186,20 @@ public class Shift extends Ucigame
 		if(toLoad != null)
 		{
 			currLevel = toLoad;
-			for(Dimension d : currLevel.dimensions)
-			{
-				if(d.dims != Dimensions.DIM0)
-				{
-					currLevel.switchDim(d.dims.dimNum, false, this);
-				}
-			}
 			currLevel.switchDim(currLevel.dimensions.get(1).dims.dimNum, false, this);
-			resetGameCamera();
 			updateEdgeSprites();
 			canvas.font("Arial", PLAIN, 14);
 			dimMenu = new DimensionMenu(this, currLevel.dimLabels());
 			endMenu.hide();
+			endMenu.playerDied = false;
 			player = new Player(this);
 			player.position(currLevel.start.xLoc, currLevel.start.yLoc);
 			playerFinishedLevel = false;
+			centerCameraOnPlayer();
 			canvas.font("Arial", PLAIN, 14);
 			System.gc();
-			startTime = System.currentTimeMillis();
 			state = GameState.IN_GAME;
+			startTime = System.currentTimeMillis();
 		}
 	}
 
@@ -223,7 +217,7 @@ public class Shift extends Ucigame
 			gameCamera.setXOffset((int)player.centerX() - FRAME_WIDTH/2);
 			cameraMoved = true;
 		}
-		if((player.centerY() - FRAME_HEIGHT/2 >= FRAME_HEIGHT - currLevel.height) && (player.centerY() <= FRAME_HEIGHT/2))
+		if((player.centerY() - FRAME_HEIGHT/2 >= FRAME_HEIGHT/2 - currLevel.height) && (player.centerY() <= FRAME_HEIGHT/2))
 		{
 			gameCamera.setYOffset((int)-(player.centerY() - FRAME_HEIGHT/2));
 			cameraMoved = true;
@@ -252,6 +246,12 @@ public class Shift extends Ucigame
 
 	private void checkEndState() 
 	{
+		if(!player.isAlive && player.xspeed() == 0 && player.yspeed() == 0)
+		{
+			playerFinishedLevel = true;
+			endMenu.playerDied = true;
+			canvas.font("Arial", PLAIN, 24);
+		}
 		Point playerLoc = new Point(player.centerX(), player.centerY());
 		if(currLevel.end.isInArea(playerLoc))
 		{
@@ -502,7 +502,8 @@ public class Shift extends Ucigame
 			keyboard.typematicOn();
 			if(keyboard.isDown(keyboard.RIGHT, keyboard.D))
 			{
-				player.flipHoriz = false;
+				if(player.isAlive)
+					player.flipHoriz = false;
 				player.run();
 			}
 			if(keyboard.isDown(keyboard.UP, keyboard.W))
@@ -511,7 +512,8 @@ public class Shift extends Ucigame
 			}
 			if(keyboard.isDown(keyboard.LEFT, keyboard.A))
 			{
-				player.flipHoriz = true;
+				if(player.isAlive)
+					player.flipHoriz = true;
 				player.run();
 			}
 			if(keyboard.isDown(keyboard.DOWN, keyboard.S))

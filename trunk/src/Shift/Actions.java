@@ -7,7 +7,8 @@ public enum Actions {
 	JUMP_FALL("JumpFall"),
 	FALL_FAST("FallFast"),
 	STAND("Stand"),
-	PUSH("Push");
+	PUSH("Push"),
+	DEAD("Dead");
 	
 	public String name;
 	Actions(String name)
