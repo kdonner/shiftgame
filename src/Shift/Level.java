@@ -59,7 +59,14 @@ public class Level
 		else
 		{
 			if(endZone != null)
+			{
+				if(!currDim.dims.gravIsDown)
+				{
+					endZone.flipHorizontal();
+					endZone.flipVertical();
+				}
 				endZone.draw();
+			}
 		}
 		
 		if(currDim.dims != Dimensions.DIM0)
