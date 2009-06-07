@@ -365,6 +365,7 @@ public class Player extends Sprite
 		checkSpriteForCollision(d.door, false);
 		if(inven.items[0].hasFound && collided())
 		{
+			parent.getSound(Constants.AUDIO_DIR + "doorOpen.mp3");
 			d.retract();
 			inven.items[0].use();
 		}
