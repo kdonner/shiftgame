@@ -58,7 +58,7 @@ public class LevelSelect
 		assignBlocks(parent);
 	}
 	
-	private void assignBlocks(Shift parent)
+	protected void assignBlocks(Shift parent)
 	{
 		ListIterator<String> keys = man.orderedKeys.listIterator();
 		for(int i = 0; i < grid.length; i++)

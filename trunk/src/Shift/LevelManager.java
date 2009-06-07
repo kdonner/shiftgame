@@ -132,6 +132,25 @@ public class LevelManager implements java.io.Serializable
 		addLevel(levelName, dir);
 	}
 	
+	public boolean attemptToRemove(String tag)
+	{
+		for(int i = 0; i < orderedKeys.size(); i++)
+		{
+			if(orderedKeys.get(i).equals(tag) && i >= customIndex)
+			{
+				removeLevel(tag, i);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private void removeLevel(String tag, int index)
+	{
+		orderedKeys.remove(index);
+		manager.remove(tag);
+	}
+	
 	public void addLevel(String tag, String dir) throws NameTakenException
 	{
 		if(manager.containsKey(tag))

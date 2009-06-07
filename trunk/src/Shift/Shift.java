@@ -601,10 +601,20 @@ public class Shift extends Ucigame
 		}
 		if(state == GameState.LEVEL_SELECT)
 		{
-			String levelSelect = selector.getTagAtMouse(mouse.x(), mouse.y());
-			if(levelSelect != LevelSelectBlock.BLANK_LEVEL)
+			String levelSelect = selector.getTagAtMouse(mouse.x(), mouse.y()).trim();
+			if(keyboard.isDown(keyboard.SHIFT))
 			{
-				loadLevelIntoSystem(levelManage.loadLevel(levelSelect.trim(), this));
+				if(levelManage.attemptToRemove(levelSelect))
+				{
+					selector.assignBlocks(this);
+				}
+			}
+			else
+			{
+				if(levelSelect != LevelSelectBlock.BLANK_LEVEL)
+				{
+					loadLevelIntoSystem(levelManage.loadLevel(levelSelect, this));
+				}
 			}
 		}
 	}
