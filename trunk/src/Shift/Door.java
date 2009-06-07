@@ -4,6 +4,7 @@ import ucigame.Sprite;
 
 public class Door extends LevelObject 
 {
+	private static final int MOVEMENT_SPEED = 6;
 	Sprite door;
 	private boolean retracting;
 	private int movement;
@@ -28,7 +29,7 @@ public class Door extends LevelObject
 		{
 			if(movement < super.height())
 			{
-				movement += 2;
+				movement += MOVEMENT_SPEED;
 			}
 			door.position(door.x(), door.y() - (flipVert? -movement : movement));
 		}
