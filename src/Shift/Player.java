@@ -2,6 +2,7 @@ package Shift;
 import java.util.ArrayList;
 
 import ucigame.Image;
+import ucigame.Sound;
 import ucigame.Sprite;
 
 public class Player extends Sprite
@@ -21,6 +22,7 @@ public class Player extends Sprite
 	private Sprite onWhat, pushingWhat; //Goes with onSurface and pushing
 	private HistoryManager history;
 	private ArrayList<SpecialEffect> effects;
+	private Sound fallWhoosh;
 	Shift parent;
 	Inventory inven;
 	Actions currentAction;
@@ -77,6 +79,8 @@ public class Player extends Sprite
 		defineSequence(Actions.PUSH.name, 12); 
 		defineSequence(Actions.DEAD.name, 18);
 		framerate(20);
+		
+		fallWhoosh = parent.getSound(Constants.AUDIO_DIR + "whoosh.mp3");
 		
 		inven = new Inventory(parent);
 		effects = new ArrayList<SpecialEffect>();
@@ -219,10 +223,16 @@ public class Player extends Sprite
 				if(yVel > DAMAGE_VELOCITY)
 				{
 					playAction(Actions.FALL_FAST);
+					if(yVel < DAMAGE_VELOCITY + 1)
+						fallWhoosh.play();
 				}
 				else
 				{
 					playAction(Actions.JUMP_FALL);
+				}
+				if(yVel > currDim.terminalVelocity - 1 && yVel < currDim.terminalVelocity)
+				{
+					fallWhoosh.play();
 				}
 			}
 		}
