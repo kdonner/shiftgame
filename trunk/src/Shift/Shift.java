@@ -187,6 +187,7 @@ public class Shift extends Ucigame
 		{
 			currLevel = toLoad;
 			currLevel.switchDim(currLevel.dimensions.get(1).dims.dimNum, false, this);
+			currLevel.switchDim(1, false, this);
 			updateEdgeSprites();
 			canvas.font("Arial", PLAIN, 14);
 			dimMenu = new DimensionMenu(this, currLevel.dimLabels());
@@ -199,6 +200,8 @@ public class Shift extends Ucigame
 			canvas.font("Arial", PLAIN, 14);
 			System.gc();
 			state = GameState.IN_GAME;
+			mouseX = mouse.x();
+			mouseY = mouse.y();
 			startTime = System.currentTimeMillis();
 		}
 	}
@@ -212,8 +215,6 @@ public class Shift extends Ucigame
 	private void centerCameraOnPlayer()
 	{
 		boolean cameraMoved = false;
-		System.out.println("Plyaer Y: " + player.centerY() + "  Ref Y: " + (FRAME_HEIGHT/2 + FRAME_HEIGHT - currLevel.height));
-		System.out.println("Cam Y: " + gameCamera.getYOffset());
 		if(player.centerY() < FRAME_HEIGHT/2 + FRAME_HEIGHT - currLevel.height)
 		{
 			gameCamera.setYOffset(currLevel.height - FRAME_HEIGHT);
@@ -230,7 +231,6 @@ public class Shift extends Ucigame
 		{
 			gameCamera.setXOffset(currLevel.width - FRAME_WIDTH);
 		}
-		System.out.println("Cam Y: " + gameCamera.getYOffset());
 		if(player.centerX() - FRAME_WIDTH/2 >=0 && player.centerX() + FRAME_WIDTH/2 <= currLevel.width)
 		{
 			gameCamera.setXOffset((int)player.centerX() - FRAME_WIDTH/2);
