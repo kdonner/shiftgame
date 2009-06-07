@@ -475,6 +475,7 @@ public class Player extends Sprite
 		{
 			if(deathWall)
 			{
+				parent.getSound(Constants.AUDIO_DIR + "electricCurrent.mp3").play();
 				lossHealth(200);
 			}
 			System.out.println("basic Collision");
@@ -492,7 +493,7 @@ public class Player extends Sprite
 		{
 			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() - 8 < collidedWith.x() + collidedWith.width())
 			{
-				if(this.y() + this.height() - 5 < collidedWith.y())
+				if(this.y() + this.height() - 5 < collidedWith.y() || xspeed() == 0)
 				{
 					stopFall(collidedWith);
 				}
@@ -502,7 +503,7 @@ public class Player extends Sprite
 		{
 			if(this.x() + this.width() - 10 >= collidedWith.x() && this.x() + this.width()/4 - 6 < collidedWith.x() + collidedWith.width())
 			{
-				if(this.y() > collidedWith.y() + collidedWith.height() - 10)
+				if(this.y() > collidedWith.y() + collidedWith.height() - 10 || xspeed() == 0)
 				{
 					stopRise(collidedWith);
 				}
@@ -512,7 +513,7 @@ public class Player extends Sprite
 		{
 			if(this.x() + this.width() > collidedWith.x() && this.x() + this.width()/2 < collidedWith.x() + 6)
 			{
-				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
+				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y() || yspeed() == 0)
 				{
 					stopXMovement(collidedWith, true);
 				}
@@ -522,7 +523,7 @@ public class Player extends Sprite
 		{
 			if(this.x() < collidedWith.x() + collidedWith.width() && this.x() + this.width()/2 + 6 > collidedWith.x() + collidedWith.width())
 			{
-				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y())
+				if(this.y() - 5 < collidedWith.y() + collidedWith.height() && this.y() + this.height() > collidedWith.y() || yspeed() == 0)
 				{
 					stopXMovement(collidedWith, false);
 				}
