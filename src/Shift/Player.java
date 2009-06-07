@@ -15,6 +15,7 @@ public class Player extends Sprite
 	
 	private boolean jumping, onSurface, pushing, pushLeft, moveThisFrame;
 	boolean flipHoriz, flipVertical;
+	protected boolean isAlive;
 	short health, armor; //These will be between 0 and 100
 	
 	private Sprite onWhat, pushingWhat; //Goes with onSurface and pushing
@@ -65,7 +66,8 @@ public class Player extends Sprite
 				128, 95, //14 - Jump Take Off
 				192, 95, //15 - Jump Apex
 				256, 95, //16 - Jump Fall
-				320, 95); //17 - Fall Fast
+				320, 95, //17 - Fall Fast
+				384, 95); //18 - Dead
 		defineSequence(Actions.RUN.name, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
 		defineSequence(Actions.STAND.name, 13); 
 		defineSequence(Actions.JUMP_TAKEOFF.name, 14); 
@@ -73,6 +75,7 @@ public class Player extends Sprite
 		defineSequence(Actions.JUMP_APEX.name, 15);
 		defineSequence(Actions.FALL_FAST.name, 17);
 		defineSequence(Actions.PUSH.name, 12); 
+		defineSequence(Actions.DEAD.name, 18);
 		framerate(20);
 		
 		inven = new Inventory(parent);
@@ -84,6 +87,7 @@ public class Player extends Sprite
 		pushing = false;
 		pushLeft = false;
 		moveThisFrame = false;
+		isAlive = true;
 		currentAction = Actions.STAND;
 		playAction(currentAction);
 		onWhat = null;
@@ -96,7 +100,7 @@ public class Player extends Sprite
 	
 	public void playAction(Actions action)
 	{
-		if(!parent.playerFinishedLevel)
+		if(!parent.playerFinishedLevel && isAlive)
 		{
 			currentAction = action;
 			play(action.name);
@@ -113,10 +117,13 @@ public class Player extends Sprite
 				playAction(Actions.JUMP_TAKEOFF);
 				addJumpDust();
 			}
-			motion(xspeed(), yspeed() + (currDim.getGravity() < 0? -JUMP_FORCE : JUMP_FORCE));
-			jumping = true;
-			onSurface = false;
-			onWhat = null;
+			if(isAlive)
+			{
+				motion(xspeed(), yspeed() + (currDim.getGravity() < 0? -JUMP_FORCE : JUMP_FORCE));
+				jumping = true;
+				onSurface = false;
+				onWhat = null;
+			}
 		}
 	}
 
@@ -126,11 +133,6 @@ public class Player extends Sprite
 		dust.flipVertical = flipVertical;
 		dust.position(this.x() - (flipHoriz? -20 : 20), (flipVertical? this.y() : this.y() + HEIGHT - dust.height()));
 		effects.add(dust);
-	}
-	
-	protected void clearHistory()
-	{
-
 	}
 	
 	protected void laserHit(double xLoc, double yLoc, double angle)
@@ -162,7 +164,10 @@ public class Player extends Sprite
 		{
 			if(!jumping)
 				playAction(Actions.RUN);
-			motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
+			if(isAlive)
+				motion((flipHoriz? -RUN_SPEED : RUN_SPEED), yspeed());
+			else
+				motion(xspeed()/2, yspeed());
 		}
 	}
 	
@@ -258,6 +263,8 @@ public class Player extends Sprite
 	private void die()
 	{
 		//TODO What happens when you die?
+		playAction(Actions.DEAD);
+		isAlive = false; //Must come after the play action
 		System.out.println("Die");
 	}
 	
@@ -529,47 +536,6 @@ public class Player extends Sprite
 				}
 			}
 		}
-		//Doesn't check yspeed == 0 because it could never collide vertically
-//		if(this.yspeed() > 0)
-//		{
-//			if(collidedWith.y() < this.y() + this.height())
-//			{
-//				if((this.x() + this.width()/2) > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're on top
-//				{
-//					stopFall(collidedWith);
-//				}
-//			}
-//		}
-//		if(this.yspeed() < 0)
-//		{
-//			if(collidedWith.y() < this.y() + this.height()/2)
-//			{
-//				if(this.x() + this.width()/2 > collidedWith.x() && this.x() < collidedWith.x() + collidedWith.width() - this.width()/4) //Checks to make sure you're under
-//				{
-//					stopRise(collidedWith);
-//				}
-//			}
-//		}
-//		if(this.xspeed() > 0)
-//		{
-//			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
-//			{
-//				if(this.x() + this.width() > collidedWith.x() && !(this.x() > collidedWith.x() + this.width()/2))
-//				{
-//					stopXMovement(collidedWith, true);
-//				}
-//			}
-//		}
-//		if(this.xspeed() < 0)
-//		{
-//			if(this.y() + this.height()/2 < collidedWith.y() + collidedWith.height() && this.y() + this.height()/2 > collidedWith.y()) //somewhere inbetween vertically
-//			{
-//				if(this.x() < collidedWith.x() + collidedWith.width())
-//				{
-//					stopXMovement(collidedWith, false);
-//				}
-//			}
-//		}
 	}
 	
 	private void stopXMovement(Sprite collidedWith, boolean leftSide)
