@@ -212,12 +212,31 @@ public class Shift extends Ucigame
 	private void centerCameraOnPlayer()
 	{
 		boolean cameraMoved = false;
+		System.out.println("Plyaer Y: " + player.centerY() + "  Ref Y: " + (FRAME_HEIGHT/2 + FRAME_HEIGHT - currLevel.height));
+		System.out.println("Cam Y: " + gameCamera.getYOffset());
+		if(player.centerY() < FRAME_HEIGHT/2 + FRAME_HEIGHT - currLevel.height)
+		{
+			gameCamera.setYOffset(currLevel.height - FRAME_HEIGHT);
+		}
+		if(player.centerY() > FRAME_HEIGHT/2)
+		{
+			gameCamera.setYOffset(0);
+		}
+		if(player.centerX() < FRAME_WIDTH/2)
+		{
+			gameCamera.setXOffset(0);
+		}
+		if(player.centerX() > currLevel.width - FRAME_WIDTH/2)
+		{
+			gameCamera.setXOffset(currLevel.width - FRAME_WIDTH);
+		}
+		System.out.println("Cam Y: " + gameCamera.getYOffset());
 		if(player.centerX() - FRAME_WIDTH/2 >=0 && player.centerX() + FRAME_WIDTH/2 <= currLevel.width)
 		{
 			gameCamera.setXOffset((int)player.centerX() - FRAME_WIDTH/2);
 			cameraMoved = true;
 		}
-		if((player.centerY() - FRAME_HEIGHT/2 >= FRAME_HEIGHT/2 - currLevel.height) && (player.centerY() <= FRAME_HEIGHT/2))
+		if((player.centerY() >= FRAME_HEIGHT/2 + FRAME_HEIGHT - currLevel.height) && (player.centerY() <= FRAME_HEIGHT/2))
 		{
 			gameCamera.setYOffset((int)-(player.centerY() - FRAME_HEIGHT/2));
 			cameraMoved = true;

@@ -616,6 +616,10 @@ public class Player extends Sprite
 		if(Math.abs(yspeed()) > DAMAGE_VELOCITY)
 		{
 			lossHealth(fallDamage(Math.abs(yspeed()) - DAMAGE_VELOCITY));
+			if(!isAlive)
+			{
+				parent.getSound(Constants.AUDIO_DIR + "groundSmack.mp3").play();
+			}
 		}
 	}
 	
