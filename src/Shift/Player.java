@@ -7,7 +7,7 @@ import ucigame.Sprite;
 
 public class Player extends Sprite
 {
-	private static final int LASER_DAMAGE = 3;
+	private static final int LASER_DAMAGE = 15;
 	private static final int DAMAGE_VELOCITY = 10;
 	private static final double RUN_SPEED = 4.5;
 	public static final int HEIGHT = 95;
