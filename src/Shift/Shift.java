@@ -671,11 +671,11 @@ public class Shift extends Ucigame
 		//TODO Finish Level Saving Function
 		if(currLevel.start == null || currLevel.end == null)
 		{
-			logWarning("A Level requires a start and end point.");
+			logWarning("A Level requires a start and end point.", "Needs to be playable.");
 		}
 		else if(currLevel.dimensions.size() == 1)
 		{
-			logWarning("A Level requires a dimension that is not the zeroth.");
+			logWarning("A Level requires a dimension that is not the zeroth.", "Matter must exist.");
 		}
 		else
 		{
@@ -703,7 +703,7 @@ public class Shift extends Ucigame
 			} 
 			catch (NameTakenException e) 
 			{
-				this.logWarning("That name is already taken for a level");
+				this.logWarning("That name is already taken for a level", "Name in use.");
 			}
 			finally
 			{
