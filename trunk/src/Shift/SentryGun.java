@@ -94,7 +94,7 @@ public class SentryGun extends LevelObject
 	
 	private static final int ENGAGE_SPEED = 40;
 	private static final int ATTACK_DISTANCE = 400;
-	private static final int COOL_DOWN_TIME = 5; //Number of Frames to cool down
+	private static final int COOL_DOWN_TIME = 30; //Number of Frames to cool down
 	private static final double FIRE_PROB = 0.05;
 	private Sound laser; 
 	Sprite top;
