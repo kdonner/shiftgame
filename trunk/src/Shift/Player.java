@@ -433,7 +433,6 @@ public class Player extends Sprite
 		{
 			if((x() + width()/2) < onWhat.x() || (x() + width()/2) > (onWhat.x() + onWhat.width()))
 			{
-				System.out.println("Fall off Surface: " + x()+width() + " : " + onWhat.x());
 				onSurface = false;
 				onWhat = null;
 			}
