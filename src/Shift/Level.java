@@ -124,7 +124,6 @@ public class Level
 	{ 
 		if(newDim >= 0 && newDim <= 8)
 		{
-			System.out.println("Switch to Dim: " + newDim);
 			Dimensions searchingFor = Dimension.getDims(newDim);
 			for(int i = 0; i < dimensions.size(); i++)
 			{
