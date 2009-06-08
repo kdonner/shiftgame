@@ -32,24 +32,8 @@ public class Player extends Sprite
 	{
 		super(WIDTH, HEIGHT);
 		this.parent = parent;
-		
-//		Image run = parent.getImage(Constants.IMG_DIR + "player/playerBack.png", 255, 0, 255);
-//		addFrames(run, 
-//				0, 0, //Frame 0
-//				64, 0,
-//				128, 0,
-//				192, 0,
-//				256, 0,
-//				320, 0,
-//				384, 0,
-//				448, 0,
-//				512, 0,
-//				576, 0,
-//				640, 0,
-//				704, 0, //Frame 11
-//				576, 0); //Frame 12 Standing
-		//This is just for testing
-		Image run = parent.getImage(Constants.IMG_DIR + "Temp/StickManWorking.png", 255, 255, 255);
+	
+		Image run = parent.getImage(Constants.IMG_DIR + "player/player.png", 255, 255, 255);
 		addFrames(run, 
 				0, 0, //Frame 0
 				64, 0,
@@ -181,7 +165,6 @@ public class Player extends Sprite
 		{
 			if((y() + height()) < pushingWhat.y() || y() > (pushingWhat.y() + pushingWhat.height()))
 			{
-				System.out.println("Push off Surface: " + x()+width() + " : " + pushingWhat.x());
 				pushing = false;
 				pushingWhat = null;
 				if(jumping)
@@ -193,7 +176,6 @@ public class Player extends Sprite
 			{
 				if(!((pushLeft && flipHoriz) || (!pushLeft && !flipHoriz)))
 				{
-					System.out.println("Walk away from Push");
 					pushing = false;
 					pushingWhat = null;
 				}
@@ -240,7 +222,6 @@ public class Player extends Sprite
 	
 	public void lossHealth(int amt)
 	{
-		System.out.println("Health Loss: " + amt);
 		if(armor > 0)
 		{
 			if(armor < amt)
@@ -272,10 +253,8 @@ public class Player extends Sprite
 	
 	private void die()
 	{
-		//TODO What happens when you die?
 		playAction(Actions.DEAD);
 		isAlive = false; //Must come after the play action
-		System.out.println("Die");
 	}
 	
 	public void move(Dimensions dim)
@@ -502,7 +481,6 @@ public class Player extends Sprite
 				parent.getSound(Constants.AUDIO_DIR + "electricCurrent.mp3").play();
 				lossHealth(200);
 			}
-			System.out.println("basic Collision");
 			checkCollision(s);
 		}
 	}
@@ -557,7 +535,6 @@ public class Player extends Sprite
 	
 	private void stopXMovement(Sprite collidedWith, boolean leftSide)
 	{
-		System.out.println("Collision: X Movement");
 		motion(0, yspeed());
 		if(!collidedWith.equals(onWhat))
 		{
@@ -581,7 +558,6 @@ public class Player extends Sprite
 	
 	private void stopRise(Sprite collidedWith)
 	{
-		System.out.println("Collision: Stop Rise");
 		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() + collidedWith.height() + 1);
@@ -605,7 +581,6 @@ public class Player extends Sprite
 
 	private void stopFall(Sprite collidedWith)
 	{
-		System.out.println("Collision: Stop Fall");
 		checkFallDamage();
 		motion(xspeed(), 0);
 		this.position(this.x(), collidedWith.y() - HEIGHT);
@@ -629,7 +604,6 @@ public class Player extends Sprite
 	
 	private void checkFallDamage() 
 	{
-		System.out.println("Y Speed: " + yspeed());
 		if(Math.abs(yspeed()) > DAMAGE_VELOCITY)
 		{
 			int damage = fallDamage(Math.abs(yspeed()) - DAMAGE_VELOCITY);
@@ -647,7 +621,6 @@ public class Player extends Sprite
 	
 	private int fallDamage(double velocity) 
 	{
-		System.out.println("Velocity - Damage Speed : " + velocity * 10);
 		return (int) velocity * 10;
 	}
 	
