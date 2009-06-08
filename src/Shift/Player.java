@@ -363,14 +363,14 @@ public class Player extends Sprite
 		{
 			if(checkForPickup(p))
 			{
-				p.aquired();
+				p.acquired();
 			}
 		}
 		for(PickupItem p : lev.currDim.pickupItems)
 		{
 			if(checkForPickup(p))
 			{
-				p.aquired();
+				p.acquired();
 			}
 		}
 		for(Door d : lev.dimensions.get(0).doors)

@@ -11,7 +11,7 @@ package Shift;
  */
 public class HistoryManager 
 {
-	private final int MAX_SIZE = 1000; //This will currently keep a little more than 30 seconds of rewindability
+	private final int MAX_SIZE = 4000; //This will currently keep a little more than 120 seconds of rewindability
 	
 	class Node
 	{
