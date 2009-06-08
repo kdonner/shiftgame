@@ -98,8 +98,6 @@ public class DimensionMenu
 				return labels[i];
 			i++;
 		}
-		
-		System.out.println("X: " + x + "  Y : " + y + "  Deg: " + degrees);
 		return 1;
 	}
 	

@@ -32,10 +32,8 @@ public class SentryGun extends LevelObject
 			position(xPos, yPos);
 
 			double relativeAngle = 90 - (this.angle % 90);
-			//System.out.println("Angle: " + this.angle +  " Rel Angle: " + relativeAngle);
 			double x = xMotion(relativeAngle, LASER_SPEED);
 			double y = yMotion(relativeAngle, LASER_SPEED);
-			//System.out.println("Angle: " + this.angle);
 
 			if(this.angle < 90)
 			{
