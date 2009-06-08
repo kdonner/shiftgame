@@ -372,7 +372,7 @@ public class Shift extends Ucigame
 						levelObject = new Wall(this, Walls.WALL1);
 					}
 					levelObject.setFilters(currLevel.currDim.dims.filters);
-					levelObject.setOpacity(0.33f);
+					levelObject.setOpacity(0.5f);
 				}
 			}
 			if(keyboard.isDown(keyboard.S)) //Set Start Point
