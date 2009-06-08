@@ -99,6 +99,7 @@ public class LevelManager implements java.io.Serializable
 		{
 			mapLevel1();
 			mapLevel2();
+			mapLevel3();
 			customIndex = orderedKeys.size(); //This needs to come after all default levels have been entered
 		}
 		catch(NameTakenException e)
@@ -125,6 +126,11 @@ public class LevelManager implements java.io.Serializable
 		addLevel("2.4", Constants.LEVEL_DIR + "level2.4");
 		addLevel("2.5", Constants.LEVEL_DIR + "level2.5");
 		addLevel("2.6", Constants.LEVEL_DIR + "level2.6");
+	}
+	
+	private void mapLevel3() throws NameTakenException
+	{
+		addLevel("3.1", Constants.LEVEL_DIR + "level3.1");
 	}
 	
 	public void addUserLevel(String levelName, String dir) throws NameTakenException

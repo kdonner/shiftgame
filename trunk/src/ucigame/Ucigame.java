@@ -1422,6 +1422,14 @@ public abstract class Ucigame
 			System.exit(0);
 	}
 
+	public static void logWarning(String _s, String title)
+	{
+		if(title == null)
+			logWarning(_s);
+		else
+			JOptionPane.showMessageDialog(null, _s, title, JOptionPane.ERROR_MESSAGE);
+	}
+	
 	public static void logWarning(String _s)
 	{
 		JOptionPane.showMessageDialog(null, _s, "Ucigame error", JOptionPane.ERROR_MESSAGE);

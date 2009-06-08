@@ -29,7 +29,7 @@ public class DimensionMenu
 		{
 			this.position(origX + parent.gameCamera.getXOffset(), origY - parent.gameCamera.getYOffset());
 			this.rotate(rotation);
-			putText(label, width()/2 - 4 - parent.gameCamera.getXOffset(), height()/2 - 4);
+			putText(label, width()/2 - 4 - parent.gameCamera.getXOffset(), height()/2 - 4 + parent.gameCamera.getYOffset());
 			super.draw();
 		}
 	}
