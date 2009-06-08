@@ -10,7 +10,7 @@ public class PickupItem extends LevelObject
 		itemType = type;
 	}
 
-	public void aquired() 
+	public void acquired() 
 	{
 		this.hide();
 	}
