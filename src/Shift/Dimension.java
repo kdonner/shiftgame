@@ -47,13 +47,13 @@ public class Dimension implements java.io.Serializable
 			else
 				enemies.remove(i);
 		}
-		for(int i = 0; i < walls.size(); i++)
-		{
-			walls.get(i).draw();
-		}
 		for(int i = 0; i < doors.size(); i++)
 		{
 			doors.get(i).draw();
+		}
+		for(int i = 0; i < walls.size(); i++)
+		{
+			walls.get(i).draw();
 		}
 		for(int i = 0; i < pickupItems.size(); i++)
 		{

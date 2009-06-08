@@ -359,11 +359,18 @@ public class Player extends Sprite
 		{
 			checkSpriteForCollision(w, (w.wallType == Walls.ELECTRIC1 || w.wallType == Walls.ELECTRIC2));
 		}
-		for(int i = 0; i < lev.currDim.pickupItems.size(); i++)
+		for(PickupItem p : lev.dimensions.get(0).pickupItems)
 		{
-			if(checkForPickup(lev.currDim.pickupItems.get(i)))
+			if(checkForPickup(p))
 			{
-				lev.currDim.pickupItems.get(i).aquired();
+				p.aquired();
+			}
+		}
+		for(PickupItem p : lev.currDim.pickupItems)
+		{
+			if(checkForPickup(p))
+			{
+				p.aquired();
 			}
 		}
 		for(Door d : lev.dimensions.get(0).doors)
@@ -577,7 +584,7 @@ public class Player extends Sprite
 		System.out.println("Collision: Stop Rise");
 		checkFallDamage();
 		motion(xspeed(), 0);
-		this.position(this.x(), collidedWith.y() + collidedWith.height());
+		this.position(this.x(), collidedWith.y() + collidedWith.height() + 1);
 		if(!pushing)
 		{
 			playAction(Actions.STAND);

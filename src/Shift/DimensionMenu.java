@@ -7,7 +7,7 @@ import ucigame.Sprite;
 
 public class DimensionMenu 
 {
-	private static final int MIN_MOUSE_MOVE_DIST = 4;
+	private static final int MIN_MOUSE_MOVE_DIST = 2;
 
 	class DimensionWedge extends Sprite
 	{
