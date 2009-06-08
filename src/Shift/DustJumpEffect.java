@@ -7,7 +7,7 @@ public class DustJumpEffect extends SpecialEffect
 	public DustJumpEffect(Shift parent)
 	{
 		super(80, 20);
-		Image dust = parent.getImage(Constants.IMG_DIR + "Temp/JumpDust.png");
+		Image dust = parent.getImage(Constants.IMG_DIR + "player/JumpDust.png");
 		addFrames(dust,
 				0, 0,
 				80, 0,

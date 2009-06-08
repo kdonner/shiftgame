@@ -9,7 +9,7 @@ public class LaserHitBlood extends SpecialEffect
 	{
 		super(30, 30);
 		rot = rotation;
-		Image dust = parent.getImage(Constants.IMG_DIR + "Temp/PlayerBlood2.png");
+		Image dust = parent.getImage(Constants.IMG_DIR + "player/PlayerBlood.png");
 		addFrames(dust,
 				0, 0,
 				30, 0,
