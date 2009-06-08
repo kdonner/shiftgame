@@ -150,8 +150,7 @@ public class Shift extends Ucigame
 	
 	private void saveImportantResources()
 	{
-		//TODO: Enable Important Saves
-		//LevelManager.saveInstance();
+		LevelManager.saveInstance();
 		System.out.println("Save Resources");
 	}
 	
@@ -668,7 +667,6 @@ public class Shift extends Ucigame
 	
 	private void saveLevel()
 	{
-		//TODO Finish Level Saving Function
 		if(currLevel.start == null || currLevel.end == null)
 		{
 			logWarning("A Level requires a start and end point.", "Needs to be playable.");

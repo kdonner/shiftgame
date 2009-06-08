@@ -35,12 +35,10 @@ public class Background
 		int y = parent.gameCamera.getYOffset();
 		if(bottomLeft.y() > Shift.FRAME_HEIGHT - y)
 		{
-			System.out.println("Move Up");
 			moveUp();
 		}
 		if(bottomLeft.y() + bottomLeft.height() < Shift.FRAME_HEIGHT - y)
 		{
-			System.out.println("Move Down");
 			moveDown();
 		}
 		if(bottomRight.x() < x)
@@ -51,7 +49,6 @@ public class Background
 		{
 			moveLeft();
 		}
-		//TODO update positions of background tiles with correct positions according to game camera
 	}
 	
 	private void moveLeft()

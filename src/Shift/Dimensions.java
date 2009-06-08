@@ -2,7 +2,6 @@ package Shift;
 
 public enum Dimensions {
 
-	//TODO Adjust Terminal Velocities to actual values
 	DIM0 (0, true, 10, 0, new float[]{0.5f, 0.5f, 0.5f, 1f}), // This is just for the zeroth dimension which the player should never enter
 	DIM1 ((Constants.GRAVITY / Shift.FRAME_RATE), true, 30, 1, new float[]{0.9f, 0.9f, 0.9f, 1f}), //White
 	DIM2 ((Constants.GRAVITY / Shift.FRAME_RATE) / 4, true, 30, 2, new float[]{0.3f, 0.4f, 1f, 1f}), //Blue
